@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -18,11 +20,11 @@ body {
 .title__description {
     width: fit-content;
     display: flex;
-    margin:3em auto;
+    margin: 3em auto;
 }
 
-.title__description div{
-    margin-top: .5em;
+.title__description div {
+    margin-top: 0.5em;
 }
 
 h1 {
@@ -32,7 +34,6 @@ h1 {
     text-align: right;
     width: min-content;
     float: right;
-    
 }
 
 h2 {
@@ -47,14 +48,15 @@ h2 {
 
 .listas:before {
     height: 50%;
-    bottom:0;
+    bottom: 0;
     width: 100%;
-    margin:auto;
+    margin: auto;
     position: absolute;
     content: "";
-    background: linear-gradient(to top,
-    rgba(34,34,34, 1) 0%, 
-    rgba(34,34,34, 0) 100%
+    background: linear-gradient(
+        to top,
+        rgba(34, 34, 34, 1) 0%,
+        rgba(34, 34, 34, 0) 100%
     );
     pointer-events: none;
 }
@@ -73,10 +75,9 @@ h2 {
 }
 
 .etapas__seccion {
-    width: 100%;
-    max-width: 50em;
-    padding-left: 15em;
-    margin:auto;
+    max-width: 45em;
+    padding-left: 8em;
+    margin: auto;
     height: inherit;
     position: relative;
 }
@@ -84,10 +85,8 @@ h2 {
 .barra {
     position: absolute;
     background-color: #666;
-    width: .125em;
+    width: 0.125em;
     height: 100%;
-
-
 }
 
 .info {
@@ -101,18 +100,18 @@ h2 {
 .info:hover {
     background-color: #111;
     width: 90%;
-    transition:.25s ease-out;
+    transition: 0.25s ease-out;
 }
 
 .dot {
     position: absolute;
     content: "";
     background-color: #666;
-    height:.75em;
-    width: .75em;
+    height: 0.75em;
+    width: 0.75em;
     border-radius: 50%;
-    margin-top:2.5em;
-    transform: translateX(-.32em);
+    margin-top: 2.5em;
+    transform: translateX(-0.32em);
 }
 
 .title {
@@ -121,46 +120,57 @@ h2 {
 }
 
 .description {
-    display:none;
-    margin-top: .5em;
-    font-size: .9em;
+    display: none;
+    margin-top: 0.5em;
+    font-size: 0.9em;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+}
+
+.info > iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    margin-top: 2em;
+    display: none;
 }
 
 .info:hover .description {
     display: flex;
 }
 
-.date{
+.info:hover > iframe {
+    display: flex;
+}
+
+.date {
     position: absolute;
     font-weight: 900;
     width: min-content;
-    padding-top: .2em; 
-    overflow:visible;
+    padding-top: 0.2em;
+    overflow: visible;
     transform: translateX(-6.4em);
 }
 
-.name-socials{
+.name-socials {
     display: flex;
     flex-direction: column;
 }
 
-.social-icons{
+.social-icons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 }
 
 /* Style all font awesome icons */
-.fa {  
-    text-align: center;  
+.fa {
+    text-align: center;
     text-decoration: none;
     padding: 14px;
     width: 45px;
     aspect-ratio: 1;
     border-radius: 50%;
-}  
+}
 
 .fa:hover {
     opacity: 0.7;
@@ -169,10 +179,31 @@ h2 {
 
 /* Set a specific color for each brand */
 .fa-instagram {
-    background: #a53c53; 
-    background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-    background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
-    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+    background: #a53c53;
+    background: -moz-linear-gradient(
+        45deg,
+        #f09433 0%,
+        #e6683c 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+    );
+    background: -webkit-linear-gradient(
+        45deg,
+        #f09433 0%,
+        #e6683c 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+    );
+    background: linear-gradient(
+        45deg,
+        #f09433 0%,
+        #e6683c 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+    );
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
     color: white;
 }
@@ -192,45 +223,44 @@ h2 {
     color: white;
 }
 
-
-
-@media (max-width: 850px) {
+@media (max-width: 875px) {
     body {
-        font-size: 80%;
+        font-size: 85%;
     }
-    
+
     .title__description {
         flex-flow: column;
     }
-    
+
     h1 {
         margin-right: 1em;
         font-size: 3em;
     }
-    
+
     .etapas__seccion {
+        max-width: 35em;
         padding-left: 7em;
     }
-    
+
     .info {
         padding: 2em;
     }
-    
-    .name-socials{
+
+    .name-socials {
         flex-direction: row-reverse;
         padding-bottom: 50px;
     }
-    
-    .social-icons{
+
+    .social-icons {
         margin: 0 30px 0 50px;
         gap: 0 8px;
         grid-template-columns: repeat(2, 1fr);
         justify-items: center;
         align-items: center;
     }
-    
-    .fa {  
+
+    .fa {
         padding: 12px;
         width: 38px;
-    }  
+    }
 }
