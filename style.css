@@ -74,8 +74,20 @@ h2 {
     display: none;
 }
 
+.video__container {
+    text-align:center;
+}
+
+video {
+    max-width: 80vh;
+    height: auto;
+}
+
+
+
 .etapas__seccion {
     max-width: 45em;
+    padding-top: 2em;
     padding-left: 8em;
     margin: auto;
     height: inherit;
@@ -223,7 +235,17 @@ h2 {
     color: white;
 }
 
-@media (max-width: 875px) {
+@media (max-width: 1070px) {
+
+    video {
+        max-width: 100%;
+    }
+}
+@media (max-width: 900px) {
+
+    video {
+        max-width: 100%;
+    }
     body {
         font-size: 85%;
     }
