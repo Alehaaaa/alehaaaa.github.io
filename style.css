@@ -75,6 +75,7 @@ h2 {
 }
 
 .video__container {
+    display: none;
     text-align:center;
 }
 
