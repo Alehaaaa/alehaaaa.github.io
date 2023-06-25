@@ -97,7 +97,7 @@ footer {
     justify-content: left;
     align-items: center;
     position: relative;
-    max-height: 85vh;
+    max-height: 87vh;
 }
 
 .button-container {
@@ -124,7 +124,6 @@ footer {
 #welcome-section video {
     z-index: -1;
     position: absolute;
-    height: 100%;
     width: 100%;
     margin: auto;
 }
