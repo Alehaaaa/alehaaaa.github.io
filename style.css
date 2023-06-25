@@ -41,9 +41,15 @@ footer {
 }
 
 #logo {
-    font-size: 8em;
     display: flex;
-    align-items: end;
+    align-items: center;
+    justify-content:center;
+    margin-left: 2em;
+}
+
+#logo img{
+    height: 2.5em;
+    aspect-ratio: 1;
 }
 
 #navigation {
@@ -98,8 +104,9 @@ footer {
     top: 2rem;
     right: 5%;
     position: absolute;
-    display: none;
+    opacity: 0%;
     flex-direction: column;
+    display:flex;
     gap: 1em;
 }
 
@@ -123,7 +130,8 @@ footer {
 }
 
 #welcome-section:hover > .button-container {
-    display:flex;
+    transition: 400ms;
+    opacity: 100%;
 }
 
 #welcome-section .name_description {
@@ -222,8 +230,8 @@ footer {
 }
 
 #projects {
+    flex-direction: row-reverse;
     gap: 2em;
-    flex-direction: row;
     margin: 40px auto;
 }
 
@@ -316,10 +324,6 @@ footer {
         width: 98%;
     }
 
-    #contact form input {
-        margin: 5px 0;
-    }
-
     .button {
         max-width: 160px;
         margin: 5px auto;
@@ -332,8 +336,9 @@ footer {
         justify-content: space-between;
         height: 6vh;
     }
-    #welcome-section {
-        margin-top: 6vh;
+
+    #logo img{
+        height: 70%;
     }
     
     .button-container {
@@ -346,6 +351,7 @@ footer {
     }
 
     #welcome-section {
+        margin-top: 6vh;
         align-items:end;
     }
 
@@ -394,7 +400,7 @@ footer {
         padding-bottom: 15px;
     }
     
-    #logo {
+    #logo img{
         font-size: 4em;
     }
     
