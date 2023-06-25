@@ -2,11 +2,11 @@ var i = document.getElementById("video-volume");
 var elem = document.getElementById("playing-video");
 
 function mute_video() {
-    if (i.className == "fas fa-volume-mute") {
-        i.className = "fas fa-volume-up";
+    if (i.src.endsWith("images/mute.svg")) {
+        i.src = "images/volume.svg";
         elem.muted = false;
     } else {
-        i.className = "fas fa-volume-mute";
+        i.src = "images/mute.svg";
         elem.muted = true;
     }
 }
@@ -22,15 +22,18 @@ function fullscreen_video() {
         elem.msRequestFullscreen();
     }
     elem.muted = false;
-    i.className = "fas fa-volume-up";
+    i.src = "images/volume.svg";
 }
 
 ham_open = () => {
-    const hamburger = document.querySelector("#hamburger");
+    const hamburger = document.querySelector("#ham_icon");
     const navbar = document.querySelector("#navbar");
 
-    hamburger.classList.toggle("fa-bars");
-    hamburger.classList.toggle("fa-times");
+    if (hamburger.src.endsWith("images/hamburger.svg")) {
+        hamburger.src = "images/close.svg";
+    } else {
+        hamburger.src = "images/hamburger.svg";
+    }
     navbar.classList.toggle("nav-toggle");
 };
 
