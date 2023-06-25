@@ -28,13 +28,16 @@
                         <li><a href="#contact">Contacto</a></li>
                     </ul>
                 </nav>
-                <i onclick="clicked()" id="hamburger" class="fas fa-bars"></i>
+                <i onclick="ham_open()" id="hamburger" class="fas fa-bars"></i>
             </div>
         </header>
 
         <section id="welcome-section">
-            <button type="button" onclick="change()"><i id="video-volume" class="fas fa-volume-mute"></i></button>
-            <div>
+            <div class="button-container">
+                <button type="button" onclick="mute_video()"><i id="video-volume" class="fas fa-volume-mute"></i></button>
+                <button type="button" onclick="fullscreen_video()"><i id="video-fullscreen" class="fas fa-expand"></i></button>
+            </div>
+            <div class="name_description">
                 <h1>Alejandro Martín.</h1>
                 <h2>Animador de Personajes 3D</h2>
             </div>

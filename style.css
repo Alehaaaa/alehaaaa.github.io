@@ -94,17 +94,24 @@ footer {
     max-height: 85vh;
 }
 
-#welcome-section button {
-    top: 7.5rem;
+.button-container {
+    top: 2rem;
     right: 5%;
+    position: absolute;
     display: none;
-    width: 2rem;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.button-container button {
+    display: flex;
+    width: 1.5em;
     aspect-ratio: 1;
     align-items: center;
     justify-content: center;
-    position: absolute;
     font-size: 3rem;
     border-radius: 50%;
+    padding: 0;
 }
 
 #welcome-section video {
@@ -115,11 +122,11 @@ footer {
     margin: auto;
 }
 
-#welcome-section:hover > button {
+#welcome-section:hover > .button-container {
     display:flex;
 }
 
-#welcome-section div {
+#welcome-section .name_description {
     margin-left: 10%;
 }
 
@@ -288,7 +295,7 @@ footer {
 
 @media (max-width: 1500px) {
     #welcome-section {
-        margin-top: 4vh;
+        margin-top: 5vh;
     }
 
     #projects {
@@ -329,9 +336,12 @@ footer {
         margin-top: 6vh;
     }
     
-    #welcome-section button {
-        top: 0.5em;
-        right: 0.8em;
+    .button-container {
+        top: 1rem;
+        gap: 0.5em;
+    }
+
+    .button-container button {
         font-size: 2em;
     }
 
@@ -339,7 +349,7 @@ footer {
         align-items:end;
     }
 
-    #welcome-section div {
+    #welcome-section .name_description {
         margin-left: 1.5em;
         margin-bottom: 4.5%;
     }
@@ -389,21 +399,25 @@ footer {
     }
     
     #navbar ul {
-        position: absolute;
-        flex-direction: column;
+        top: 0;
+        right: 0;
+        height: 100%;
+        position: fixed;
         background-color: var(--main-color-transparent);
-        right: 1em;
-        gap: 2em;
-        padding: 2em;
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 4em 3em 0 3em;
     }
     
     #navbar li {
-        margin: 0 0.5em;
+        margin: 0.5em 0;
         padding: 0;
         font-size: 1.5em;
     }
     
     #hamburger {
+        z-index: 1;
         display: block;
     }
     
