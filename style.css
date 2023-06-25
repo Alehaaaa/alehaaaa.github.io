@@ -101,7 +101,7 @@ footer {
 }
 
 .button-container {
-    top: 2rem;
+    top: 6rem;
     right: 5%;
     position: absolute;
     opacity: 0%;
@@ -304,6 +304,10 @@ footer {
 @media (max-width: 1500px) {
     #welcome-section {
         margin-top: 5vh;
+    }
+    
+    .button-container {
+        top: 2rem;
     }
 
     #projects {
