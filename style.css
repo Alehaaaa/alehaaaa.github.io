@@ -101,7 +101,7 @@ footer {
 }
 
 .button-container {
-    top: 6rem;
+    bottom: 4rem;
     right: 5%;
     position: absolute;
     opacity: 0%;
@@ -307,7 +307,7 @@ footer {
     }
     
     .button-container {
-        top: 2rem;
+        bottom: 4rem;
     }
 
     #projects {
