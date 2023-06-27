@@ -25,15 +25,11 @@ function fullscreen_video() {
     i.src = "images/volume.svg";
 }
 
-ham_open = () => {
-    const hamburger = document.querySelector("#ham_icon");
-    const navbar = document.querySelector("#navbar");
+function ham_open() {
+    const hamburger = document.getElementById("hamburger");
+    const navbar = document.getElementById("navbar");
 
-    if (hamburger.src.endsWith("images/hamburger.svg")) {
-        hamburger.src = "images/close.svg";
-    } else {
-        hamburger.src = "images/hamburger.svg";
-    }
+    hamburger.classList.toggle("is-active");
     navbar.classList.toggle("nav-toggle");
 };
 

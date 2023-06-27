@@ -23,13 +23,17 @@
             <div id="navigation" class="nav-toggle">
                 <nav id="navbar" class="nav-toggle">
                     <ul>
-                        <li><a href="#welcome-section">Reel</a></li>
                         <li><a href="#about">Sobre mí</a></li>
                         <li><a href="#projects">Proyectos</a></li>
-                        <li><a href="#contact">Contacto</a></li>
+                        <li><a href="https://youtu.be/9MxPRdxFjXk" target="_blank">Reel</a></li>
+                        <!-- <li><a href="#contact">Contacto</a></li> -->
                     </ul>
                 </nav>
-                <a type="button" id="hamburger" ><img id="ham_icon" onclick="ham_open()" src="images/hamburger.svg" alt=""></a>
+                <div class="hamburger" id="hamburger" onclick="ham_open()" >
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </div>
             </div>
         </header>
 
@@ -53,46 +57,40 @@
         
         <section id="about">
             <div id="about-info">
-                <h2>Sobre mí</h2>
-                <p>Graduado de un Máster en Animación 3D ECIB, Barcelona. Poseo una capacidad excepcional para asimilar rápidamente las tareas que se me asignan, solventando problemas con facilidad y encontrando soluciones innovadoras cuando se requiere.
-                </p>
-                <p>Aunque disfruto trabajando en proyectos tecnológicos de forma independiente, encuentro una gran satisfacción colaborando en equipo, donde destaco como un compañero excepcional.</p>
-                </p>
+                <h2>¿Quién soy?</h2>
+                <p>¡Hola! Soy graduado del <strong>Máster en Animación 3D en ECIB</strong>, Barcelona. Se me da genial sacar ideas muy diferentes para resolver tareas en un abrir y cerrar de ojos. Siempre ando buscando soluciones innovadoras y no me asusto ante los problemas que se cruzan en mi camino.</p><p>Aunque me encanta hacer mis cosas e investigar en proyectos personales, me llevo el interés al trabajo, buscando siempre cómo hacerlo mejor. Ahí es donde realmente me luzco como un compañero excepcional.</p><p><strong>¡Estoy listo para darlo todo!</strong></p>
             </div>
             <div id="skills">
-                <h2>Domino</h2>
                 <div id="list-container">
+                    <h2 class="nowarp">¿Qué sé hacer?</h2>
                     <ul>
                         <li>Autodesk Maya</li>
-                        <li>Adobe Photoshop</li>
-                        <li>Adobe Illustrator</li>
-                        <li>Adobe Premiere</li>
-                        <li>Python (aprendiendo)</li>
+                        <li>Adobe Suite</li>
+                        <li>Python</li>
                         <li>Blender (aprendiendo)</li>
-                        <li>Gamer</li>
-                        <li>Cocinero</li>
-                        <li>Editor de vídeo</li>
-                        <li>Diseñador gráfico</li>
                         <li>Técnico informático</li>
+                        <li>Diseñador gráfico</li>
+                        <li>Editor de vídeo</li>
                         <li>Fotógrafo</li>
                         <li>Programador</li>
-                        <li>Gamer</li>
                         <li>Cocinero</li>
+                        <li>Gamer</li>
                     </ul>
                 </div>
             </div>
             <div id="net">
-                <h2>Redes sociales</h2>
+                <h2>Contáctame</h2>
                 <div id="network-icons">
                     <a class="net-icon" target=_blank href="https://www.linkedin.com/in/alejandro-martin-407527215"><i class="fa fa-linkedin fa-lg"></i></a>
-                    <a class="net-icon" target=_blank href="https://www.instagram.com/alejandro_anim/"><i class="fa fa-instagram fa-lg"></i></a>
-                    <a class="net-icon" target=_blank href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#97;&#108;&#101;&#104;&#97;&#109;&#97;&#114;&#116;&#105;&#110;&#118;&#97;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;"><i class="fa fa-envelope fa-lg"></i></a>
+                    <a class="net-icon larger" target=_blank href="https://www.instagram.com/alejandro_anim/"><i class="fa fa-instagram fa-lg"></i></a>
+                    <a class="net-icon smaller" target=_blank href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#97;&#108;&#101;&#104;&#97;&#109;&#97;&#114;&#116;&#105;&#110;&#118;&#97;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;"><i class="fa fa-envelope fa-lg"></i></a>
                     <a class="net-icon" target=_blank href="&#116;&#101;&#108;&#58;&#43;&#51;&#52;&#54;&#55;&#49;&#50;&#49;&#51;&#57;&#51;&#56;"><i class="fa fa-phone fa-lg"></i></a>
                 </div>
             </div>
         </section>
-
+        
         <section id="projects">
+            <h2 class="nowarp">Formación<br>y proyectos</h2>
             <div class="project-tile">
                 <p id="date">2022 - 2023</p>
                 <h3>Producción de un Corto de Animación</h3>
@@ -108,14 +106,14 @@
                 <h3>Diplomado de Animación</h3>
                 <a href="https://www.ecib.es/cursos-3/diploma-en-animacion/" target=”_blank”>ECIB, Barcelona</a>
             </div>
-            <div class="project-tile">
+            <!-- <div class="project-tile">
                 <p id="date">2016 - 2018</p>
                 <h3>Bachillerato de Artes Plásticas</h3>
                 <a href="https://agora.xtec.cat/iesmallafre/" target=”_blank”>INS Mallafré, Vilanova i la Geltrú</a>
-            </div>
+            </div> -->
         </section>
 
-        <section id="contact">
+        <!-- <section id="contact">
             <div id="contact-text">
                 <h2>¿Quieres hablar conmigo?</h2>
                 <p>
@@ -128,7 +126,7 @@
                 <div><label for="">Comentario: </label><input type="text" /></div>
                 <button type="button">Enviar</button>
             </form>
-        </section>
+        </section> -->
 
         <footer>
             <a href="#welcome-section">Nada es imposible</a>
