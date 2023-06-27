@@ -165,6 +165,7 @@ footer {
     align-items: center;
     position: relative;
     max-height: 87vh;
+    overflow: hidden;
 }
 
 .button-container {
