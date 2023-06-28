@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="styles.css" />
     <title>Alejandro Martín | Animador de Personajes 3D</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/src/favicon.svg" />
 </head>
 
 <body>
     <header>
         <div id="logo">
-            <img src="images/favicon.svg" alt="">
+            <img src="src/favicon.svg" alt="">
         </div>
         <div id="navigation">
             <nav id="navbar">
@@ -24,7 +24,7 @@
                     <li><a href="#about">Sobre mí</a></li>
                     <li><a href="#projects">Proyectos</a></li>
                     <li><a href="#gallery">Galería</a></li>
-                    <li><a href="https://youtu.be/9MxPRdxFjXk" target="_blank">Reel</a></li>
+                    <li><a href="https://youtu.be/9MxPRdxFjXk" target=_blank>Reel ⇢</a></li>
                     <!-- <li><a href="#contact">Contacto</a></li> -->
                 </ul>
             </nav>
@@ -38,18 +38,18 @@
 
     <section id="welcome-section">
         <div class="button-container">
-            <button type="button" onclick="mute_video()"><img id="video-volume" src="images/mute.svg"
+            <button type="button" onclick="mute_video()"><img id="video-volume" src="src/mute.svg"
                     alt=""></img></button>
-            <button type="button" onclick="fullscreen_video()"><img id="video-fullscreen" src="images/fullscreen.svg"
+            <button type="button" onclick="fullscreen_video()"><img id="video-fullscreen" src="src/fullscreen.svg"
                     alt=""></img></button>
         </div>
         <div class="name_description">
             <h1>Alejandro Martín.</h1>
             <h2>Animador de Personajes 3D</h2>
         </div>
-        <video id="playing-video" autoplay muted loop>
-            <source src="images/Alejandro_Martin_AnimationReel.mp4" type="video/mp4"
-                poster="images/reel_placeholder.jpg" controlsList="nodownload" />
+        <video id="playing-video" autoplay muted loop controlsList="nodownload"  >
+            <source src="src/Alejandro_Martin_AnimationReel.mp4" type="video/mp4"
+                poster="src/reel_placeholder.jpg" />
         </video>
     </section>
 
@@ -101,35 +101,39 @@
             <section id="projects">
                 <h2 class="nowarp">Formación<br>y proyectos</h2>
                 <div class="project-tile">
-                    <p id="date">2022 - 2023</p>
+                    
+                    <a href="https://www.ecib.es" target=_blank><img src="src/ecib.png" alt=""></a>
+                    <p class="date">2022 - 2023</p>
                     <h3>Producción de un Corto de Animación</h3>
-                    <a href="https://www.ecib.es" target=_blank>ECIB, Barcelona</a>
+                    <h4>ECIB, Barcelona</h4>
                 </div>
                 <div class="project-tile">
-                    <p id="date">2020 - 2021</p>
+                    <a href="https://www.ecib.es/cursos-3/master-en-animacion3d/" target=_blank><img src="src/ecib.png" alt=""></a>
+                    <p class="date">2020 - 2021</p>
                     <h3>Máster de Animación de Personajes 3D</h3>
-                    <a href="https://www.ecib.es/cursos-3/master-en-animacion3d/" target=”_blank”>ECIB, Barcelona</a>
+                    <h4>ECIB, Barcelona</h4>
                 </div>
                 <div class="project-tile">
-                    <p id="date">2018 - 2020</p>
+                    <a href="https://www.ecib.es/cursos-3/diploma-en-animacion/" target=_blank><img src="src/ecib.png" alt=""></a>
+                    <p class="date">2018 - 2020</p>
                     <h3>Diplomado de Animación</h3>
-                    <a href="https://www.ecib.es/cursos-3/diploma-en-animacion/" target=”_blank”>ECIB, Barcelona</a>
+                    <h4>ECIB, Barcelona</h4>
                 </div>
             </section>
             
     <section id="gallery">
         <h2>Galería</h2>
         <div class="gallery">
-            <div class="img-panel"><img class="img" loading="lazy" src="gallery/Happyness.jpg" alt=""></img></div>
-            <div class="img-panel"><img class="img" loading="lazy" src="gallery/Indifference.jpg" alt=""></img></div>
+            <div class="img-panel"><img class="img" loading="lazy" src="gallery/Disgust.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/Pain.jpg" alt=""></img></div>
+            <div class="img-panel"><img class="img" loading="lazy" src="gallery/Surprise.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/Sadness.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/pose1.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/pose3.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/angry.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/objeto_01.jpg" alt=""></img></div>
             <div class="img-panel"><img class="img" loading="lazy" src="gallery/relajado_02.jpg" alt=""></img></div>
-            <div class="img-panel"><img class="img" loading="lazy" src="gallery/surprise.jpg" alt=""></img></div>
+            <div class="img-panel"><img class="img" loading="lazy" src="gallery/surprise_02.jpg" alt=""></img></div>
         </div>
         <div class="thumb-viewer">
             <a class="prev"></a>

@@ -1,30 +1,44 @@
 i = document.getElementById("video-volume");
-elem = document.getElementById("playing-video");
+video = document.getElementById("playing-video");
 hamburger = document.getElementById("hamburger");
 navbar = document.getElementById("navbar-list");
 
 function mute_video() {
-    if (i.src.endsWith("images/mute.svg")) {
-        i.src = "images/volume.svg";
-        elem.muted = false;
+    if (i.src.endsWith("src/mute.svg")) {
+        i.src = "src/volume.svg";
+        video.muted = false;
     } else {
-        i.src = "images/mute.svg";
-        elem.muted = true;
+        i.src = "src/mute.svg";
+        video.muted = true;
     }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.intersectionRatio > 0) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+    });
+
+    observer.observe(video);
+});
+
 function fullscreen_video() {
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) {
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
         /* Safari */
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
+        video.webkitRequestFullscreen();
+    } else if (video.msRequestFullscreen) {
         /* IE11 */
-        elem.msRequestFullscreen();
+        video.msRequestFullscreen();
     }
-    elem.muted = false;
-    i.src = "images/volume.svg";
+    video.muted = false;
+    i.src = "src/volume.svg";
 }
 
 document.addEventListener("click", function (event) {
@@ -67,23 +81,25 @@ $(function () {
     });
 
     next.click(nextImage);
-  
+
     prev.click(prevImage);
 
     margin.click(function (event) {
         const target = $(event.target);
-        const img = $(".img");
-
-        if (!target.is(img) && !target.is(next) && !target.is(prev)) {
+        if (!target.is($("img")) && !target.is(next) && !target.is(prev)) {
             $("body").removeClass("view-open");
         }
     });
 
     if (!$("body").hasClass("view-open")) {
         $(document).keydown(function (e) {
-            if (e.keyCode === 37) {prevImage();
-            } else if (e.keyCode === 39) {nextImage();
-            }
+            if (e.keyCode === 27) {
+                $("body").removeClass("view-open");
+              } else if (e.keyCode === 37 || e.keyCode === 40) {
+                prevImage();
+              } else if (e.keyCode === 39 || e.keyCode === 38) {
+                nextImage();
+              }              
         });
     }
 
