@@ -434,6 +434,106 @@ button:active {
     scale: 98%;
 }
 
+#gallery {
+    background-color: var(--secondary-color);
+    padding: 3rem 0 3rem 0;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+#gallery h2 {
+    margin-bottom: 3rem;
+}
+
+.gallery {
+    margin: 0 10%;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.img-panel {
+    flex: 1 0 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.img {
+    width: 100%;
+    vertical-align: middle;
+    aspect-ratio: 1;
+    transition: 150ms;
+    object-fit: cover;
+}
+
+.img-panel:hover > .img {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 1rem black);
+}
+
+.thumb-viewer {
+    z-index: 2;
+    display: none;
+}
+.view-open {
+    overflow: hidden;
+}
+.view-open .thumb-viewer {
+    display: block;
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.viewer-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.viewer-body img {
+    max-width: 90%;
+    max-height: 90%;
+}
+.prev,
+.next {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-top: 5px solid #bbb;
+    border-left: 5px solid #bbb;
+    transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    margin: auto 15px;
+    opacity: 0.6;
+    z-index: 5;
+}
+.next {
+    border: none;
+    border-bottom: 5px solid #bbb;
+    border-right: 5px solid #bbb;
+    left: auto;
+    right: 15px;
+}
+.prev:hover,
+.next:hover {
+    opacity: 1;
+}
+
 footer {
     display: flex;
     justify-content: center;
@@ -487,6 +587,10 @@ footer {
     .button {
         max-width: 160px;
         margin: 5px auto;
+    }
+
+    .img-panel {
+        flex: 1 0 15rem;
     }
 }
 
@@ -605,6 +709,7 @@ footer {
         flex-direction: column;
         justify-content: flex-start;
         padding: 4em 10% 0 10%;
+        transition: 200ms;
     }
 
     #navbar li {
@@ -614,11 +719,16 @@ footer {
     }
 
     .nav-toggle {
-        display: none;
+        opacity: 0;
+        translate: 100%;
     }
 
     .project-tile {
         width: 75%;
         padding: 25px 40px;
+    }
+
+    .img-panel {
+        flex: 1 0 40%;
     }
 }
