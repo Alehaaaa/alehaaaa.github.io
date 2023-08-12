@@ -1,10 +1,22 @@
 :root {
     --main-font-color: white;
     --secondary-font-color: #999999;
-    --main-color-transparent: #181818b4;
-    --main-color: #000000;
-    --secondary-color: rgb(10, 10, 10);
+    --main-color: rgb(0, 0, 0);
+    --secondary-color: rgb(8, 8, 8);
+    --main-color-transparent: rgba(20, 20, 20, 0.4);
 }
+
+@property --navbar-main {
+    syntax: '<color>';
+    initial-value: rgba(0, 0, 0, 0);
+    inherits: false;
+  }
+  
+  @property --navbar-transparent {
+    syntax: '<color>';
+    initial-value: rgb(0, 0, 0, 0);
+    inherits: false;
+  }
 
 * {
     margin: 0;
@@ -29,13 +41,17 @@ a {
 }
 
 header {
+    background: linear-gradient(180deg, var(--navbar-main), var(--navbar-transparent));
     z-index: 1;
-    background-color: var(--main-color-transparent);
     display: flex;
     position: fixed;
     justify-content: space-between;
     width: 100%;
     top: 0;
+    transition: --navbar-main 1s, --navbar-transparent 1s;
+}
+header:hover {
+    --navbar-main: rgba(0, 0, 0, 0.7);
 }
 
 footer {
@@ -79,10 +95,10 @@ footer {
     margin: 0 20px;
     border-radius: 6px;
     cursor: pointer;
+    transition: 300ms;
 }
 
 #navbar li:hover {
-    transition: 300ms;
     scale: 95%;
 }
 
@@ -320,6 +336,18 @@ footer {
     margin-bottom: 10px;
 }
 
+#name_accent {
+    outline: solid rgba(255, 255, 255, 0);
+    border-radius: 0.25em;
+    outline-offset: 2px;
+    background-color: transparent;
+    transition: 200ms;
+}
+
+#name_accent:hover {
+    outline: 1px solid;
+}
+
 .project-tile {
     width: 25%;
     padding: 2em;
@@ -346,6 +374,11 @@ footer {
     padding: 10px;
     margin-bottom: 5%;
     border-radius: 8px;
+    transition: 100ms;
+}
+
+.project-tile img:hover {
+    transform: scale(1.01);
 }
 
 .project-tile p {
@@ -353,7 +386,7 @@ footer {
 }
 
 .project-tile h4 {
-    margin-top: 5px;
+    margin-top: 10px;
     font-weight: 200;
 }
 
