@@ -1,7 +1,155 @@
 i = document.getElementById("video-volume");
 video = document.getElementById("playing-video");
-hamburger = document.getElementById("hamburger");
-navbar = document.getElementById("navbar-list");
+
+// Translation Buttons
+let langs; // Declare the variable to hold the imported JSON data
+
+fetch("./langs.json")
+    .then((response) => response.json())
+    .then((data) => {
+        langs = data; // Assign the imported JSON data to the variable
+        init();
+    })
+    .catch((error) => console.error("Error loading langs.json:", error));
+
+const locales = ["en-GB", "es-ES", "ca-ES", "fr-FR", "it-IT"];
+const dropdownBtn = document.getElementById("dropdown-btn");
+const dropdownContent = document.getElementById("dropdown-content");
+let isDropdownOpen = false;
+
+function getFlagCode(locale) {
+    if (locale.region === "ES" && locale.language === "ca") {
+        return "es-ct";
+    } else {
+        return locale.region.toLowerCase();
+    }
+}
+
+const switchLanguage = (code) => {
+    const selectedLanguage = langs[code];
+    if (selectedLanguage) {
+        for (let key of Object.keys(selectedLanguage)) {
+            const element = document.getElementById(key);
+            if (element) {
+                element.innerHTML = selectedLanguage[key];
+            }
+        }
+    }
+};
+
+function setSelectedLocale(locale) {
+    const intlLocale = new Intl.Locale(locale);
+
+    const langName = new Intl.DisplayNames([locale], {
+        type: "language",
+    }).of(intlLocale.language);
+    const formattedLangName =
+        langName.charAt(0).toUpperCase() + langName.slice(1);
+
+    dropdownContent.innerHTML = "";
+
+    const otherLocales = locales.filter((loc) => loc !== locale);
+    otherLocales.forEach((otherLocale) => {
+        const otherIntlLocale = new Intl.Locale(otherLocale);
+
+        const otherLangName = new Intl.DisplayNames([otherLocale], {
+            type: "language",
+        }).of(otherIntlLocale.language);
+        const formattedOtherLangName =
+            otherLangName.charAt(0).toUpperCase() + otherLangName.slice(1);
+
+        const listEl = document.createElement("li");
+        listEl.innerHTML = `${formattedOtherLangName}<span class="fi fi-${getFlagCode(
+            otherIntlLocale
+        )}"></span>`;
+        listEl.value = otherLocale;
+        listEl.addEventListener("mousedown", function () {
+            setSelectedLocale(otherLocale);
+        });
+        dropdownContent.appendChild(listEl);
+    });
+
+    dropdownBtn.innerHTML = `<span class="fi fi-${getFlagCode(
+        intlLocale
+    )}"></span>${formattedLangName}<span class="arrow-down">`;
+    closeDropdown();
+    switchLanguage(locale);
+}
+
+function toggleDropdown(event) {
+    if (event) {
+        event.stopPropagation();
+    }
+    isDropdownOpen = !isDropdownOpen;
+    dropdownContent.style.display = isDropdownOpen ? "block" : "none";
+}
+
+function closeDropdown() {
+    if (isDropdownOpen) {
+        isDropdownOpen = false;
+        dropdownContent.style.display = "none";
+    }
+}
+
+document.addEventListener("click", (event) => {
+    if (isDropdownOpen) {
+        closeDropdown();
+    }
+});
+
+dropdownBtn.addEventListener("click", (event) => {
+    toggleDropdown(event);
+});
+
+try{
+    setSelectedLocale(locales[0]);
+}catch( ex ){
+}
+const browserLang = new Intl.Locale(navigator.language).language;
+for (const locale of locales) {
+    const localeLang = new Intl.Locale(locale).language;
+    if (localeLang === browserLang) {
+        try{
+            setSelectedLocale(locale);
+        }catch( ex ){
+        }
+    }
+}
+
+// Nav Bar
+
+function togglemenu() {
+    const hamburger = document.getElementById("hamburger");
+    const navbar = document.getElementById("navbar-list");
+    hamburger.classList.toggle("is-active");
+    navbar.classList.toggle("nav-toggle");
+}
+
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+        });
+    });
+});
+
+// Video Scripts
+
+function fullscreen_video() {
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+        /* Safari */
+        video.webkitRequestFullscreen();
+    } else if (video.msRequestFullscreen) {
+        /* IE11 */
+        video.msRequestFullscreen();
+    }
+    video.muted = false;
+    i.src = "src/volume.svg";
+}
 
 function mute_video() {
     if (i.src.endsWith("src/mute.svg")) {
@@ -25,44 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     observer.observe(video);
-});
-
-function fullscreen_video() {
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        /* Safari */
-        video.webkitRequestFullscreen();
-    } else if (video.msRequestFullscreen) {
-        /* IE11 */
-        video.msRequestFullscreen();
-    }
-    video.muted = false;
-    i.src = "src/volume.svg";
-}
-
-document.addEventListener("click", function (event) {
-    if (
-        !navbar.classList.contains("nav-toggle") &&
-        !event.target.isEqualNode(navbar) &&
-        !navbar.contains(event.target)
-    ) {
-        hamburger.classList.toggle("is-active");
-        navbar.classList.toggle("nav-toggle");
-    } else if (event.target.isEqualNode(hamburger)) {
-        hamburger.classList.toggle("is-active");
-        navbar.classList.toggle("nav-toggle");
-    }
-});
-
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        document.querySelector(this.getAttribute("href")).scrollIntoView({
-            behavior: "smooth",
-        });
-    });
 });
 
 $(function () {
@@ -95,11 +205,11 @@ $(function () {
         $(document).keydown(function (e) {
             if (e.keyCode === 27) {
                 $("body").removeClass("view-open");
-              } else if (e.keyCode === 37 || e.keyCode === 40) {
+            } else if (e.keyCode === 37 || e.keyCode === 40) {
                 prevImage();
-              } else if (e.keyCode === 39 || e.keyCode === 38) {
+            } else if (e.keyCode === 39 || e.keyCode === 38) {
                 nextImage();
-              }              
+            }
         });
     }
 

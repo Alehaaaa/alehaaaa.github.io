@@ -3,20 +3,8 @@
     --secondary-font-color: #999999;
     --main-color: rgb(0, 0, 0);
     --secondary-color: rgb(8, 8, 8);
-    --main-color-transparent: rgba(20, 20, 20, 0.4);
+    --main-color-transparent: rgba(24, 24, 24, 0.8);
 }
-
-@property --navbar-main {
-    syntax: '<color>';
-    initial-value: rgba(0, 0, 0, 0);
-    inherits: false;
-  }
-  
-  @property --navbar-transparent {
-    syntax: '<color>';
-    initial-value: rgb(0, 0, 0, 0);
-    inherits: false;
-  }
 
 * {
     margin: 0;
@@ -41,17 +29,17 @@ a {
 }
 
 header {
-    background: linear-gradient(180deg, var(--navbar-main), var(--navbar-transparent));
+    background: linear-gradient(
+        180deg,
+        var(--main-color) 10%,
+        rgba(8, 8, 8, 0)
+    );
     z-index: 1;
     display: flex;
     position: fixed;
     justify-content: space-between;
     width: 100%;
     top: 0;
-    transition: --navbar-main 1s, --navbar-transparent 1s;
-}
-header:hover {
-    --navbar-main: rgba(0, 0, 0, 0.7);
 }
 
 footer {
@@ -62,7 +50,7 @@ footer {
 #logo {
     display: flex;
     align-items: center;
-    justify-content: center;
+    transition: none;
     margin-left: 2em;
 }
 
@@ -71,25 +59,29 @@ footer {
     aspect-ratio: 1;
 }
 
+/* NAVIGATION */
+
 #navigation {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-right: 5%;
+    margin-right: 1em;
 }
 
 #navbar {
     position: relative;
 }
 
-#navbar ul {
-    padding: 10px;
+#navbar-list {
+    padding: 5px;
     display: flex;
     justify-content: space-evenly;
 }
 
-#navbar li {
+.navbar-element {
+    display: flex;
+    align-items: center;
     padding: 10px;
     font-size: 1.25em;
     margin: 0 20px;
@@ -98,8 +90,114 @@ footer {
     transition: 300ms;
 }
 
-#navbar li:hover {
+.navbar-element:hover {
     scale: 95%;
+}
+
+.dropdown:hover {
+    scale: none;
+}
+
+.dropdown button:hover {
+    scale: none;
+    cursor: pointer;
+}
+
+/* TRANSLATE SELECTOR */
+
+.dropdown button {
+    background-color: var(--main-color-transparent);
+    min-width: 130px;
+    height: 35px;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    justify-content: space-evenly;
+}
+.dropdown button span {
+    margin: 0 5px 0 0;
+}
+.dropdown button span:not(.arrow-down),
+#dropdown-content li span {
+    width: 20px;
+}
+.dropdown button,
+#dropdown-content li {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+.arrow-down {
+    width: 0;
+    height: 0;
+    display: inline-block;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 4px 4px 0 4px;
+    border-color: #fff transparent transparent transparent;
+    margin: 0 0 0 5px;
+}
+
+/* Style for the dropdown content */
+
+#dropdown-content {
+    display: none;
+    position: absolute;
+    margin-top: 9.1em;
+    padding: 0;
+    background-color: #000000;
+    border-radius: 5px;
+}
+
+/* Style for the dropdown content items */
+#dropdown-content li {
+    color: white;
+    padding: 0.5em 1em 0.5em 0;
+    margin: 0;
+    gap: 1em;
+    text-decoration: none;
+    justify-content: end;
+    min-width: 118px;
+}
+
+/* Style for the dropdown content items on hover */
+#dropdown-content li:hover {
+    background-color: var(--main-color-transparent);
+    cursor: pointer;
+    color: rgb(219, 219, 219);
+    border-radius: 5px;
+}
+/* Show the dropdown content when the dropdown button is clicked */
+.dropdown:focus-within #dropdown-content {
+    display: block;
+}
+/* Animate the dropdown content */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#dropdown-content {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #525252;
 }
 
 .hamburger .line {
@@ -648,8 +746,8 @@ footer {
     }
 }
 
-@media (max-width: 980px) {
-    #navbar li {
+@media (max-width: 1000px) {
+    .navbar-element {
         margin: 0 10px;
     }
 
@@ -671,7 +769,7 @@ footer {
     }
 }
 
-@media (max-width: 672px) {
+@media (max-width: 732px) {
     header {
         flex-direction: row;
         justify-content: space-between;
@@ -693,6 +791,62 @@ footer {
 
     .button-container button {
         font-size: 2em;
+    }
+
+    #logo img {
+        font-size: 4em;
+    }
+
+    #navbar-list {
+        top: 0;
+        right: 0;
+        height: 100%;
+        position: fixed;
+        background-color: var(--main-color-transparent);
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 15% 10% 0 10%;
+        transition: 200ms;
+    }
+
+    .navbar-element {
+        margin: 0.5em 0;
+        padding: 0;
+        font-size: 1.5em;
+    }
+
+    .nav-toggle {
+        opacity: 0;
+        translate: 100%;
+    }
+
+    .dropdown {
+        margin-top: auto;
+        transform: translateY(-120px);
+    }
+
+    .dropdown button {
+        font-size: 1.2rem;
+        padding: 20px;
+        border-radius: 10px;
+        outline: none;
+        width: 150px;
+    }
+
+    /* Style for the dropdown content */
+    #dropdown-content {
+        display: none;
+        transform: translate(-0.3em, -11em);
+        position: absolute;
+        background-color: var(--main-color-transparent);
+        animation: none;
+        padding: 0.2em;
+    }
+
+    #dropdown-content li {
+        font-size: 1.1rem;
+        padding: 1.2em 1em;
     }
 
     #welcome-section {
@@ -747,33 +901,5 @@ footer {
     #contact-text {
         padding-right: 0;
         padding-bottom: 15px;
-    }
-
-    #logo img {
-        font-size: 4em;
-    }
-
-    #navbar ul {
-        top: 0;
-        right: 0;
-        height: 100%;
-        position: fixed;
-        background-color: var(--main-color-transparent);
-        align-items: center;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 15% 10% 0 10%;
-        transition: 200ms;
-    }
-
-    #navbar li {
-        margin: 0.5em 0;
-        padding: 0;
-        font-size: 1.5em;
-    }
-
-    .nav-toggle {
-        opacity: 0;
-        translate: 100%;
     }
 }
