@@ -101,18 +101,16 @@ dropdownBtn.addEventListener("click", (event) => {
     toggleDropdown(event);
 });
 
-try{
+try {
     setSelectedLocale(locales[0]);
-}catch( ex ){
-}
+} catch (ex) {}
 const browserLang = new Intl.Locale(navigator.language).language;
 for (const locale of locales) {
     const localeLang = new Intl.Locale(locale).language;
     if (localeLang === browserLang) {
-        try{
+        try {
             setSelectedLocale(locale);
-        }catch( ex ){
-        }
+        } catch (ex) {}
     }
 }
 
@@ -175,7 +173,38 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(video);
 });
 
-$(function () {
+
+const imageNames = [
+    "00_happyness.jpg",
+    "01_disgust.jpg",
+    "02_pain.jpg",
+    "03_surprise.jpg",
+    "04_sadness.jpg",
+    "05_pose1.jpg",
+    "06_pose3.jpg",
+    "07_angry.jpg",
+    "08_objeto_01.jpg",
+    "09_relajado_02.jpg",
+    "091_surprise_02.jpg",
+];
+
+const galleryContainer = document.getElementById("gallery-container");
+imageNames.forEach((imageName) => {
+    const imgPanelDiv = document.createElement("div");
+    imgPanelDiv.className = "img-panel";
+
+    const imgElement = document.createElement("img");
+    imgElement.className = "img";
+    imgElement.loading = "lazy";
+    imgElement.src = `gallery/${imageName}`;
+    imgElement.alt = "";
+
+    imgPanelDiv.appendChild(imgElement);
+    galleryContainer.appendChild(imgPanelDiv);
+});
+
+$(window).on('load', function () {
+
     const thumbnail = $(".img-panel");
     const container = $(".viewer-body");
     const margin = $(".thumb-viewer");
@@ -230,7 +259,6 @@ $(function () {
 
     function prevImage() {
         const currentIndex = $(".open").index();
-        const totalItems = $(".img-panel").length;
 
         if (currentIndex === 0) {
             $(".open").removeClass("open");

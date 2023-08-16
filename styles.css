@@ -116,9 +116,7 @@ footer {
     border: none;
     cursor: pointer;
     justify-content: space-evenly;
-}
-.dropdown button span {
-    margin: 0 5px 0 0;
+    gap: 5px;
 }
 .dropdown button span:not(.arrow-down),
 #dropdown-content li span {
@@ -147,7 +145,7 @@ footer {
 #dropdown-content {
     display: none;
     position: absolute;
-    margin-top: 9.1em;
+    margin-top: 8.3em;
     padding: 0;
     background-color: #000000;
     border-radius: 5px;
@@ -588,7 +586,7 @@ button:active {
     margin-bottom: 3rem;
 }
 
-.gallery {
+#gallery-container {
     margin: 0 10%;
     display: flex;
     gap: 1rem;
@@ -831,13 +829,13 @@ footer {
         padding: 20px;
         border-radius: 10px;
         outline: none;
-        width: 150px;
+        width: 160px;
     }
 
     /* Style for the dropdown content */
     #dropdown-content {
         display: none;
-        transform: translate(-0.3em, -11em);
+        transform: translate(-0.08em, -11em);
         position: absolute;
         background-color: var(--main-color-transparent);
         animation: none;
