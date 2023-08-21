@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.9.2/css/flag-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
     <link rel="stylesheet" href="styles.css" />
     <title>Alejandro Martín | 3D Character Animator</title>
     <link rel="icon" type="image/x-icon" href="/src/favicon.svg" />
@@ -25,8 +26,9 @@
                     <li class="navbar-element"><a id="nav_about" href="#about">About me</a></li>
                     <li class="navbar-element"><a id="nav_projects" href="#projects">Projects</a></li>
                     <li class="navbar-element"><a id="nav_gallery" href="#gallery">Gallery</a></li>
-                    <li class="navbar-element"><a id="nav_reel" href="https://youtu.be/9MxPRdxFjXk"
-                            target=_blank>Reel</a></li>
+                    <li class="navbar-element">
+                        <a id="nav_reel" class="popup-vimeo" href="https://vimeo.com/856399524">Reel</a>
+                    </li>
                     <!-- <li><a href="#contact">Contacto</a></li> -->
                     <li class="navbar-element dropdown">
                         <button id="dropdown-btn"></button>
@@ -61,11 +63,13 @@
     <section id="about">
         <div id="about-info">
             <h2 id="whoami">Who am I?</h2>
-            <p id="whoami1">Hi! I am a 3D Character Animator with vision and passion, always looking for innovative solutions. I am not scared by the problems that may come my way.</p>
-            <p id="whoami2">Experienced in production environments, receiving instructions from the Animation Director and Supervisor and collaborating with other Animators and the Rigging team.</p>
+            <p id="whoami1">Hi! I am a 3D Character Animator with vision and passion, always looking for innovative
+                solutions. I am not scared by the problems that may come my way.</p>
+            <p id="whoami2">Experienced in production environments, receiving instructions from the Animation Director
+                and Supervisor and collaborating with other Animators and the Rigging team.</p>
             <p id="whoami3"><strong>I am excited to contribute to the industry to warm everyone’s heart.</strong></p>
 
-            
+
         </div>
         <div id="skills">
             <div id="list-container">
@@ -108,7 +112,8 @@
 
             <a href="https://www.ecib.es" target=_blank><img src="src/ecib.png" alt=""></a>
             <p class="date">2022 - 2023</p>
-            <h3 id="shortfilm">Animation Short Film by <a id='name_accent' href='https://invictus-designs.com/filmmaker/'>Víctor Marín</a></h3>
+            <h3 id="shortfilm">Animation Short Film by <a id='name_accent'
+                    href='https://invictus-designs.com/filmmaker/'>Víctor Marín</a></h3>
             <h4>ECIB, Barcelona</h4>
         </div>
         <div class="project-tile">
@@ -141,7 +146,8 @@
         <a href="#welcome-section" id="goup">Go back up</a>
     </footer>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
 <script src="scripts.js"></script>
 
 </html>

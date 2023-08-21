@@ -135,6 +135,31 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
 // Video Scripts
 
+$(function() {
+    var videoMute = null; // Store the video element reference
+    
+    $('.popup-vimeo').magnificPopup({
+        disableOn: 700,
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: false,
+        fixedContentPos: false,
+        callbacks: {
+            beforeOpen: function () {
+                videoMute = video.muted;
+                video.pause();
+                video.muted = true;
+            },
+            afterClose: function () {
+                video.play();
+                video.muted = videoMute
+            }
+        }
+    });
+});
+
+
 function fullscreen_video() {
     if (video.requestFullscreen) {
         video.requestFullscreen();
