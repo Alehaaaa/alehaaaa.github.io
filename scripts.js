@@ -1,16 +1,30 @@
 i = document.getElementById("video-volume");
 video = document.getElementById("playing-video");
 
+// ... (your existing code)
+
+
+// Initialization function
+function init() {
+    // Call any initializations or setups here
+    setWebsiteLanguage(); // Call the function to set the website language
+}
+
+// ... (rest of your code)
+
 // Translation Buttons
 let langs; // Declare the variable to hold the imported JSON data
 
-fetch("./langs.json")
-    .then((response) => response.json())
-    .then((data) => {
-        langs = data; // Assign the imported JSON data to the variable
-        init();
-    })
-    .catch((error) => console.error("Error loading langs.json:", error));
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("./langs.json")
+        .then((response) => response.json())
+        .then((data) => {
+            langs = data; // Assign the imported JSON data to the variable
+            init(); // Call the initialization function
+        })
+        .catch((error) => console.error("Error loading langs.json:", error));
+});
+
 
 const locales = ["en-GB", "es-ES", "ca-ES", "fr-FR", "it-IT"];
 const dropdownBtn = document.getElementById("dropdown-btn");
@@ -74,6 +88,19 @@ function setSelectedLocale(locale) {
     )}"></span>${formattedLangName}<span class="arrow-down">`;
     closeDropdown();
     switchLanguage(locale);
+}
+
+// Function to set website language based on device language
+function setWebsiteLanguage() {
+    const browserLang = new Intl.Locale(navigator.language).language;
+    console.log(browserLang)
+    for (const locale of locales) {
+        const localeLang = new Intl.Locale(locale).language;
+        if (localeLang === browserLang) {
+            setSelectedLocale(locale);
+            break; // Stop searching if a matching language is found
+        }
+    }
 }
 
 function toggleDropdown(event) {
@@ -204,13 +231,13 @@ const imageNames = [
     "01_disgust.jpg",
     "02_pain.jpg",
     "03_surprise.jpg",
-    "04_sadness.jpg",
+    "08_samurai.jpg",
     "05_pose1.jpg",
     "06_pose3.jpg",
+    "07_dance.jpg",
     "07_angry.jpg",
     "08_objeto_01.jpg",
     "09_relajado_02.jpg",
-    "091_surprise_02.jpg",
 ];
 
 const galleryContainer = document.getElementById("gallery-container");
