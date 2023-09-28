@@ -229,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Gallery Scripts
 
 const imageNames = [
+    "mega_robo_poster.jpg",
     "00_happyness.jpg",
     "01_disgust.jpg",
     "02_pain.jpg",
