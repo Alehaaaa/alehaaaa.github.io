@@ -226,6 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+// Gallery Scripts
+
 const imageNames = [
     "00_happyness.jpg",
     "01_disgust.jpg",
