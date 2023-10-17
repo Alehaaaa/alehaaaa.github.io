@@ -1,16 +1,12 @@
 i = document.getElementById("video-volume");
 video = document.getElementById("playing-video");
 
-// ... (your existing code)
-
 
 // Initialization function
 function init() {
     // Call any initializations or setups here
     setWebsiteLanguage(); // Call the function to set the website language
 }
-
-// ... (rest of your code)
 
 // Translation Buttons
 let langs; // Declare the variable to hold the imported JSON data
@@ -130,14 +126,14 @@ dropdownBtn.addEventListener("click", (event) => {
 
 try {
     setSelectedLocale(locales[0]);
-} catch (ex) {}
+} catch (ex) { }
 const browserLang = new Intl.Locale(navigator.language).language;
 for (const locale of locales) {
     const localeLang = new Intl.Locale(locale).language;
     if (localeLang === browserLang) {
         try {
             setSelectedLocale(locale);
-        } catch (ex) {}
+        } catch (ex) { }
     }
 }
 
@@ -150,7 +146,7 @@ function togglemenu() {
     navbar.classList.toggle("nav-toggle");
 }
 
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+document.querySelectorAll('.navbar-element .ele').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
         e.preventDefault();
 
@@ -162,9 +158,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
 // Video Scripts
 
-$(function() {
-    var videoMute = null; // Store the video element reference
-    
+$(function () {
     $('.popup-vimeo').magnificPopup({
         disableOn: 700,
         type: 'iframe',
@@ -174,56 +168,42 @@ $(function() {
         fixedContentPos: false,
         callbacks: {
             beforeOpen: function () {
-                videoMute = video.muted;
-                video.pause();
-                video.muted = true;
+                vimeoPlayer.setMuted(true);
+                vimeoPlayer.pause();
             },
             afterClose: function () {
-                video.play();
-                video.muted = videoMute
+                vimeoPlayer.play();
             }
         }
     });
 });
 
+const vimeoVideoID = '875111175';
+const vimeoPlayer = new Vimeo.Player('playing-video', {
+    id: vimeoVideoID,
+    autoplay: true,
+    loop: true,
+});
+vimeoPlayer.setMuted(true);
 
 function fullscreen_video() {
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        /* Safari */
-        video.webkitRequestFullscreen();
-    } else if (video.msRequestFullscreen) {
-        /* IE11 */
-        video.msRequestFullscreen();
-    }
-    video.muted = false;
-    i.src = "src/volume.svg";
+    vimeoPlayer.requestFullscreen().catch(error => {
+        console.error('Failed to enter fullscreen mode:', error);
+    });
+    vimeoPlayer.setMuted(false);
 }
 
 function mute_video() {
-    if (i.src.endsWith("src/mute.svg")) {
-        i.src = "src/volume.svg";
-        video.muted = false;
-    } else {
-        i.src = "src/mute.svg";
-        video.muted = true;
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.intersectionRatio > 0) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        });
+    vimeoPlayer.getVolume().then(volume => {
+        if (i.src.endsWith("src/mute.svg")) {
+            i.src = "src/volume.svg";
+            vimeoPlayer.setMuted(false);
+        } else {
+            i.src = "src/mute.svg";
+            vimeoPlayer.setMuted(true);
+        }
     });
-
-    observer.observe(video);
-});
+}
 
 
 // Gallery Scripts
@@ -325,4 +305,93 @@ $(window).on('load', function () {
         const imageUrl = $(".open").find("img").attr("src");
         container.html(`<img src="${imageUrl}">`);
     }
+});
+
+
+
+// Projects section
+
+const slider = document.getElementById("slider-container");
+const projects = document.querySelectorAll('.project');
+let isDragged = false;
+let oneActive = false
+
+
+function removeSelected() {
+    projects.forEach((project) => {
+        project.classList.remove('active');
+        project.classList.remove('darken');
+    });
+}
+
+document.addEventListener('click', event => {
+    const target = event.target;
+    const projectTarget = target.classList.contains('project') || target.closest('.project');
+    if (!projectTarget) {
+        removeSelected();
+    } else {
+        if (isDragged == false) { projectTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+    }
+});
+
+
+function toggleSelection(clickedProject) {
+    if (isDragged == true) {
+        return
+    }
+
+    if (oneActive == true) {
+        projects.forEach((project) => {
+            if (project !== clickedProject) {
+                project.classList.add('darken');
+                project.classList.remove('active');
+            } else {
+                project.classList.add('active');
+                project.classList.remove('darken');
+            }
+        })
+    }
+    else {
+        projects.forEach((project) => {
+            if (project !== clickedProject) {
+                project.classList.add('darken');
+                project.classList.remove('active');
+            } else {
+                project.classList.add('active');
+                project.classList.remove('darken');
+                oneActive = true
+            }
+        })
+    }
+}
+
+
+
+let startX;
+let scrollLeft;
+let isDown = false;
+
+slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    isDragged = false;
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+});
+
+slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    isDragged = false;
+});
+
+slider.addEventListener('mouseup', () => {
+    isDown = false;
+});
+
+slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX);
+    slider.scrollLeft = scrollLeft - walk;
+    isDragged = true;
 });
