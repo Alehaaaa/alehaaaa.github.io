@@ -35,17 +35,31 @@ function getFlagCode(locale) {
     }
 }
 
+
+const translationElements = new Map();
+
+document.querySelectorAll('[data-translation-id]').forEach((element) => {
+    const translationId = element.getAttribute('data-translation-id');
+    if (!translationElements.has(translationId)) {
+        translationElements.set(translationId, []);
+    }
+    translationElements.get(translationId).push(element);
+});
+
 const switchLanguage = (code) => {
     const selectedLanguage = langs[code];
     if (selectedLanguage) {
         for (let key of Object.keys(selectedLanguage)) {
-            const element = document.getElementById(key);
-            if (element) {
-                element.innerHTML = selectedLanguage[key];
+            const elements = translationElements.get(key);
+            if (elements) {
+                elements.forEach((element) => {
+                    element.innerHTML = selectedLanguage[key];
+                });
             }
         }
     }
 };
+
 
 function setSelectedLocale(locale) {
     const intlLocale = new Intl.Locale(locale);
