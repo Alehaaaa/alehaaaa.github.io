@@ -107,7 +107,6 @@ footer {
     font-size: 1.25em;
     margin: 0 20px;
     border-radius: 6px;
-    cursor: pointer;
     transition: 300ms;
 }
 
@@ -244,7 +243,7 @@ footer {
     scale: 105%;
 }
 
-#hamburger.is-active {
+#hamburger.ham-active {
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
@@ -269,22 +268,22 @@ footer {
     transition: all 0.3s ease-in-out;
 }
 
-#hamburger.is-active:before {
+#hamburger.ham-active:before {
     border: 3px solid #ecf0f1;
 }
 
-#hamburger.is-active .line:nth-child(2) {
+#hamburger.ham-active .line:nth-child(2) {
     opacity: 0;
 }
 
-#hamburger.is-active .line:nth-child(1) {
+#hamburger.ham-active .line:nth-child(1) {
     -webkit-transform: translateY(10px);
     -ms-transform: translateY(10px);
     -o-transform: translateY(10px);
     transform: translateY(10px);
 }
 
-#hamburger.is-active .line:nth-child(3) {
+#hamburger.ham-active .line:nth-child(3) {
     -webkit-transform: translateY(-10px) rotate(90deg);
     -ms-transform: translateY(-10px) rotate(90deg);
     -o-transform: translateY(-10px) rotate(90deg);
@@ -478,6 +477,7 @@ footer {
     margin: 10em auto;
 }
 
+
 .nowarp {
     white-space: nowrap;
 }
@@ -489,7 +489,6 @@ footer {
 }
 
 #slider {
-    height: inherit;
     width: max-content;
     display: flex;
     background-color: black;
@@ -504,11 +503,12 @@ footer {
     margin-inline: 1em;
     border-radius: 1em;
     background: linear-gradient(230deg, var(--gradient-2) 10%, var(--gradient-1) 100%);
-    height: 50vh;
-    font-size: 1.2vh;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     scroll-margin: 8em;
+    
+    height: 40em;
+    font-size: 0.9em;
 }
 
 .project_poster {
@@ -814,6 +814,18 @@ footer {
 }
 
 @media (max-width: 1500px) {
+    
+    #projects {
+        width: 90%;
+        flex-direction: column;
+        gap:  2.5em;
+        margin: 5em auto;
+    }
+
+    .project {
+        font-size: 0.75em;
+    }
+    
     #welcome-section {
         margin-top: 65px;
     }
@@ -861,19 +873,6 @@ footer {
 }
 
 @media (max-width: 1300px) {
-    #projects {
-        width: 90%;
-        flex-direction: column;
-        gap:  2.5em;
-        margin: 5em auto;
-    }
-
-
-    
-
-}
-
-@media (max-width: 1000px) {
     .navbar-element {
         margin: 0 10px;
     }
@@ -897,6 +896,12 @@ footer {
 }
 
 @media (max-width: 732px) {
+
+    .project {
+        height: 80vw;
+        font-size: 1.85vw;
+    }
+
     header {
         flex-direction: row;
         justify-content: space-between;
@@ -934,7 +939,7 @@ footer {
         font-size: 1.5em;
     }
 
-    .nav-toggle {
+    .nav-active {
         opacity: 0;
         translate: 100%;
     }
@@ -1019,11 +1024,6 @@ footer {
     #contact-text {
         padding-right: 0;
         padding-bottom: 15px;
-    }
-
-    .project {
-        height: 90vw;
-        font-size: 2.2vw;
     }
 }
 @media (max-width: 400px) {

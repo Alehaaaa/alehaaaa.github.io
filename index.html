@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -17,17 +18,17 @@
 
 <body>
     <header>
-        <div id="logo">
+        <a id="logo" href="#welcome-section">
             <img src="src/favicon.svg" alt="">
-        </div>
+        </a>
         <div id="navigation">
             <nav id="navbar">
-                <ul id="navbar-list" class="nav-toggle">
+                <ul id="navbar-list" class="nav-active">
                     <li class="navbar-element"><a class="ele" data-translation-id="nav_about" href="#about">About me</a></li>
                     <li class="navbar-element"><a class="ele" data-translation-id="nav_projects" href="#projects">Projects</a></li>
                     <li class="navbar-element"><a class="ele" data-translation-id="nav_gallery" href="#gallery">Gallery</a></li>
                     <li class="navbar-element">
-                        <a id="nav_reel" class="popup-vimeo" href="https://vimeo.com/957666816">Reel</a>
+                        <a id="nav_reel" class="popup-vimeo" href="https://vimeo.com/957666816" data-translation-id="nav_reel">Reel</a>
                     </li>
                     <li class="navbar-element dropdown">
                         <button id="dropdown-btn"></button>
@@ -48,7 +49,14 @@
             <h1>Alejandro Martín.</h1>
             <h2 data-translation-id="carreer">3D Character Animator</h2>
         </div>
-        <div id="playing-video"></div>
+        <div id="playing-video">
+            <iframe 
+                src="https://player.vimeo.com/video/875111175?autoplay=1&loop=1&muted=1"
+                frameborder="0" 
+                allow="autoplay; fullscreen; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
     </section>
 
     <section id="about">
@@ -102,7 +110,7 @@
                     <span class="net-title">Email</span>
                 </div>
                 <div class="net-icon-wrapper">
-                    <a class="net-icon" target=_blank href="/src/CV_EN.pdf">
+                    <a class="net-icon" data-translation-id="cv_link" target=_blank href="/src/CV_EN.pdf">
                         <i class="fa fa-user fa-lg"></i>
                     </a>
                     <span class="net-title">CV</span>
@@ -112,139 +120,12 @@
     </section>
 
     <section id="projects">
-        <h2 class="nowarp" data-translation-id="formproj">Projects<br>and Education</h2>
-        <div id="slider-container">
-            <div id="slider">
-                <div class="project" onclick="toggleSelection(this)"
-                    style="--gradient-1: rgb(90, 28, 34);--gradient-2: rgb(45, 11, 24);">
-                    <img class="project_poster" src="src/project_magischen_tiere_4.jpg" alt="Poster of the feature film 'Die Schule der magischen Tiere 3'" draggable="false">
-                    <div class="project_info">
-                        <h4>2024 - 2025</h4>
-                        <div>
-                            <h5 data-translation-id="project_feature">Project - Feature Film</h5>
-                            <h6>Die Schule der magischen Tiere 4</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_role">Role</h5>
-                            <h6 data-translation-id="project_role_juniormid">Junior/Mid 3D Animator</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_comp">Company</h5>
-                            <a class="company_link" href="https://lumatic.xyz/" target=_blank><img src="src/lumatic.png"
-                                    alt=""></a>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_demo_play">Play Trailer</h5>
-                            <a class="company_play popup-vimeo disabled" href="https://www.youtube.com/watch?v=UpXRJ9ZMtRk"><i
-                                    class="fa fa-play fa-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project" onclick="toggleSelection(this)"
-                    style="--gradient-1: rgb(28, 72, 90);--gradient-2: rgb(56, 16, 35);">
-                    <img class="project_poster" src="src/project_magischen_tiere_3.jpg" alt="Poster of the feature film 'Die Schule der magischen Tiere 3'" draggable="false">
-                    <div class="project_info">
-                        <h4>2023 - 2024</h4>
-                        <div>
-                            <h5 data-translation-id="project_feature">Project - Feature Film</h5>
-                            <h6>Die Schule der magischen Tiere 3</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_role">Role</h5>
-                            <h6 data-translation-id="project_role_junior">Junior 3D Animator</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_comp">Company</h5>
-                            <a class="company_link" href="https://lumatic.xyz/" target=_blank><img src="src/lumatic.png"
-                                    alt=""></a>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_trailer_play">Play Trailer</h5>
-                            <a class="company_play popup-vimeo" href="https://www.youtube.com/watch?v=UpXRJ9ZMtRk"><i
-                                    class="fa fa-play fa-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project" onclick="toggleSelection(this)"
-                    style="--gradient-1: rgb(117, 25, 111);--gradient-2: rgb(73, 21, 71);">
-                    <img class="project_poster" src="src/project_robo.jpg" alt="Poster of the shortfilm 'The Mega Heist'"
-                        draggable="false">
-                    <div class="project_info">
-                        <h4>2022 - 2023</h4>
-                        <div>
-                            <h5 data-translation-id="project_short">Project - Short Film</h5>
-                            <h6 data-translation-id="project_type_3">El Mega Robo by Victor Marin</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_role">Role</h5>
-                            <h6 data-translation-id="project_role_3">3D & Technical Animator</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_comp">Company</h5>
-                            <a class="company_link" href="https://ecib.es/cortometraje/el-mega-robo/" target=_blank><img src="src/ecib.png"
-                                    alt=""></a>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_demo_play">Play Demo</h5>
-                            <a class="company_play popup-vimeo" href="https://vimeo.com/906418779"><i
-                                class="fa fa-play fa-lg"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project" onclick="toggleSelection(this)"
-                    style="--gradient-1: rgb(40, 74, 94);--gradient-2: rgb(13, 37, 51);">
-                    <img class="project_poster" src="src/master_ecib.jpg" alt="Image 2" draggable="false">
-                    <div class="project_info">
-                        <h4>2021 - 2022</h4>
-                        <div>
-                            <h5 data-translation-id="project_type_title_2">Masters Degree in</h5>
-                            <h6 data-translation-id="project_type_2">3D Character Animation</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_role_title_2">Temario</h5>
-                            <h6 data-translation-id="project_role_2">Acting · LipSync · Emoción</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_comp">Company</h5>
-                            <a class="company_link" href="https://www.ecib.es/cursos-3/master-en-animacion3d/" target=_blank><img src="src/ecib.png"
-                                alt=""></a>
-                            </div>
-                            <div>
-                                <h5 data-translation-id="project_demo_play">Play Demo</h5>
-                                <a class="company_play popup-vimeo" href="https://vimeo.com/894582147"><i class="fa fa-play fa-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project" onclick="toggleSelection(this)"
-                    style="--gradient-1: rgb(131, 96, 31);--gradient-2: rgb(85, 61, 24);">
-                    <img class="project_poster" src="src/diploma_ecib.jpg" alt="Shortfilm 'The Mega Heist'"
-                        draggable="false">
-                    <div class="project_info">
-                        <h4>2022 - 2023</h4>
-                        <div>
-                            <h5 data-translation-id="project_type_title_1">Diploma in</h5>
-                            <h6 data-translation-id="project_type_1">2D Animation, Stop Motion, and 3D</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_role_title_1">Topics</h5>
-                            <h6 data-translation-id="project_role_1">Cinema, Drawing, Animation, and 3D</h6>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_comp_1">School</h5>
-                            <a class="company_link" href="https://www.ecib.es/cursos-3/diploma-en-animacion/" target=_blank><img src="src/ecib.png"
-                                    alt=""></a>
-                        </div>
-                        <div>
-                            <h5 data-translation-id="project_demo_play">Play Demo</h5>
-                            <a class="company_play popup-vimeo" href="https://vimeo.com/875108181"><i
-                                    class="fa fa-play fa-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
+        <h2 class="nowarp" data-translation-id="formproj">Education<br>and Projects</h2>
+        <div id="slider-container"></div>
     </section>
 
     <section id="gallery">
-        <h2 data-translation-id="gallery_title">Gallery</h2>
+        <h2 data-translation-id="gallery_title"></h2>
         <div id="gallery-container"></div>
         <div class="thumb-viewer">
             <a class="prev"></a>
@@ -260,6 +141,6 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
-<script src="scripts.js"></script>
+<script src="./scripts/main.js"></script>
 
 </html>
