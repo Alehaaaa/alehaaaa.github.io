@@ -131,7 +131,8 @@
         "project_comp_1": "Escola",
         "project_play_1": "Veure Demo",
         "gallery_title": "Galeria",
-        "goup": "Torna amunt"
+        "goup": "Torna amunt",
+        "cv_link": "/src/CV_ES.pdf"
     },
     "fr-FR": {
         "nav_about": "Sur moi",
@@ -174,7 +175,8 @@
         "project_role_1": "Cinéma, Dessin, Animation et 3D",
         "project_comp_1": "Lycée",
         "gallery_title": "Galerie",
-        "goup": "Remonter"
+        "goup": "Remonter",
+        "cv_link": "/src/CV_EN.pdf"
     },
     "it-IT": {
         "nav_about": "Chi sono",
@@ -218,6 +220,7 @@
         "project_comp_1": "Scuola",
         "project_play_1": "Demo Play",
         "gallery_title": "Galleria",
-        "goup": "Torna su"
+        "goup": "Torna su",
+        "cv_link": "/src/CV_EN.pdf"
     }
 }

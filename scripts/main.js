@@ -465,7 +465,7 @@ function applyTranslationToElement(element, selectedLanguage) {
     const translatedText = selectedLanguage[translationId];
 
     if (translatedText) {
-        if (!element.hasAttribute('href') || element.innerHTML) {
+        if (!element.hasAttribute('href') || element.innerText) {
             element.innerHTML = translatedText;
         } else {
             element.setAttribute('href', translatedText);
