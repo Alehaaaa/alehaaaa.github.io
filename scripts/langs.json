@@ -37,12 +37,12 @@
         "project_type_title_1": "Diplomado en",
         "project_type_1": "Animación 2D, Stop Motion y 3D",
         "project_role_title_1": "Temario",
-        "project_role_1": "Cine, Dibujo, Animación y 3D",
+        "project_role_1": "Cine, Dibujo y Animación",
         "project_comp_1": "Escuela",
         "project_play_1": "Ver Demo",
         "gallery_title": "Galería",
         "goup": "Volver arriba",
-        "cv_link": "/src/CV_ES.pdf"
+        "cv_link": "/src/cv/CV_ES.pdf"
     },
     "en-GB": {
         "nav_about": "About me",
@@ -87,7 +87,7 @@
         "project_play_1": "Play Demo",
         "gallery_title": "Gallery",
         "goup": "Go back up",
-        "cv_link": "/src/CV_EN.pdf"
+        "cv_link": "/src/cv/CV_EN.pdf"
     },
     "ca-ES": {
         "nav_about": "Sobre mi",
@@ -114,11 +114,11 @@
         "project_role_junior": "Animador 3D Junior",
         "project_role_juniormid": "Animador 3D Junior/Mid",
         "project_comp": "Empresa",
-        "project_trailer_play": "Veure Tràiler",
+        "project_trailer_play": "Tràiler",
         "project_short": "Projecte - Curtmetratge",
         "project_type_3": "El Mega Robo per Víctor Marín",
         "project_role_3": "Animador 3D i Tècnic",
-        "project_demo_play": "Veure Demo",
+        "project_demo_play": "Demo",
         "project_type_title_2": "Màster en",
         "project_type_2": "Animació de Personatges 3D",
         "project_role_title_2": "Temari",
@@ -127,12 +127,12 @@
         "project_type_title_1": "Diplomat en",
         "project_type_1": "Animació 2D, Stop Motion i 3D",
         "project_role_title_1": "Temari",
-        "project_role_1": "Cinema, Dibuix, Animació i 3D",
+        "project_role_1": "Cinema, Dibuix i Animació",
         "project_comp_1": "Escola",
-        "project_play_1": "Veure Demo",
+        "project_play_1": "Demo",
         "gallery_title": "Galeria",
         "goup": "Torna amunt",
-        "cv_link": "/src/CV_ES.pdf"
+        "cv_link": "/src/cv/CV_ES.pdf"
     },
     "fr-FR": {
         "nav_about": "Sur moi",
@@ -172,11 +172,11 @@
         "project_type_title_1": "Diplôme en",
         "project_type_1": "Animation 2D, Stop Motion et 3D",
         "project_role_title_1": "Programme",
-        "project_role_1": "Cinéma, Dessin, Animation et 3D",
+        "project_role_1": "Cinéma, Dessin et Animation",
         "project_comp_1": "Lycée",
         "gallery_title": "Galerie",
         "goup": "Remonter",
-        "cv_link": "/src/CV_EN.pdf"
+        "cv_link": "/src/cv/CV_EN.pdf"
     },
     "it-IT": {
         "nav_about": "Chi sono",
@@ -216,11 +216,11 @@
         "project_type_title_1": "Diplomato in",
         "project_type_1": "Animazione 2D, Stop Motion e 3D",
         "project_role_title_1": "Programma",
-        "project_role_1": "Cinema, Disegno, Animazione e 3D",
+        "project_role_1": "Cinema, Disegno e Animazione",
         "project_comp_1": "Scuola",
         "project_play_1": "Demo Play",
         "gallery_title": "Galleria",
         "goup": "Torna su",
-        "cv_link": "/src/CV_EN.pdf"
+        "cv_link": "/src/cv/CV_EN.pdf"
     }
 }

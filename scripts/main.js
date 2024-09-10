@@ -91,8 +91,14 @@ function renderProjects(projectsData) {
         mediaTitle.textContent = project.mediaType === 1 ? "Play Trailer" : "Play Demo";
         mediaTitle.setAttribute('data-translation-id', project.mediaType === 1 ? "project_trailer_play" : "project_demo_play");
         const mediaLink = document.createElement('a');
-        mediaLink.href = project.mediaLink;
         mediaLink.className = "company_play popup-vimeo";
+        
+        if (project.mediaLink) {
+            mediaLink.href = project.mediaLink;
+        } else {
+            mediaLink.classList.add('disabled');
+        }
+        
         const playIcon = document.createElement('i');
         playIcon.className = "fa fa-play fa-lg";
         mediaLink.appendChild(playIcon);
@@ -356,7 +362,7 @@ imageNames.forEach((imageName) => {
     const imgElement = document.createElement("img");
     imgElement.className = "img";
     imgElement.loading = "lazy";
-    imgElement.src = `gallery/${imageName}`;
+    imgElement.src = `src/gallery/${imageName}`;
     imgElement.alt = "";
 
     imgPanelDiv.appendChild(imgElement);
