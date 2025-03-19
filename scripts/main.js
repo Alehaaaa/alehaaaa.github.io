@@ -20,9 +20,10 @@ function renderProjects(projectsData) {
     // Obtenemos el div #slider
     const slider = document.createElement('div');
     slider.id = "slider";
+    let projectCount = 1;
 
     // Recorremos cada proyecto en el JSON
-    projectsData.projects.forEach(project => {
+    projectsData.projects.reverse().forEach(project => {
         // Creamos un div para el proyecto
         const projectDiv = document.createElement('div');
         projectDiv.className = "project";
@@ -32,6 +33,11 @@ function renderProjects(projectsData) {
 
         // Poster del proyecto
         const projectPoster = document.createElement('img');
+        console.log(project.poster)
+        if (project.poster && project.poster.includes("/studies/")) {
+            projectPoster.setAttribute('data-translation-id', 'project_poster_'+projectCount);
+            projectCount++;
+        }
         projectPoster.className = "project_poster";
         projectPoster.src = project.poster;
         projectPoster.alt = `Poster of '${project.title}'`;
@@ -95,6 +101,20 @@ function renderProjects(projectsData) {
         
         if (project.mediaLink) {
             mediaLink.href = project.mediaLink;
+
+            // Agregar evento onclick para abrir el video con Magnific Popup
+            mediaLink.onclick = function(event) {
+                event.preventDefault(); // Evitar navegación por defecto
+                
+                $(this).magnificPopup({
+                    type: 'iframe',
+                    disableOn: 700,
+                    mainClass: 'mfp-fade',
+                    removalDelay: 160,
+                    preloader: false,
+                    fixedContentPos: false
+                }).magnificPopup('open'); // Abrir el popup manualmente
+            };
         } else {
             mediaLink.classList.add('disabled');
         }
@@ -110,7 +130,7 @@ function renderProjects(projectsData) {
         projectDiv.appendChild(projectInfo);
 
         // Añadir el div del proyecto al slider
-        slider.appendChild(projectDiv);
+        slider.prepend(projectDiv);
     });
 
     // Finalmente, añadimos el slider al contenedor
@@ -122,24 +142,60 @@ function renderProjects(projectsData) {
 
 
 
-let isDragged = false;
 let oneActive = false;
+let isDown = false;
 
-// Delegación de eventos para gestionar los clics en los proyectos
-sliderContainer.addEventListener('click', (event) => {
-    const target = event.target.closest('.project');
-    
-    if (!target) {
-        // Si se hace clic fuera de un proyecto, deselecciona todos
-        removeSelected();
-    } else {
-        // Si el proyecto fue arrastrado, no hacemos la selección
-        if (!isDragged) {
+let startX;
+let scrollLeft;
+
+const dragThreshold = 40; // Puedes ajustar este valor
+let isDragged = false;
+let dragDistance = 0;
+
+sliderContainer.addEventListener('mousedown', (e) => {
+    isDown = true;
+    isDragged = false;
+    startX = e.pageX - sliderContainer.offsetLeft;
+    scrollLeft = sliderContainer.scrollLeft;
+    dragDistance = 0; // Reiniciar distancia de arrastre
+});
+
+sliderContainer.addEventListener('mouseleave', () => {
+    isDown = false;
+    isDragged = false;
+});
+
+sliderContainer.addEventListener('mouseup', (event) => {
+    isDown = false;
+
+    // Si el arrastre fue menor que el umbral, se considera un clic
+    if (dragDistance < dragThreshold) {
+        const target = event.target.closest('.project');
+        if (!target) {
+            removeSelected();
+        } else {
             target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             toggleSelection(target);
         }
     }
 });
+
+sliderContainer.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - sliderContainer.offsetLeft;
+    const walk = (x - startX);
+    sliderContainer.scrollLeft = scrollLeft - walk;
+    
+    // Calcular distancia recorrida
+    dragDistance = Math.abs(walk);
+
+    if (dragDistance > dragThreshold) {
+        isDragged = true;
+    }
+});
+
+
 
 function removeSelected() {
     const projects = sliderContainer.querySelectorAll('.project');
@@ -178,39 +234,53 @@ function toggleSelection(clickedProject) {
     }
 }
 
-// Manejo del arrastre en el sliderContainer
-let startX;
-let scrollLeft;
-let isDown = false;
 
-sliderContainer.addEventListener('mousedown', (e) => {
-    isDown = true;
-    isDragged = false;
-    startX = e.pageX - sliderContainer.offsetLeft;
-    scrollLeft = sliderContainer.scrollLeft;
+
+// Video Scripts
+
+$(function () {
+    $('.popup-vimeo').magnificPopup({
+        disableOn: 700,
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: false,
+        fixedContentPos: false,
+        callbacks: {
+            beforeOpen: function () {
+                vimeoPlayer.setMuted(true);
+                vimeoPlayer.pause();
+            },
+            afterClose: function () {
+                vimeoPlayer.play();
+            }
+        }
+    });
 });
 
-sliderContainer.addEventListener('mouseleave', () => {
-    isDown = false;
-    isDragged = false;
+// Iniciar el reproductor de Vimeo
+const vimeoPlayer = new Vimeo.Player('playing-video');
+
+// Crear un IntersectionObserver para detectar cuándo el video está en la vista
+const vimeoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Si el video está en la vista, reproducirlo
+            vimeoPlayer.play();
+        } else {
+            // Si el video no está en la vista, detenerlo
+            vimeoPlayer.pause();
+        }
+    });
+}, {
+    threshold: 0.5 // Se activa cuando el 50% del video está en la vista
 });
 
-sliderContainer.addEventListener('mouseup', () => {
-    isDown = false;
-});
+// Seleccionar el iframe del video
+const videoIframe = document.querySelector('#playing-video');
 
-sliderContainer.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - sliderContainer.offsetLeft;
-    const walk = (x - startX);
-    sliderContainer.scrollLeft = scrollLeft - walk;
-    isDragged = true;
-});
-
-
-
-
+// Observar el iframe del video
+vimeoObserver.observe(videoIframe);
 
 
 function toggleDropdown(event) {
@@ -269,18 +339,31 @@ function togglemenu() {
 document.querySelectorAll('[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
         e.preventDefault();
-
+        
         // Obtener la sección a la que apunta el href
-        const targetSection = document.querySelector(this.getAttribute("href"));
+        const targetId = this.getAttribute("href");
+        const targetSection = document.querySelector(targetId);
 
         if (targetSection) {
             // Obtener la altura del header
-            const headerHeight = document.querySelector('header').offsetHeight;
+            const header = document.querySelector('header');
+            const headerHeight = header ? header.offsetHeight : 0;
+            const sectionHeight = targetSection.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            let sectionPosition;
 
-            // Calcular la posición de la sección menos la altura del header
-            const sectionPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+            if (sectionHeight < viewportHeight) {
+                // Si la sección es más pequeña que la pantalla, centrarla verticalmente
+                sectionPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - 
+                                  (viewportHeight / 2 - sectionHeight / 2);
+            } else {
+                // Si la sección es más grande que la pantalla, mostrar la parte superior con margen
+                const paddingTop = 20; // Puedes ajustar este valor según necesites
+                sectionPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - paddingTop;
+            }
 
-            // Hacer scroll a la posición con la corrección de padding top
+            // Hacer scroll a la posición calculada
             window.scrollTo({
                 top: sectionPosition,
                 behavior: 'smooth'
@@ -290,51 +373,6 @@ document.querySelectorAll('[href^="#"]').forEach((anchor) => {
 });
 
 
-// Video Scripts
-
-$(function () {
-    $('.popup-vimeo').magnificPopup({
-        disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false,
-        callbacks: {
-            beforeOpen: function () {
-                vimeoPlayer.setMuted(true);
-                vimeoPlayer.pause();
-            },
-            afterClose: function () {
-                vimeoPlayer.play();
-            }
-        }
-    });
-});
-
-// Iniciar el reproductor de Vimeo
-const vimeoPlayer = new Vimeo.Player('playing-video');
-
-// Crear un IntersectionObserver para detectar cuándo el video está en la vista
-const vimeoObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Si el video está en la vista, reproducirlo
-            vimeoPlayer.play();
-        } else {
-            // Si el video no está en la vista, detenerlo
-            vimeoPlayer.pause();
-        }
-    });
-}, {
-    threshold: 0.5 // Se activa cuando el 50% del video está en la vista
-});
-
-// Seleccionar el iframe del video
-const videoIframe = document.querySelector('#playing-video');
-
-// Observar el iframe del video
-vimeoObserver.observe(videoIframe);
 
 
 // Gallery Scripts
@@ -446,7 +484,6 @@ const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
         mutation.addedNodes.forEach(node => {
             if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-translation-id')) {
-                // Aplicar la traducción inmediatamente a los nuevos elementos
                 applyTranslationToElement(node);
             }
         });
@@ -461,7 +498,7 @@ const switchLanguage = (code) => {
     const selectedLanguage = langs[code];
     if (selectedLanguage) {
         document.querySelectorAll('[data-translation-id]').forEach((element) => {
-            applyTranslationToElement(element, selectedLanguage);
+        applyTranslationToElement(element, selectedLanguage);
         });
     }
 };
@@ -471,10 +508,12 @@ function applyTranslationToElement(element, selectedLanguage) {
     const translatedText = selectedLanguage[translationId];
 
     if (translatedText) {
-        if (!element.hasAttribute('href') || element.innerText) {
-            element.innerHTML = translatedText;
-        } else {
+        if (element.hasAttribute('href') && !element.innerText) {
             element.setAttribute('href', translatedText);
+        } else if (element.hasAttribute('src')){
+            element.setAttribute('src', translatedText);
+        } else if (element.innerText){
+            element.innerHTML = translatedText;
         }
     }
 }

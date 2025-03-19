@@ -107,11 +107,11 @@ footer {
     font-size: 1.25em;
     margin: 0 20px;
     border-radius: 6px;
-    transition: 300ms;
+    transition: 50ms;
 }
 
 .navbar-element:hover {
-    scale: 95%;
+    scale: 98%;
 }
 
 .dropdown:hover {
@@ -441,7 +441,8 @@ footer {
 
 #list-container ul::before {
     position: absolute;
-    height: 10rem;
+    height: 7rem;
+    bottom: 0.5em;
     width: 100%;
     content: "";
     background: linear-gradient(
@@ -483,6 +484,7 @@ footer {
 }
 
 #slider-container {
+    user-select: none;
     max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -516,20 +518,21 @@ footer {
     max-width: 100%;
     max-height: 100%;
     position: absolute;
-    transition: filter 0.3s, transform 0.2s;
+    transition: filter 0.3s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.4); /* Upwards shadow */
     cursor: pointer;
-    z-index: 1;
 }
 
 .active .project_poster {
     transform: translateY(94%);
     filter: brightness(0.7);
     pointer-events: none;
-    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.4); /* Upwards shadow */
 }
 
 .project:hover:not(.active) > .project_poster {
+    transform: translateY(-1%);
     filter: brightness(1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Upwards shadow */
 }
 
 .darken .project_poster {
@@ -732,23 +735,23 @@ button {
     width: 100%;
     vertical-align: middle;
     aspect-ratio: 1;
-    transition: 150ms;
+    transition: 100ms;
     object-fit: cover;
 }
 
 .img-panel:hover > .img {
-    transform: scale(1.02);
+    transform: scale(1.01);
     filter: drop-shadow(0 0 1rem black);
 }
 
 .thumb-viewer {
-    z-index: 2;
     display: none;
 }
 .view-open {
     overflow: hidden;
 }
 .view-open .thumb-viewer {
+    z-index: 5;
     display: block;
     background: rgba(0, 0, 0, 0.7);
     position: fixed;
@@ -772,32 +775,66 @@ button {
     max-width: 90%;
     max-height: 90%;
 }
+
+.close,
 .prev,
 .next {
     display: inline-block;
     width: 35px;
     height: 35px;
+    cursor: pointer;
+    position: absolute;
+    margin: auto 15px;
+    opacity: 0.6;
+    z-index: 5;
+    top: 0;
+    bottom: 0;
+}
+.prev {
+    left: 15px;
     border-top: 5px solid #bbb;
     border-left: 5px solid #bbb;
     transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 15px;
-    margin: auto 15px;
-    opacity: 0.6;
-    z-index: 5;
 }
 .next {
-    border: none;
-    border-bottom: 5px solid #bbb;
-    border-right: 5px solid #bbb;
     left: auto;
+    border-right: 5px solid #bbb;
+    border-bottom: 5px solid #bbb;
     right: 15px;
+    transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
+.close {
+    bottom: auto;
+    left: auto;
+    top: 15px;
+    right: 0;
+}
+.close::before,
+.close::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 35px;
+    height: 3.5px;
+    background-color: #bbb;
+    transform-origin: center;
+}
+
+.close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+close:hover,
 .prev:hover,
 .next:hover {
     opacity: 1;
