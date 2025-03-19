@@ -19,6 +19,7 @@ const sliderContainer = document.getElementById("slider-container");
 function renderProjects(projectsData) {
     // Obtenemos el div #slider
     const slider = document.createElement('div');
+    const disablePopUpOnValue = 700; // Define el valor de disableOn
     slider.id = "slider";
     let projectCount = 1;
 
@@ -33,7 +34,6 @@ function renderProjects(projectsData) {
 
         // Poster del proyecto
         const projectPoster = document.createElement('img');
-        console.log(project.poster)
         if (project.poster && project.poster.includes("/studies/")) {
             projectPoster.setAttribute('data-translation-id', 'project_poster_'+projectCount);
             projectCount++;
@@ -104,11 +104,14 @@ function renderProjects(projectsData) {
 
             // Agregar evento onclick para abrir el video con Magnific Popup
             mediaLink.onclick = function(event) {
-                event.preventDefault(); // Evitar navegación por defecto
-                
+                if (window.innerWidth <= disablePopUpOnValue) {
+                    return; // Permitir la navegación predeterminada si la pantalla es pequeña
+                }
+
+                event.preventDefault(); // Evitar la navegación por defecto si aplica
                 $(this).magnificPopup({
                     type: 'iframe',
-                    disableOn: 700,
+                    disableOn: disablePopUpOnValue,
                     mainClass: 'mfp-fade',
                     removalDelay: 160,
                     preloader: false,
