@@ -346,7 +346,7 @@ footer {
 
 #network-icons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Ensure equal spacing */
+    grid-template-columns: repeat(3, 1fr); /* Ensure equal spacing */
     gap: 1em;
     justify-content: center;
     align-items: center;
@@ -426,6 +426,7 @@ footer {
     display: flex;
     flex-direction: column;
     position: relative;
+    align-items: center;
 }
 
 #list-container ul {

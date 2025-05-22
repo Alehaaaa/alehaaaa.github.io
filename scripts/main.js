@@ -50,7 +50,11 @@ function renderProjects(projectsData) {
 
         // Año del proyecto
         const year = document.createElement('h4');
-        year.textContent = project.year;
+        if (Array.isArray(project.year)) {
+            year.textContent = project.year.join(' - ');
+        } else {
+            year.textContent = project.year;
+        }
         projectInfo.appendChild(year);
 
         // Título del proyecto (Feature Film o Short Film)
@@ -591,6 +595,3 @@ fetch("scripts/langs.json")
             .catch(error => console.error('Error loading projects:', error));
     })
     .catch((error) => console.error("Error loading langs.json:", error));
-
-
-
