@@ -40,6 +40,9 @@ function renderProjects(projectsData) {
     .slice() // clone array to avoid mutating original
     .reverse()
     .forEach((project) => {
+      if (project.disabled){
+        return;
+      }
       const projectDiv = document.createElement("div");
       projectDiv.className = "project";
       projectDiv.style.setProperty("--gradient-1", project.gradient1);
@@ -114,7 +117,7 @@ function renderProjects(projectsData) {
       const isTrailer = project.mediaType === 1;
       mediaTitle.setAttribute(
         "data-translation-id",
-        isTrailer ? "project_trailer_play" : "project_demo_play"
+        isTrailer ? "project_play_trailer" : "project_play_demo"
       );
       mediaTitle.textContent = isTrailer ? "Play Trailer" : "Play Demo";
 
