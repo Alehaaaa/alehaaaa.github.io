@@ -2,7 +2,7 @@
     "projects": [
         {   
             "disabled": true,
-            "year": [2025, "now"],
+            "year": [2025],
             "type": "project_feature",
             "title": "Three Bags Full",
             "roleTitle": "project_role_title",
