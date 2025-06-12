@@ -484,14 +484,14 @@ footer {
     white-space: nowrap;
 }
 
-#slider-container {
+.slider-container {
     user-select: none;
     max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
 }
 
-#slider {
+.slider {
     width: max-content;
     display: flex;
     background-color: black;

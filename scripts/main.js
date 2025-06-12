@@ -26,37 +26,53 @@ function getFlagCode(locale) {
 }
 
 // -----------------------------------------------------------------------------
-// 1 · Projects slider ----------------------------------------------------------
+// 1 · Projects and Studies sliders ----------------------------------------------------------
 // -----------------------------------------------------------------------------
-const sliderContainer = document.getElementById("slider-container");
 
-function renderProjects(projectsData) {
-  const slider = document.createElement("div");
-  slider.id = "slider";
-  const disablePopUpOnValue = 700;
-  let projectCount = 1;
+function removeSelected() {
+  document.querySelectorAll(".project").forEach((p) => {
+    p.classList.remove("active", "darken");
+  });
+}
 
-  projectsData.projects
-    .slice() // clone array to avoid mutating original
-    .reverse()
-    .forEach((project) => {
+
+const disablePopUpOnValue = 700;
+let oneActive = false;
+
+function renderSliders(trajectoryData) {
+
+  Object.entries(trajectoryData).forEach(([type, projectArray]) => {
+    const container = document.getElementById("projects");
+    
+    const title = document.createElement("h2");
+    title.textContent = type;
+    title.setAttribute("data-translation-id", type);
+    container.appendChild(title);
+
+    const sliderContainer = document.createElement("div");
+    sliderContainer.className = "slider-container";
+    container.appendChild(sliderContainer);
+
+    const slider = document.createElement("div");
+    slider.className = "slider";
+    slider.setAttribute("type", type);
+
+    sliderContainer.appendChild(slider);
+
+    let projectCount = 1;
+
+    projectArray.slice().forEach((project) => {
       if (project.enabled === false) return;
 
       const projectDiv = document.createElement("div");
       projectDiv.className = "project";
       projectDiv.style.setProperty("--gradient-1", project.gradient1);
       projectDiv.style.setProperty("--gradient-2", project.gradient2);
-
-      // click handler (instead of inline onclick)
       projectDiv.addEventListener("click", () => toggleSelection(projectDiv));
 
-      // Poster
       const projectPoster = document.createElement("img");
       if (project.poster && project.poster.includes("/studies/")) {
-        projectPoster.setAttribute(
-          "data-translation-id",
-          `project_poster_${projectCount++}`
-        );
+        projectPoster.setAttribute("data-translation-id", `project_poster_${projectCount++}`);
       }
       projectPoster.className = "project_poster";
       projectPoster.src = project.poster;
@@ -64,18 +80,13 @@ function renderProjects(projectsData) {
       projectPoster.draggable = false;
       projectDiv.appendChild(projectPoster);
 
-      // Info wrapper
       const projectInfo = document.createElement("div");
       projectInfo.className = "project_info";
 
-      // Year
       const year = document.createElement("h4");
-      year.textContent = Array.isArray(project.year)
-        ? project.year.join(" – ")
-        : project.year;
+      year.textContent = Array.isArray(project.year) ? project.year.join(" – ") : project.year;
       projectInfo.appendChild(year);
 
-      // Title & subtitle
       const titleDiv = document.createElement("div");
       const title = document.createElement("h5");
       title.setAttribute("data-translation-id", project.type);
@@ -85,7 +96,6 @@ function renderProjects(projectsData) {
       titleDiv.append(title, titleSub);
       projectInfo.appendChild(titleDiv);
 
-      // Role
       const roleDiv = document.createElement("div");
       const roleTitle = document.createElement("h5");
       roleTitle.setAttribute("data-translation-id", project.roleTitle);
@@ -94,7 +104,6 @@ function renderProjects(projectsData) {
       roleDiv.append(roleTitle, role);
       projectInfo.appendChild(roleDiv);
 
-      // Company
       const companyDiv = document.createElement("div");
       const companyTitle = document.createElement("h5");
       companyTitle.textContent = "Company";
@@ -110,14 +119,10 @@ function renderProjects(projectsData) {
       companyDiv.append(companyTitle, companyLink);
       projectInfo.appendChild(companyDiv);
 
-      // Media (trailer / demo)
       const mediaDiv = document.createElement("div");
       const mediaTitle = document.createElement("h5");
       const isTrailer = project.mediaType === 1;
-      mediaTitle.setAttribute(
-        "data-translation-id",
-        isTrailer ? "project_play_trailer" : "project_play_demo"
-      );
+      mediaTitle.setAttribute("data-translation-id", isTrailer ? "project_play_trailer" : "project_play_demo");
       mediaTitle.textContent = isTrailer ? "Play Trailer" : "Play Demo";
 
       const mediaLink = document.createElement("a");
@@ -141,6 +146,7 @@ function renderProjects(projectsData) {
       } else {
         mediaLink.classList.add("disabled");
       }
+
       const playIcon = document.createElement("i");
       playIcon.className = "fa fa-play fa-lg";
       mediaLink.appendChild(playIcon);
@@ -148,74 +154,82 @@ function renderProjects(projectsData) {
       projectInfo.appendChild(mediaDiv);
 
       projectDiv.appendChild(projectInfo);
-      slider.prepend(projectDiv);
+      slider.appendChild(projectDiv);
     });
 
-  sliderContainer.appendChild(slider);
-}
+    // Dragging functionality
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    const dragThreshold = 40;
+    let isDragged = false;
+    let dragDistance = 0;
 
-// -----------------------------------------------------------------------------
-// 2 · Slider interactions  -----------------------------------------------------
-// -----------------------------------------------------------------------------
-let oneActive = false;
-let isDown = false;
-let startX;
-let scrollLeft;
-const dragThreshold = 40;
-let isDragged = false;
-let dragDistance = 0;
+    sliderContainer.addEventListener("mousedown", (e) => {
+      isDown = true;
+      isDragged = false;
+      startX = e.pageX - sliderContainer.offsetLeft;
+      scrollLeft = sliderContainer.scrollLeft;
+      dragDistance = 0;
+    });
 
-sliderContainer.addEventListener("mousedown", (e) => {
-  isDown = true;
-  isDragged = false;
-  startX = e.pageX - sliderContainer.offsetLeft;
-  scrollLeft = sliderContainer.scrollLeft;
-  dragDistance = 0;
-});
+    sliderContainer.addEventListener("mouseleave", () => {
+      isDown = false;
+      isDragged = false;
+    });
 
-sliderContainer.addEventListener("mouseleave", () => {
-  isDown = false;
-  isDragged = false;
-});
+    sliderContainer.addEventListener("mouseup", (event) => {
+      isDown = false;
+      if (dragDistance < dragThreshold) {
+        const target = event.target.closest(".project");
+        if (!target) {
+          removeSelected();
+        } else {
+          target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+          toggleSelection(target);
+        }
+      }
+    });
 
-sliderContainer.addEventListener("mouseup", (event) => {
-  isDown = false;
-  if (dragDistance < dragThreshold) {
-    const target = event.target.closest(".project");
-    if (!target) {
-      removeSelected();
-    } else {
-      target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-      toggleSelection(target);
+    sliderContainer.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - sliderContainer.offsetLeft;
+      const walk = x - startX;
+      sliderContainer.scrollLeft = scrollLeft - walk;
+      dragDistance = Math.abs(walk);
+      if (dragDistance > dragThreshold) isDragged = true;
+    });
+
+    function toggleSelection(clickedProject) {
+      if (isDragged) return;
+      document.querySelectorAll(".project").forEach((project) => {
+        const isTarget = project === clickedProject;
+        project.classList.toggle("active", isTarget);
+        project.classList.toggle("darken", !isTarget);
+      });
     }
-  }
-});
 
-sliderContainer.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-  const x = e.pageX - sliderContainer.offsetLeft;
-  const walk = x - startX;
-  sliderContainer.scrollLeft = scrollLeft - walk;
-  dragDistance = Math.abs(walk);
-  if (dragDistance > dragThreshold) isDragged = true;
-});
-
-function removeSelected() {
-  sliderContainer.querySelectorAll(".project").forEach((p) => {
-    p.classList.remove("active", "darken");
+    // MutationObserver para traducir dinámicamente
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((n) => {
+          if (n.nodeType === 1 && n.hasAttribute("data-translation-id")) {
+            const currentLocale = dropdownBtn.textContent.trim();
+            const localeKey = locales.find((l) =>
+              currentLocale.includes(new Intl.DisplayNames([l], { type: "language" }).of(new Intl.Locale(l).language))
+            );
+            if (localeKey) applyTranslationToElement(n, langs[localeKey]);
+          }
+        });
+      });
+    });
+    observer.observe(sliderContainer, { childList: true, subtree: true });
   });
 }
 
-function toggleSelection(clickedProject) {
-  if (isDragged) return;
-  sliderContainer.querySelectorAll(".project").forEach((project) => {
-    const isTarget = project === clickedProject;
-    project.classList.toggle("active", isTarget);
-    project.classList.toggle("darken", !isTarget);
-  });
-  oneActive = true;
-}
+
+
 
 // -----------------------------------------------------------------------------
 // 3 · Vimeo pop‑up & intersection observer ------------------------------------
@@ -255,8 +269,12 @@ function closeDropdown() {
 
 document.addEventListener("click", (event) => {
   if (isDropdownOpen) closeDropdown();
-  const sliderEl = document.getElementById("slider");
-  if (sliderEl && !sliderEl.contains(event.target) && oneActive) removeSelected();
+  if (oneActive) {
+    const sliderEls = Array.from(document.getElementsByClassName("slider"));
+    sliderEls.forEach((el) => {
+      if (el && !el.contains(event.target)) removeSelected();
+    });
+  }
 });
 
 dropdownBtn.addEventListener("click", toggleDropdown);
@@ -422,28 +440,14 @@ function chooseInitialLocale() {
   setSelectedLocale(match || locales[0], false);
 }
 
-// MutationObserver: translate late-added nodes (projects slider) --------------
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((m) => {
-    m.addedNodes.forEach((n) => {
-      if (n.nodeType === 1 && n.hasAttribute("data-translation-id")) {
-        const currentLocale = dropdownBtn.textContent.trim();
-        const localeKey = locales.find((l) => currentLocale.includes(new Intl.DisplayNames([l], { type: "language" }).of(new Intl.Locale(l).language)));
-        if (localeKey) applyTranslationToElement(n, langs[localeKey]);
-      }
-    });
-  });
-});
-observer.observe(sliderContainer, { childList: true, subtree: true });
-
 // -----------------------------------------------------------------------------
 // 8 · Load JSON and boot -------------------------------------------------------
 // -----------------------------------------------------------------------------
 Promise.all([
   fetch("scripts/langs.json").then((r) => r.json()),
-  fetch("scripts/projects.json").then((r) => r.json()),
-]).then(([langData, projectData]) => {
+  fetch("scripts/trajectory.json").then((r) => r.json()),
+]).then(([langData, trajectoryData]) => {
   langs = langData;
-  renderProjects(projectData);
+  renderSliders(trajectoryData);
   chooseInitialLocale();
 }).catch((err) => console.error("Initial load error:", err));
