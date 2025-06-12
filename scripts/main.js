@@ -40,9 +40,8 @@ function renderProjects(projectsData) {
     .slice() // clone array to avoid mutating original
     .reverse()
     .forEach((project) => {
-      if (project.disabled){
-        return;
-      }
+      if (project.enabled === false) return;
+
       const projectDiv = document.createElement("div");
       projectDiv.className = "project";
       projectDiv.style.setProperty("--gradient-1", project.gradient1);
@@ -371,7 +370,7 @@ function switchLanguage(code) {
 
 // i18n helper – writes text and, only for real URLs, rewrites href/src
 function applyTranslationToElement(el, dict) {
-  const key  = el.getAttribute('data-translation-id');
+  const key = el.getAttribute('data-translation-id');
   const text = dict[key];
   if (!text) return;
 

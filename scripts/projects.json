@@ -1,7 +1,7 @@
 {
     "projects": [
         {   
-            "disabled": true,
+            "enabled": false,
             "year": [2025],
             "type": "project_feature",
             "title": "Three Bags Full",
