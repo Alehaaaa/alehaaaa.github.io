@@ -208,52 +208,50 @@ footer {
     animation: slideIn 0.3s ease-out;
 }
 
-/* Thin, consistent scrollbars across page, list, and slider, no layout shift */
-html, body { scrollbar-gutter: stable both-edges; }
-
-/* Page (vertical) scrollbar */
-body {
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(120,120,120,0.6) transparent;
+/* Minimal, rounded, hidden-by-default scrollbars, without layout shift */
+/* Reserve space for the OS scrollbar to avoid layout shift */
+html, body {
+    scrollbar-gutter: stable;
 }
-body::-webkit-scrollbar { width: 4px; height: 4px; }
+
+/* Body scrollbars: hidden by default, appear on hover */
+body { scrollbar-width: none; }
+body:hover { scrollbar-width: thin; scrollbar-color: rgba(120,120,120,0.6) transparent; }
+/* WebKit */
+body::-webkit-scrollbar { width: 0; height: 0; }
+body:hover::-webkit-scrollbar { width: 8px; height: 8px; }
 body::-webkit-scrollbar-track { background: transparent; }
 body::-webkit-scrollbar-thumb {
     background: rgba(120,120,120,0.6);
     border-radius: 999px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     background-clip: padding-box;
 }
 
-/* Skills list (vertical) and slider (horizontal) */
+/* Match style for skills list and slider container */
 #list-container ul, #slider-container {
-    scrollbar-gutter: stable; /* reserve space, avoid movement */
-    scrollbar-width: thin; /* keep thin geometry always */
-    scrollbar-color: transparent transparent; /* invisible by default */
+    scrollbar-gutter: stable; /* avoid layout jump when bar appears */
+    scrollbar-width: none; /* hidden by default */
 }
 #list-container ul:hover, #slider-container:hover {
-    scrollbar-color: rgba(120,120,120,0.6) transparent; /* show on hover */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120,120,120,0.6) transparent;
 }
-/* WebKit: keep geometry fixed, toggle visibility via thumb color */
-#list-container ul::-webkit-scrollbar { width: 4px; height: 4px; }
-#slider-container::-webkit-scrollbar { width: 4px; height: 4px; }
-#list-container ul::-webkit-scrollbar-track,
-#slider-container::-webkit-scrollbar-track { background: transparent; }
-#list-container ul::-webkit-scrollbar-thumb,
-#slider-container::-webkit-scrollbar-thumb {
-    background: transparent; /* invisible by default */
+#list-container ul::-webkit-scrollbar, #slider-container::-webkit-scrollbar {
+    width: 0; height: 0;
+}
+#list-container ul:hover::-webkit-scrollbar { width: 8px; }
+#slider-container:hover::-webkit-scrollbar { height: 8px; }
+#list-container ul::-webkit-scrollbar-thumb, #slider-container::-webkit-scrollbar-thumb {
+    background: rgba(120,120,120,0.6);
     border-radius: 999px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     background-clip: padding-box;
 }
-#list-container ul:hover::-webkit-scrollbar-thumb,
-#slider-container:hover::-webkit-scrollbar-thumb {
-    background: rgba(120,120,120,0.6); /* visible on hover */
-}
 
-/* Hide page scrollbar while LightGallery is open (no layout shift) */
-html.lg-on, body.lg-on { overflow: hidden !important; scrollbar-width: none !important; }
-html.lg-on::-webkit-scrollbar, body.lg-on::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
+/* Ensure scrollbars are fully hidden when LightGallery is open */
+body.lg-on { overflow: hidden !important; scrollbar-width: none !important; }
+body.lg-on::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
 
 .hamburger .line {
     width: 24px;
@@ -473,7 +471,9 @@ html.lg-on::-webkit-scrollbar, body.lg-on::-webkit-scrollbar { width: 0 !importa
     padding: 0;
 }
 
-/* removed explicit hide; unified below */
+#list-container ul::-webkit-scrollbar {
+    display: none;
+}
 
 #list-container ul::before {
     position: absolute;

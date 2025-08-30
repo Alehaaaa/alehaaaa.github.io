@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.9.2/css/flag-icons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.8.1/css/lightgallery-bundle.min.css" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/x-icon" href="/src/logos/favicon.svg" />
     <title>Alejandro Martín | 3D Character Animator</title>
@@ -37,7 +38,7 @@
                     </li>
                 </ul>
             </nav>
-            <div class="hamburger" id="hamburger" onclick="togglemenu();">
+            <div class="hamburger" id="hamburger">
                 <span class="line"></span>
                 <span class="line"></span>
                 <span class="line"></span>
@@ -128,12 +129,6 @@
     <section id="gallery">
         <h2 data-translation-id="gallery_title">Gallery</h2>
         <div id="gallery-container"></div>
-        <div class="thumb-viewer">
-            <a class="close"></a>
-            <a class="prev"></a>
-            <a class="next"></a>
-            <div class="viewer-body">
-            </div>
     </section>
 
     <footer>
@@ -143,6 +138,9 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
-<script src="./scripts/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@2.8.1/lightgallery.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@2.8.1/plugins/zoom/lg-zoom.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@2.8.1/plugins/thumbnail/lg-thumbnail.umd.min.js"></script>
+<script type="module" src="./scripts/main.js"></script>
 
 </html>
