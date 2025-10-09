@@ -7,6 +7,7 @@ const loadCachedLocale = () =>
   DEFAULT_LOCALES.includes(localStorage.getItem(CACHE_KEY)) ? localStorage.getItem(CACHE_KEY) : null;
 const saveCachedLocale = (loc) => localStorage.setItem(CACHE_KEY, loc);
 
+
 function getFlagCode(locale) {
   return locale.language === "ca" && locale.region === "ES" ? "es-ct" : locale.region.toLowerCase();
 }
@@ -50,7 +51,7 @@ export function initI18n(langsData, { dropdownBtn, dropdownContent, locales = DE
       const loc = new Intl.Locale(otherLocale);
       const otherName = new Intl.DisplayNames([otherLocale], { type: "language" }).of(loc.language);
       const li = document.createElement("li");
-      li.innerHTML = `${otherName.charAt(0).toUpperCase() + otherName.slice(1)}<span class="fi fi-${getFlagCode(loc)}"></span>`;
+      li.innerHTML = `<span class="fi fi-${getFlagCode(loc)}"></span>${otherName.charAt(0).toUpperCase() + otherName.slice(1)}`;
       li.addEventListener("mousedown", () => setSelectedLocale(otherLocale, true));
       dropdownContent.appendChild(li);
     });

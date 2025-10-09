@@ -56,34 +56,49 @@ export function renderProjects(projectsData, container) {
       const companyDiv = document.createElement("div");
       const companyTitle = document.createElement("h5");
       companyTitle.textContent = "Company";
-      companyTitle.setAttribute("data-translation-id", "project_comp");
+      companyTitle.setAttribute("data-translation-id", project.companyClass);
       const companyLink = document.createElement("a");
       companyLink.href = project.companyLink;
       companyLink.target = "_blank";
+      companyLink.rel = "noopener noreferrer";
       companyLink.className = "company_link";
-      const companyImg = document.createElement("img");
-      companyImg.src = project.companyLogo;
-      companyImg.alt = "Company Logo";
-      companyLink.appendChild(companyImg);
+      if (project.companyLogo) {
+        companyLink.style.backgroundImage = `url('${project.companyLogo}')`;
+      }
+      const hiddenText = document.createElement("span");
+      hiddenText.className = "visually_hidden";
+      hiddenText.textContent = "Company";
+      hiddenText.setAttribute("data-translation-id", project.companyClass);
+
+      companyLink.appendChild(hiddenText);
       companyDiv.append(companyTitle, companyLink);
       projectInfo.appendChild(companyDiv);
 
       const mediaDiv = document.createElement("div");
       const mediaTitle = document.createElement("h5");
-      const isTrailer = project.mediaType === 1;
-      mediaTitle.setAttribute("data-translation-id", isTrailer ? "project_play_trailer" : "project_play_demo");
-      mediaTitle.textContent = isTrailer ? "Play Trailer" : "Play Demo";
+      mediaTitle.setAttribute("data-translation-id", project.mediaType);
 
       const mediaLink = document.createElement("a");
-      mediaLink.className = "company_play popup-vimeo";
+      mediaLink.className = "company_play";
+
       if (project.mediaLink) {
+        if (project.mediaLink.includes("www.imdb.com")) {
+          mediaLink.target = "_blank";
+          mediaLink.rel = "noopener noreferrer";
+          mediaLink.className = "imdb_link";
+          mediaLink.style.backgroundImage = `url("src/logos/imdb.png")`;
+        } else {
+          mediaLink.classList.add("popup-vimeo");
+          mediaLink.innerHTML = `<i class="fa fa-play fa-lg"></i>`;
+          mediaLink.disabled = true; // Disable the link if it's not an IMDb link
+        }
         mediaLink.href = project.mediaLink;
       } else {
         mediaLink.classList.add("disabled");
+        mediaLink.innerHTML = `<i class="fa fa-play fa-lg"></i>`;
+        mediaLink.disabled = true; // Disable the link if no media link is provided
       }
-      const playIcon = document.createElement("i");
-      playIcon.className = "fa fa-play fa-lg";
-      mediaLink.appendChild(playIcon);
+
       mediaDiv.append(mediaTitle, mediaLink);
       projectInfo.appendChild(mediaDiv);
 
@@ -155,4 +170,3 @@ function toggleSelection(clickedProject, container) {
     project.classList.toggle("darken", !isTarget);
   });
 }
-
