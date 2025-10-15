@@ -25,6 +25,31 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <!-- Tailwind CDN with minimal theme to support used classes -->
+    <script>
+      tailwind = window.tailwind || {}
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: '#ffffff',
+              foreground: '#111827',
+              muted: { foreground: '#6b7280' },
+              input: '#e5e7eb',
+              ring: '#111827',
+              primary: { DEFAULT: '#111827', foreground: '#ffffff' },
+              accent: { DEFAULT: '#f3f4f6', foreground: '#111827' },
+            },
+          },
+        },
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Utility overrides for wider layout */
+      .px-4 { padding-left: 8rem !important; padding-right: 8rem !important; }
+      .max-w-7xl { max-width: 170rem !important; }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
