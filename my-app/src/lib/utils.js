@@ -1,3 +1,5 @@
+import projectsData from '../projects.json'
+
 // Minimal className merge utility compatible with objects/arrays/strings
 export function cn(...args) {
   const classes = []
@@ -50,3 +52,34 @@ export function toPublicUrl(p) {
   const baseClean = (base || '').replace(/\/$/, '')
   return baseClean ? `${baseClean}/${rel}` : `/${rel}`
 }
+
+export const projects = projectsData.projects
+  .filter((item) => !item.disabled)
+  .map((item) => {
+    const companyUrl = item.companyUrl || ''
+    const companyName = (item.companyName || '').trim()
+    let companyDisplayName = companyName
+    if (!companyDisplayName && companyUrl) {
+      try {
+        const { hostname } = new URL(companyUrl)
+        companyDisplayName = hostname.replace(/^www\./, '')
+      } catch { }
+    }
+    const years = Array.isArray(item.year)
+      ? item.year
+      : typeof item.year === 'number'
+        ? [item.year]
+        : []
+    return {
+      title: item.title,
+      image: toPublicUrl(item.poster),
+      type: item.type,
+      role: item.role,
+      companyUrl,
+      companyName,
+      companyDisplayName,
+      years,
+      imdb: item.imdbLink,
+      trailer: item.trailerLink,
+    }
+  })

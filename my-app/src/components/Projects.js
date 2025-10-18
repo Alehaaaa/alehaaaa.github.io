@@ -1,19 +1,9 @@
 import React from 'react'
 import Reveal from './Reveal'
-import projectsData from '../projects.json'
-import { toPublicUrl } from '../lib/utils'
+import { projects } from '../lib/utils'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import LightboxImage from './LightboxImage'
 
-const projects = projectsData.projects
-  .filter((p) => !p.disabled)
-  .map((p) => ({
-  title: p.title,
-  image: toPublicUrl(p.poster),
-  description: [p.type, p.role].filter(Boolean).join(' · '),
-  imdb: p.imdbLink,
-  trailer: p.trailerLink,
-}))
 
 export default function Projects() {
   const gap = 24 // px (Tailwind gap-6 / mr-6)
@@ -163,8 +153,8 @@ export default function Projects() {
     endDrag()
     if (wasDrag) {
       // Prevent the synthetic click from firing after a drag
-      try { e.preventDefault() } catch {}
-      try { e.stopPropagation() } catch {}
+      try { e.preventDefault() } catch { }
+      try { e.stopPropagation() } catch { }
       suppressClickRef.current = false
     }
   }, [endDrag])
@@ -204,33 +194,26 @@ export default function Projects() {
         >
           {projects.map((project, i) => {
             const isFocused = i >= index && i < index + visible
-            const source = (projectsData.projects && projectsData.projects[i]) || {}
-            const companyUrl = source.companyLink
-            let companyText = source.companyName || ''
-            if (!companyText && companyUrl) {
-              try {
-                const u = new URL(companyUrl)
-                companyText = u.hostname.replace(/^www\./, '')
-              } catch { }
-            }
+            const companyUrl = project.companyUrl
+            const companyLabel = project.companyDisplayName || project.companyName || ''
             return (
               <div
                 key={i}
                 className="flex-none group"
                 style={{ width: slideWidth ? `${slideWidth}px` : undefined, opacity: isFocused ? 1 : 0.7, transition: 'opacity 300ms ease' }}
               >
-              <div className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover cursor-pointer"
-                  draggable={false}
-                  onDragStart={(e) => e.preventDefault()}
-                  onClick={() => { setImageSrc(project.image); setImageAlt(project.title || ''); setImageOpen(true) }}
-                />
-              </div>
+                <div className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover cursor-pointer"
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    onClick={() => { setImageSrc(project.image); setImageAlt(project.title || ''); setImageOpen(true) }}
+                  />
+                </div>
                 <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
-                <p className="text-gray-600 text-xl leading-relaxed">{[source.type, source.role].filter(Boolean).join(' · ')}</p>
+                <p className="text-gray-600 text-xl leading-relaxed">{[project.type, project.role].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center xl:gap-8 md:gap-5 gap-4 text-black">
                   {project.trailer && (
                     <a
@@ -258,13 +241,13 @@ export default function Projects() {
                   )}
                   {project.imdb && (
                     <a href={project.imdb} target="_blank" rel="noopener noreferrer"
-                    className="font-medium text-xl underline">IMDb</a>
+                      className="font-medium text-xl underline">IMDb</a>
                   )}
                   {companyUrl && (
                     <>
                       <span className="mx-1 text-black">|</span>
                       <a href={companyUrl} target="_blank" rel="noopener noreferrer"
-                      className="text-xl no-underline font-light hover:opacity-80">{companyText || 'Company'}</a>
+                        className="text-xl no-underline font-light hover:opacity-80">{companyLabel || 'Company'}</a>
                     </>
                   )}
                 </div>

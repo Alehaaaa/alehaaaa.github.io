@@ -1,20 +1,7 @@
 import React from 'react'
 import Reveal from './Reveal'
-import projectsData from '../projects.json'
-import { toPublicUrl } from '../lib/utils'
+import { projects } from '../lib/utils'
 import LightboxImage from './LightboxImage'
-
-const items = projectsData.projects
-  .filter((p) => !p.disabled)
-  .map((p) => ({
-    title: p.title,
-    image: toPublicUrl(p.poster),
-    type: p.type,
-    role: p.role,
-    companyUrl: p.companyLink,
-    companyName: p.companyName || '',
-    years: Array.isArray(p.year) ? p.year : [],
-  }))
 
 export default function Explore() {
   const [imageOpen, setImageOpen] = React.useState(false)
@@ -30,7 +17,7 @@ export default function Explore() {
 
         <div className="border-t border-b border-black">
           <div className="divide-y divide-black">
-            {items.map((item, idx) => {
+            {projects.map((item, idx) => {
               const years = item.years
               let yearStr = ''
               if (years.length === 1) yearStr = String(years[0])
@@ -48,7 +35,7 @@ export default function Explore() {
                       <p>{yearStr}</p>
                       <span className='mx-1'>|</span>
                       <a href={item.companyUrl} target="_blank" rel="noopener noreferrer"
-                        className="no-underline font-light hover:opacity-80">{item.companyName || 'Company'}</a>
+                        className="no-underline font-light hover:opacity-80">{item.companyDisplayName || item.companyName || 'Company'}</a>
                     </div>
                   </div>
                   <div>
@@ -71,4 +58,3 @@ export default function Explore() {
     </section>
   )
 }
-
