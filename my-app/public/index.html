@@ -47,9 +47,41 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Utility overrides for wider layout */
-      .px-4 { padding-left: 8rem !important; padding-right: 8rem !important; }
-      .max-w-7xl { max-width: 170rem !important; }
+      /* Responsive container paddings aligned with Tailwind breakpoints */
+      .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+      @media (min-width: 640px) { /* sm */
+        .px-4 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+      }
+      @media (min-width: 768px) { /* md */
+        .px-4 { padding-left: 2rem !important; padding-right: 2rem !important; }
+      }
+      @media (min-width: 1024px) { /* lg */
+        .px-4 { padding-left: 4rem !important; padding-right: 4rem !important; }
+      }
+      @media (min-width: 1280px) { /* xl */
+        .px-4 { padding-left: 6rem !important; padding-right: 6rem !important; }
+      }
+      @media (min-width: 1536px) { /* 2xl */
+        .px-4 { padding-left: 8rem !important; padding-right: 8rem !important; }
+      }
+
+      /* Responsive max width for main container */
+      .max-w-7xl { max-width: 100% !important; }
+      @media (min-width: 1024px) { /* lg */
+        .max-w-7xl { max-width: 90rem !important; }
+      }
+      @media (min-width: 1536px) { /* 2xl */
+        .max-w-7xl { max-width: 120rem !important; }
+      }
+
+      /* Reduce section vertical spacing on smaller screens */
+      .py-40 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+      @media (min-width: 768px) { /* md */
+        .py-40 { padding-top: 6rem !important; padding-bottom: 6rem !important; }
+      }
+      @media (min-width: 1280px) { /* xl */
+        .py-40 { padding-top: 10rem !important; padding-bottom: 10rem !important; }
+      }
     </style>
   </head>
   <body>

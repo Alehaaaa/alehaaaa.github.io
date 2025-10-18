@@ -9,14 +9,13 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <Reveal>
             <div>
-              <h2 className="text-6xl md:text-7xl font-light text-black mb-10">Let's Build!</h2>
+              <h2 className="text-6xl md:text-7xl font-light text-black mb-10">Let's Animate!</h2>
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                Ready to create something extraordinary? We'd love to hear about your project and explore how we can bring your vision to life.
+                I love new projects and meeting new teams. If you're looking to add energy to a sequence, polish a tricky shot, or just explore what we can build together, drop me a line and let's talk.
               </p>
               <div className="text-xl text-gray-600 leading-relaxed mb-8">
                 <p>alehamartinva@gmail.com</p>
                 <p>+34 671 21 39 38</p>
-                {/* <p>123 Architecture Lane<br />Design District, NY 10001</p> */}
               </div>
             </div>
           </Reveal>

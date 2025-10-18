@@ -6,7 +6,7 @@ export default function Footer() {
           <div>
             <h3 className="text-3xl font-bold mb-4">Alejandro</h3>
             <p className="text-gray-400 text-base leading-relaxed">
-              Building future-facing spaces for highly creative, considerate humans.
+              Character animation with clear storytelling, strong acting, and clean polish.
             </p>
           </div>
           <div>
@@ -19,16 +19,15 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-medium mb-4 text-lg">Follow</h4>
-            <div className="space-y-2 text-base text-gray-400">
-              <p>Instagram</p>
-              <p>LinkedIn</p>
-              <p>Twitter</p>
+            <div className="flex flex-col space-y-2 text-base text-gray-400">
+              <a className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alejandro-martin-407527215">LinkedIn</a>
+              <a className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/alejandro_anim/">Instagram</a>
             </div>
           </div>
         </div>
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            © 2024 Alejandro Architecture. All rights reserved.
+            © 2025 Alejandro Martín. All rights reserved.
           </p>
         </div>
       </div>

@@ -9,12 +9,17 @@ export default function About() {
         </Reveal>
         <Reveal delay={100}>
           <p className="text-xl text-gray-600 leading-relaxed mb-8">
-            Founded on the principle that architecture should enhance human experience, Alejandro brings together innovative design thinking with sustainable building practices. Our team of architects, designers, and builders work collaboratively to create spaces that are both beautiful and functional.
+            I'm Alejandro, a character-focused 3D animator from Barcelona, now based in Berlin. I love finding the little choices that make a performance feel honest: clear storytelling, appealing timing, strong posing, and clean polish.
+          </p>
+        </Reveal>
+        <Reveal delay={150}>
+          <p className="text-xl text-gray-600 leading-relaxed mb-8">
+            Recently I animated on "Three Bags Full" at Framestore. Before that, I spent two years at Lumatic VFX & Animation on Die Schule der magischen Tiere (movies 3 & 4), and even built a few pipeline tools to help the team move faster.
           </p>
         </Reveal>
         <Reveal delay={200}>
           <p className="text-xl text-gray-600 leading-relaxed">
-            We believe that great architecture emerges from deep listening, careful observation, and a commitment to craftsmanship that honors both the environment and the communities we serve.
+            I care about hitting deadlines, keeping quality high, supporting my teammates, and bringing a bit of joy to every shot.
           </p>
         </Reveal>
       </div>
