@@ -38,21 +38,18 @@ export default function Explore() {
               const description = [item.type, item.role].filter(Boolean).join(' · ')
 
               return (
-                <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start py-12">
+                <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start py-12">
                   <div className="text-left">
-                    <h3 className="md:text-3xl text-black font-medium text-balance">{item.title}</h3>
+                    <h3 className="text-3xl text-black font-medium text-balance">{item.title}</h3>
                   </div>
                   <div className="text-left">
-                    <p className="text-xl text-black leading-relaxed">{description}</p>
-                    <p className="text-xl text-black/80 mt-2">
-                      {yearStr}
-                      {item.companyUrl && (
-                        <>
-                          <span className="mx-2 text-gray-400">|</span>
-                          <a href={item.companyUrl} target="_blank" rel="noopener noreferrer" className="no-underline font-light text-black/80 hover:opacity-80">{item.companyName || 'Company'}</a>
-                        </>
-                      )}
-                    </p>
+                    <p className="text-xl text-black leading-relaxed text-balance">{description}</p>
+                    <div className="flex items-center mt-2 text-xl text-black 2xl:gap-8 xl:gap-6 md:gap-2 gap-4">
+                      <p>{yearStr}</p>
+                      <span className='mx-1'>|</span>
+                      <a href={item.companyUrl} target="_blank" rel="noopener noreferrer"
+                        className="no-underline font-light hover:opacity-80">{item.companyName || 'Company'}</a>
+                    </div>
                   </div>
                   <div>
                     <div className="aspect-[3/2] overflow-hidden bg-gray-200">
