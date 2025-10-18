@@ -5,7 +5,9 @@ import { toPublicUrl } from '../lib/utils'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import LightboxImage from './LightboxImage'
 
-const projects = projectsData.projects.map((p) => ({
+const projects = projectsData.projects
+  .filter((p) => !p.disabled)
+  .map((p) => ({
   title: p.title,
   image: toPublicUrl(p.poster),
   description: [p.type, p.role].filter(Boolean).join(' · '),
@@ -25,11 +27,17 @@ export default function Projects() {
   const [index, setIndex] = React.useState(0) // non-infinite, start at 0
   const maxIndex = Math.max(0, projects.length - visible)
 
+  // Drag state (mouse + touch via Pointer Events)
+  const [isDragging, setIsDragging] = React.useState(false)
+  const [dragOffset, setDragOffset] = React.useState(0)
+  const dragRef = React.useRef({ startX: 0, startOffset: 0, moved: false })
+
   const [videoOpen, setVideoOpen] = React.useState(false)
   const [videoSrc, setVideoSrc] = React.useState(null)
   const [videoTitle, setVideoTitle] = React.useState('')
   const [imageOpen, setImageOpen] = React.useState(false)
   const [imageSrc, setImageSrc] = React.useState(null)
+  const [imageAlt, setImageAlt] = React.useState('')
 
   const measure = React.useCallback(() => {
     const vp = viewportRef.current
@@ -74,6 +82,95 @@ export default function Projects() {
 
   const imageMidY = React.useMemo(() => (slideWidth ? (slideWidth * 3) / 4 / 2 : 0), [slideWidth])
 
+  // Derived values for dragging
+  const stepSize = slideWidth + gap
+  const maxOffset = Math.max(0, maxIndex * stepSize)
+  const SNAP_RATIO = 0.18 // fraction of a slide to advance
+  const MOVE_THRESHOLD = 8 // px before we treat it as a drag
+
+  // Track whether we've exceeded the move threshold in this gesture
+  const suppressClickRef = React.useRef(false)
+
+  // Read the current visual translateX (in px) from the track element
+  const getCurrentOffset = React.useCallback(() => {
+    const el = trackRef.current
+    if (!el) return offset
+    try {
+      const style = window.getComputedStyle(el)
+      const t = style.transform || style.webkitTransform || 'none'
+      if (!t || t === 'none') return offset
+      if (t.startsWith('matrix3d(')) {
+        const parts = t.slice(9, -1).split(',').map(parseFloat)
+        const tx = parts[12] || 0
+        return Math.max(0, -tx)
+      }
+      if (t.startsWith('matrix(')) {
+        const parts = t.slice(7, -1).split(',').map(parseFloat)
+        const tx = parts[4] || 0
+        return Math.max(0, -tx)
+      }
+    } catch { }
+    return offset
+  }, [offset])
+
+  const onPointerDown = React.useCallback((e) => {
+    // Only left mouse button or touch/pen
+    if (typeof e.button === 'number' && e.button !== 0) return
+    if (!slideWidth) return
+    // Do not initiate dragging when clicking interactive controls
+    const tgt = e.target
+    if (tgt && (tgt.closest && (tgt.closest('a,button')))) return
+    const current = getCurrentOffset()
+    const startIdx = stepSize > 0 ? Math.round(current / stepSize) : index
+    dragRef.current = { startX: e.clientX, startOffset: current, moved: false, startIndex: startIdx }
+    setDragOffset(current)
+    setIsDragging(true)
+  }, [getCurrentOffset, slideWidth, stepSize, index])
+
+  const onPointerMove = React.useCallback((e) => {
+    if (!isDragging) return
+    const dx = e.clientX - dragRef.current.startX
+    let nextOffset = dragRef.current.startOffset - dx
+    if (nextOffset < 0) nextOffset = 0
+    if (nextOffset > maxOffset) nextOffset = maxOffset
+    if (!dragRef.current.moved && Math.abs(dx) > MOVE_THRESHOLD) {
+      dragRef.current.moved = true
+      try { e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId) } catch { }
+    }
+    setDragOffset(nextOffset)
+  }, [isDragging, maxOffset])
+
+  const endDrag = React.useCallback(() => {
+    if (!isDragging) return
+    // Snap using a shorter threshold than 50%
+    const origin = dragRef.current.startIndex || 0
+    let clamped = origin
+    if (stepSize > 0) {
+      const movedFrac = (dragOffset - (dragRef.current.startOffset || 0)) / stepSize
+      if (movedFrac > SNAP_RATIO) clamped = origin + 1
+      else if (movedFrac < -SNAP_RATIO) clamped = origin - 1
+      clamped = Math.max(0, Math.min(clamped, maxIndex))
+    }
+    setIndex(clamped)
+    setIsDragging(false)
+    // Remember if this gesture moved enough to count as a drag
+    suppressClickRef.current = !!dragRef.current.moved
+    dragRef.current.moved = false
+  }, [dragOffset, isDragging, maxIndex, setIndex, stepSize])
+
+  const onPointerUp = React.useCallback((e) => {
+    const wasDrag = suppressClickRef.current
+    endDrag()
+    if (wasDrag) {
+      // Prevent the synthetic click from firing after a drag
+      try { e.preventDefault() } catch {}
+      try { e.stopPropagation() } catch {}
+      suppressClickRef.current = false
+    }
+  }, [endDrag])
+  const onPointerCancel = React.useCallback(() => endDrag(), [endDrag])
+  // No global click capture; we suppress click via pointerup when needed
+
   return (
     <section id="projects" className="py-40 bg-white" style={{ overflowX: 'hidden' }}>
       {/* Header in normal page flow */}
@@ -84,7 +181,15 @@ export default function Projects() {
       </div>
 
       {/* Slider viewport within main container margins */}
-      <div ref={viewportRef} className="relative overflow-hidden select-none">
+      <div
+        ref={viewportRef}
+        className="relative overflow-hidden select-none"
+        style={{ touchAction: 'pan-y', cursor: isDragging ? 'grabbing' : 'grab' }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
+      >
         {/* Track */}
         <div
           ref={trackRef}
@@ -93,8 +198,8 @@ export default function Projects() {
             paddingLeft: gutter,
             paddingRight: gutter,
             gap: `${gap}px`,
-            transform: `translateX(${-offset}px)`,
-            transition: 'transform 700ms ease',
+            transform: `translateX(${- (isDragging ? dragOffset : offset)}px)`,
+            transition: isDragging ? 'none' : 'transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1)',
           }}
         >
           {projects.map((project, i) => {
@@ -121,11 +226,11 @@ export default function Projects() {
                   className="w-full h-full object-cover cursor-pointer"
                   draggable={false}
                   onDragStart={(e) => e.preventDefault()}
-                  onClick={() => { setImageSrc(project.image); setImageOpen(true) }}
+                  onClick={() => { setImageSrc(project.image); setImageAlt(project.title || ''); setImageOpen(true) }}
                 />
               </div>
                 <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">{[source.type, source.role].filter(Boolean).join(' · ')}</p>
+                <p className="text-gray-600 text-xl leading-relaxed">{[source.type, source.role].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-6 text-black">
                   {project.trailer && (
                     <a
@@ -140,24 +245,26 @@ export default function Projects() {
                         const embed = toEmbedSrc(project.trailer)
                         if (embed) {
                           setVideoSrc(embed)
-                          setVideoTitle(project.title)
+                          setVideoTitle(`Trailer for ${project.title}`)
                           setVideoOpen(true)
                         } else {
                           window.open(project.trailer, '_blank', 'noopener,noreferrer')
                         }
                       }}
-                      className="font-medium text-lg underline"
+                      className="font-medium text-xl underline"
                     >
                       Trailer
                     </a>
                   )}
                   {project.imdb && (
-                    <a href={project.imdb} target="_blank" rel="noopener noreferrer" className="font-medium text-lg underline">IMDb</a>
+                    <a href={project.imdb} target="_blank" rel="noopener noreferrer"
+                    className="font-medium text-xl underline">IMDb</a>
                   )}
                   {companyUrl && (
                     <>
-                      <span className="mx-1 text-black/40">|</span>
-                      <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="text-lg no-underline font-light hover:opacity-80">{companyText || 'Company'}</a>
+                      <span className="mx-1 text-black">|</span>
+                      <a href={companyUrl} target="_blank" rel="noopener noreferrer"
+                      className="text-xl no-underline font-light hover:opacity-80">{companyText || 'Company'}</a>
                     </>
                   )}
                 </div>
@@ -193,7 +300,7 @@ export default function Projects() {
         </button>
       </div>
       <LightboxVideo open={videoOpen} onClose={() => setVideoOpen(false)} src={videoSrc} title={videoTitle} />
-      <LightboxImage open={imageOpen} onClose={() => setImageOpen(false)} src={imageSrc} alt={videoTitle} />
+      <LightboxImage open={imageOpen} onClose={() => setImageOpen(false)} src={imageSrc} alt={`Poster for ${imageAlt}`} />
     </section>
   )
 }

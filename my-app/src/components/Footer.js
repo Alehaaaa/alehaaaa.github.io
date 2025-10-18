@@ -4,21 +4,30 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="text-3xl font-bold mb-4">Alejandro</h3>
-            <p className="text-gray-400 text-base leading-relaxed">
+            <h3 className="text-3xl font-medium mb-4">Alejandro</h3>
+            <p className="text-gray-400 text-balance">
               Character animation with clear storytelling, strong acting, and clean polish.
             </p>
           </div>
           <div>
             <h4 className="font-medium mb-4 text-lg">Contact</h4>
-            <div className="space-y-2 text-base text-gray-400">
-              <p>alehamartinva@gmail.com</p>
-              <p>+34 671 21 39 38</p>
-              {/* <p>123 Architecture Lane<br />Design District, NY 10001</p> */}
+            <div className="flex flex-col space-y-2 text-base text-gray-400">
+              <a
+                href="mailto:alehamartinva@gmail.com"
+                className="hover:text-white transition-colors"
+              >
+                alehamartinva@gmail.com
+              </a>
+              <a
+                href="tel:+34671213938"
+                className="hover:text-white transition-colors"
+              >
+                +34 671 21 39 38
+              </a>
             </div>
           </div>
           <div>
-            <h4 className="font-medium mb-4 text-lg">Follow</h4>
+            <h4 className="font-medium mb-4 text-lg">Socials</h4>
             <div className="flex flex-col space-y-2 text-base text-gray-400">
               <a className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alejandro-martin-407527215">LinkedIn</a>
               <a className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/alejandro_anim/">Instagram</a>

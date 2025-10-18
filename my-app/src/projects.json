@@ -1,16 +1,30 @@
 {
     "projects": [
         {
+            "disabled": true,
+            "year": [2025],
+            "type": "Cinematic Trailer",
+            "title": "Fall Guys",
+            "role": "3D Animator",
+            "companyLink": "https://www.passion-pictures.com/",
+            "companyLogo": "/logos/framestore.png",
+            "companyName": "Passion Pictures",
+            "poster": "/projects/project_fall_guys_6.jpg",
+            "trailerLink": "https://www.youtube.com/watch?v=lHSumsnr9ZE",
+            "color1": [28, 79, 90],
+            "color2": [37, 31, 8]
+        },
+        {
             "year": [2025],
             "type": "Feature Film",
             "title": "Three Bags Full",
-            "role": "Mid 3D Animator",
+            "role": "3D Animator",
             "companyLink": "https://framestore.com/",
             "companyLogo": "/logos/framestore.png",
             "companyName": "Framestore",
             "poster": "/projects/project_three_bags_full.jpg",
             "imdbLink": "https://www.imdb.com/title/tt32565993/",
-            "trailerLink": false,
+            "trailerLink": "",
             "color1": [28, 79, 90],
             "color2": [37, 31, 8]
         },

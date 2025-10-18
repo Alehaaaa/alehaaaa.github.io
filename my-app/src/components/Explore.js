@@ -4,22 +4,25 @@ import projectsData from '../projects.json'
 import { toPublicUrl } from '../lib/utils'
 import LightboxImage from './LightboxImage'
 
-const items = projectsData.projects.map((p) => ({
-  title: p.title,
-  image: toPublicUrl(p.poster),
-  type: p.type,
-  role: p.role,
-  companyUrl: p.companyLink,
-  companyName: p.companyName || '',
-  years: Array.isArray(p.year) ? p.year : [],
-}))
+const items = projectsData.projects
+  .filter((p) => !p.disabled)
+  .map((p) => ({
+    title: p.title,
+    image: toPublicUrl(p.poster),
+    type: p.type,
+    role: p.role,
+    companyUrl: p.companyLink,
+    companyName: p.companyName || '',
+    years: Array.isArray(p.year) ? p.year : [],
+  }))
 
 export default function Explore() {
   const [imageOpen, setImageOpen] = React.useState(false)
   const [imageSrc, setImageSrc] = React.useState(null)
+  const [imageAlt, setImageAlt] = React.useState('')
 
   return (
-    <section className="py-40 bg-gray-50">
+    <section className="py-40 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <Reveal className="mb-16 text-left">
           <h2 className="text-6xl md:text-7xl font-light text-black">Explore</h2>
@@ -37,7 +40,7 @@ export default function Explore() {
               return (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start py-12">
                   <div className="text-left">
-                    <h3 className="text-3xl md:text-4xl text-black font-medium">{item.title}</h3>
+                    <h3 className="md:text-3xl text-black font-medium text-balance">{item.title}</h3>
                   </div>
                   <div className="text-left">
                     <p className="text-xl text-black leading-relaxed">{description}</p>
@@ -55,9 +58,9 @@ export default function Explore() {
                     <div className="aspect-[3/2] overflow-hidden bg-gray-200">
                       <img
                         src={item.image}
-                        alt={item.title}
+                        alt={item.image}
                         className="w-full h-full object-cover cursor-pointer"
-                        onClick={() => { setImageSrc(item.image); setImageOpen(true) }}
+                        onClick={() => { setImageSrc(item.image); setImageOpen(true); setImageAlt(item.title || '') }}
                       />
                     </div>
                   </div>
@@ -67,7 +70,7 @@ export default function Explore() {
           </div>
         </div>
       </div>
-      <LightboxImage open={imageOpen} onClose={() => setImageOpen(false)} src={imageSrc} alt="" />
+      <LightboxImage open={imageOpen} onClose={() => setImageOpen(false)} src={imageSrc} alt={`Poster for ${imageAlt}`} />
     </section>
   )
 }

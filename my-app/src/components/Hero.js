@@ -5,6 +5,7 @@ export default function Hero() {
         <div className="relative aspect-video w-full overflow-hidden rounded-lg">
           <iframe
             src="https://player.vimeo.com/video/875111175?autoplay=1&muted=1&controls=1&title=0&dnt=1&loop=1"
+            title="Animation demoreel for website"
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
             className="absolute inset-0 w-full h-full"
