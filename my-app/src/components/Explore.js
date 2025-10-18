@@ -32,7 +32,7 @@ export default function Explore() {
               let yearStr = ''
               if (years.length === 1) yearStr = String(years[0])
               else if (years.length >= 2) yearStr = years[0] === years[years.length - 1] ? String(years[0]) : `${years[0]} - ${years[years.length - 1]}`
-              const description = [item.type, item.role].filter(Boolean).join(' • ')
+              const description = [item.type, item.role].filter(Boolean).join(' · ')
 
               return (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start py-12">

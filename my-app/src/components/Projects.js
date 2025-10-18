@@ -125,7 +125,7 @@ export default function Projects() {
                 />
               </div>
                 <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">{[source.type, source.role].filter(Boolean).join(' • ')}</p>
+                <p className="text-gray-600 text-lg leading-relaxed">{[source.type, source.role].filter(Boolean).join(' · ')}</p>
                 <div className="mt-3 flex items-center gap-6 text-black">
                   {project.trailer && (
                     <a
