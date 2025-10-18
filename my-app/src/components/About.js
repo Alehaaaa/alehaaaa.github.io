@@ -9,7 +9,7 @@ export default function About() {
         </Reveal>
         <Reveal delay={100}>
           <p className="text-xl text-gray-600 leading-relaxed mb-8">
-            Founded on the principle that architecture should enhance human experience, Radian brings together innovative design thinking with sustainable building practices. Our team of architects, designers, and builders work collaboratively to create spaces that are both beautiful and functional.
+            Founded on the principle that architecture should enhance human experience, Alejandro brings together innovative design thinking with sustainable building practices. Our team of architects, designers, and builders work collaboratively to create spaces that are both beautiful and functional.
           </p>
         </Reveal>
         <Reveal delay={200}>

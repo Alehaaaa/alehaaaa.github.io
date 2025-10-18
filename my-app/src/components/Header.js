@@ -26,7 +26,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <a href="#" className="text-3xl md:text-4xl font-normal text-black">
-              Radian
+              Alejandro
             </a>
           </div>
           <nav className="hidden md:flex items-center space-x-10">
@@ -40,7 +40,7 @@ export default function Header() {
               Contact
             </a>
           </nav>
-          <button 
+          <button
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >

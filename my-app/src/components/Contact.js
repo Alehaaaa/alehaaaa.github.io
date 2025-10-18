@@ -13,10 +13,10 @@ export default function Contact() {
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
                 Ready to create something extraordinary? We'd love to hear about your project and explore how we can bring your vision to life.
               </p>
-              <div className="space-y-4 text-gray-600">
-                <p>hello@radian.com</p>
-                <p>+1 (555) 123-4567</p>
-                <p>123 Architecture Lane<br />Design District, NY 10001</p>
+              <div className="text-xl text-gray-600 leading-relaxed mb-8">
+                <p>alehamartinva@gmail.com</p>
+                <p>+34 671 21 39 38</p>
+                {/* <p>123 Architecture Lane<br />Design District, NY 10001</p> */}
               </div>
             </div>
           </Reveal>
@@ -24,37 +24,37 @@ export default function Contact() {
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xl text-gray-700 mb-2">
                     First Name
                   </label>
-                  <Input type="text" className="w-full" />
+                  <Input type="text"  className="w-full rounded-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xl text-gray-700 mb-2">
                     Last Name
                   </label>
-                  <Input type="text" className="w-full" />
+                  <Input type="text"  className="w-full rounded-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xl text-gray-700 mb-2">
                   Email
                 </label>
-                <Input type="email" className="w-full" />
+                <Input type="email"  className="w-full rounded-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xl text-gray-700 mb-2">
                   Project Type
                 </label>
-                <Input type="text" className="w-full" />
+                <Input type="text"  className="w-full rounded-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xl text-gray-700 mb-2">
                   Message
                 </label>
-                <Textarea rows={6} className="w-full" />
+                <Textarea rows={6}  className="w-full rounded-none" />
               </div>
-              <Button type="submit" className="w-full bg-black text-white hover:bg-gray-800">
+              <Button type="submit" className="text-xl w-full bg-black text-white hover:bg-gray-800">
                 Send Message
               </Button>
             </form>

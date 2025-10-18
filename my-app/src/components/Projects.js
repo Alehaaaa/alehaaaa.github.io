@@ -68,7 +68,6 @@ export default function Projects() {
 
   const onTransitionEnd = React.useCallback(() => {
     const origLen = projects.length
-    const total = withClones.length
     if (index >= origLen + visible) {
       setEnableTransition(false)
       setIndex(visible)
@@ -78,7 +77,7 @@ export default function Projects() {
       setIndex(origLen + visible - 1)
       requestAnimationFrame(() => requestAnimationFrame(() => setEnableTransition(true)))
     }
-  }, [index, withClones.length])
+  }, [index])
 
   const imageMidY = React.useMemo(() => {
     // For aspect-[4/3] blocks: height = slideWidth * 3/4
@@ -108,14 +107,14 @@ export default function Projects() {
               <div
                 key={i}
                 ref={i === visible ? slideRef : null}
-                className="flex-none mr-6 group cursor-pointer"
+                className="flex-none mr-6 group"
                 style={{ width: slideWidth ? `${slideWidth}px` : undefined }}
               >
                 <div className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-pointer"
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
                   />
@@ -123,8 +122,8 @@ export default function Projects() {
                 <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">{project.description}</p>
                 <div className="mt-3 space-x-6">
-                  <a href={project.trailer} target="_blank" rel="noopener noreferrer" className="font-bold underline text-black">Trailer</a>
-                  <a href={project.imdb} target="_blank" rel="noopener noreferrer" className="font-bold underline text-black">IMDb</a>
+                  <a href={project.trailer} target="_blank" rel="noopener noreferrer" className="font-medium text-lg underline text-black">Trailer</a>
+                  <a href={project.imdb} target="_blank" rel="noopener noreferrer" className="font-medium text-lg underline text-black">IMDb</a>
                 </div>
               </div>
             ))}

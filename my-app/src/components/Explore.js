@@ -26,8 +26,8 @@ export default function Explore() {
           <h2 className="text-6xl md:text-7xl font-light text-black">Explore</h2>
         </Reveal>
 
-        <div className="border-t border-b border-gray-200">
-          <div className="divide-y divide-gray-200">
+        <div className="border-t border-b border-black">
+          <div className="divide-y divide-black">
             {items.map((item, idx) => (
               <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start py-14">
                 <div className="text-left">
@@ -38,7 +38,7 @@ export default function Explore() {
                 </div>
                 <div className="my-2">
                   <div className="aspect-[3/2] overflow-hidden bg-gray-200">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover cursor-pointer" />
                   </div>
                 </div>
               </div>
