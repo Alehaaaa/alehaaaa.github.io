@@ -4,23 +4,15 @@ import { projects } from '../lib/utils'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import LightboxImage from './LightboxImage'
 
+const MOVE_THRESHOLD = 8
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
 
 export default function Projects() {
   const gap = 24 // px (Tailwind gap-6 / mr-6)
-  const [visible, setVisible] = React.useState(2)
-  const pageRef = React.useRef(null) // measures main container padding (main margins)
-  const viewportRef = React.useRef(null) // slider viewport within main container
-  const trackRef = React.useRef(null)
-  const [slideWidth, setSlideWidth] = React.useState(0)
-  const [gutter, setGutter] = React.useState(0)
-
-  const [index, setIndex] = React.useState(0) // non-infinite, start at 0
-  const maxIndex = Math.max(0, projects.length - visible)
-
-  // Drag state (mouse + touch via Pointer Events)
-  const [isDragging, setIsDragging] = React.useState(false)
-  const [dragOffset, setDragOffset] = React.useState(0)
-  const dragRef = React.useRef({ startX: 0, startOffset: 0, moved: false })
+  const totalProjects = projects.length
+  const pageRef = React.useRef(null)
+  const viewportRef = React.useRef(null)
 
   const [videoOpen, setVideoOpen] = React.useState(false)
   const [videoSrc, setVideoSrc] = React.useState(null)
@@ -29,137 +21,310 @@ export default function Projects() {
   const [imageSrc, setImageSrc] = React.useState(null)
   const [imageAlt, setImageAlt] = React.useState('')
 
+  const [layout, setLayout] = React.useState({
+    visible: 2,
+    slideWidth: 0,
+    leadingPadding: 0,
+    trailingPadding: 0,
+  })
+  const [index, setIndex] = React.useState(0)
+  const [isDragging, setIsDragging] = React.useState(false)
+  const [scrollPosition, setScrollPosition] = React.useState(0)
+
+  const dragRef = React.useRef({ active: false, startX: 0, startScroll: 0, moved: false, lightbox: null })
+  const suppressClickRef = React.useRef(false)
+  const animationRef = React.useRef(null)
+
+  const { visible, slideWidth, leadingPadding, trailingPadding } = layout
+  const stepSize = React.useMemo(() => (slideWidth ? slideWidth + gap : 0), [slideWidth, gap])
+  const maxIndex = React.useMemo(() => Math.max(0, totalProjects - visible), [visible, totalProjects])
+  const imageMidY = React.useMemo(() => (slideWidth ? (slideWidth * 3) / 4 / 2 : 0), [slideWidth])
+  const trailingInset = React.useMemo(() => (visible > 1 ? gap : 0), [visible, gap])
+  const focusPosition = React.useMemo(() => {
+    if (!stepSize) return index
+    const maxPosition = Math.max(0, totalProjects - 1)
+    return clamp(scrollPosition / stepSize, 0, maxPosition)
+  }, [scrollPosition, stepSize, index, totalProjects])
+
   const measure = React.useCallback(() => {
     const vp = viewportRef.current
     const page = pageRef.current
     if (!vp || !page) return
+
     const vpWidth = vp.getBoundingClientRect().width
     const cs = window.getComputedStyle(page)
-    const paddingLeft = parseFloat(cs.paddingLeft) || 0 // equals main margin width (px-4 override)
-    const newVisible = vpWidth < 768 ? 1 : 2
-    // Use a dynamic side peek for balance, clamped to sensible range
-    let width
-    if (newVisible === 2) {
-      // Two centered slides filling the content area evenly (no extra peeks)
-      const contentWidth = Math.max(0, vpWidth - paddingLeft * 2)
+    const basePadding = parseFloat(cs.paddingLeft) || 0
+
+    let newVisible
+    if (vpWidth < 768) {
+      newVisible = 1
+    } else if (vpWidth < 1500) {
+      newVisible = 2
+    } else {
+      newVisible = 3
+    }
+
+    let width = 0
+    let leading = basePadding
+    let trailing = basePadding
+
+    if (newVisible === 1) {
+      const contentWidth = Math.max(0, vpWidth - (basePadding + gap) * 2)
+      width = Math.max(0, contentWidth)
+      leading = basePadding + gap
+      trailing = basePadding + gap
+    } else if (newVisible === 2) {
+      const contentWidth = Math.max(0, vpWidth - basePadding * 2)
       width = Math.max(0, (contentWidth - gap) / 2)
     } else {
-      // One centered slide filling the content area
-      const contentWidth = Math.max(0, vpWidth - paddingLeft * 2)
-      width = Math.max(0, contentWidth)
+      const contentWidth = Math.max(0, vpWidth - basePadding * 2)
+      width = Math.max(0, (contentWidth - gap * 2) / 3)
     }
-    setVisible(newVisible)
-    setSlideWidth(width)
-    setGutter(paddingLeft)
-    // Clamp index if needed when layout changes
-    const newMax = Math.max(0, projects.length - newVisible)
-    setIndex((i) => Math.min(i, newMax))
+
+    setLayout((prev) => {
+      if (
+        prev.visible === newVisible &&
+        prev.slideWidth === width &&
+        prev.leadingPadding === leading &&
+        prev.trailingPadding === trailing
+      ) {
+        return prev
+      }
+      return { visible: newVisible, slideWidth: width, leadingPadding: leading, trailingPadding: trailing }
+    })
+
+    const newMax = Math.max(0, totalProjects - newVisible)
+    const step = width + gap
+    setIndex((prev) => {
+      const next = clamp(prev, 0, newMax)
+      if (step > 0) {
+        requestAnimationFrame(() => {
+          const el = viewportRef.current
+          if (!el) return
+          el.scrollTo({ left: next * step, behavior: 'auto' })
+          setScrollPosition(next * step)
+        })
+      }
+      return next
+    })
+  }, [gap, totalProjects])
+
+  React.useLayoutEffect(() => {
+    measure()
+  }, [measure])
+
+  React.useEffect(() => {
+    const vp = viewportRef.current
+    if (!vp || !stepSize) return
+
+    let frame = 0
+    const syncIndex = () => {
+      frame = 0
+      if (dragRef.current.active && dragRef.current.moved) return
+      const raw = Math.round(vp.scrollLeft / stepSize)
+      const clamped = clamp(raw, 0, maxIndex)
+      setIndex((prev) => (prev === clamped ? prev : clamped))
+      setScrollPosition(vp.scrollLeft)
+    }
+    const onScroll = () => {
+      if (!frame) {
+        frame = requestAnimationFrame(syncIndex)
+      }
+    }
+
+    vp.addEventListener('scroll', onScroll, { passive: true })
+    syncIndex()
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      vp.removeEventListener('scroll', onScroll)
+    }
+  }, [maxIndex, stepSize])
+
+  React.useEffect(() => {
+    const vp = viewportRef.current
+    if (!vp) return
+    let ro = null
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => measure())
+      ro.observe(vp)
+      const page = pageRef.current
+      if (page) ro.observe(page)
+    }
+    window.addEventListener('resize', measure)
+    return () => {
+      if (ro) ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [measure])
+
+  const cancelScrollAnimation = React.useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current.frame)
+      animationRef.current = null
+      const vp = viewportRef.current
+      if (vp) {
+        setScrollPosition(vp.scrollLeft)
+      }
+    }
+  }, [])
+
+  const openImageLightbox = React.useCallback((src, title) => {
+    setImageSrc(src)
+    setImageAlt(title || '')
+    setImageOpen(true)
+  }, [])
+
+  const animateScrollTo = React.useCallback((target, duration = 280) => {
+    const vp = viewportRef.current
+    if (!vp) return
+    const start = vp.scrollLeft
+    const distance = target - start
+    if (Math.abs(distance) < 1 || duration <= 0) {
+      vp.scrollLeft = target
+      setScrollPosition(target)
+      return
+    }
+    const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
+    const startTime = performance.now()
+    const step = (now) => {
+      const progress = Math.min(1, Math.max(0, (now - startTime) / duration))
+      const eased = ease(progress)
+      const next = start + distance * eased
+      vp.scrollLeft = next
+      setScrollPosition(next)
+      if (progress < 1) {
+        animationRef.current = { frame: requestAnimationFrame(step) }
+      } else {
+        setScrollPosition(target)
+        animationRef.current = null
+      }
+    }
+    animationRef.current = { frame: requestAnimationFrame(step) }
+  }, [])
+
+  const scrollToIndex = React.useCallback(
+    (targetIndex, behavior = 'smooth') => {
+      const vp = viewportRef.current
+      if (!vp || !stepSize) return
+      const clampedIndex = Math.min(maxIndex, Math.max(0, targetIndex))
+      const target = clampedIndex * stepSize
+      setIndex(clampedIndex)
+      if (behavior === 'instant') {
+        cancelScrollAnimation()
+        vp.scrollLeft = target
+        setScrollPosition(target)
+        return
+      }
+      cancelScrollAnimation()
+      animateScrollTo(target, 240)
+    },
+    [animateScrollTo, cancelScrollAnimation, maxIndex, stepSize]
+  )
+
+  const endDrag = React.useCallback((didMove) => {
+    dragRef.current.active = false
+    dragRef.current.moved = false
+    suppressClickRef.current = didMove
+    setIsDragging(false)
+  }, [])
+
+  const onPointerDown = React.useCallback((e) => {
+    const vp = viewportRef.current
+    if (!vp) return
+    if (typeof e.button === 'number' && e.button !== 0) return
+    const target = e.target
+    if (target && typeof target.closest === 'function' && target.closest('a,button,input,textarea,select')) {
+      return
+    }
+    const lightboxTarget = target && typeof target.closest === 'function' ? target.closest('[data-lightbox-src]') : null
+
+    cancelScrollAnimation()
+    dragRef.current = {
+      active: true,
+      startX: e.clientX,
+      startScroll: vp.scrollLeft,
+      moved: false,
+      lightbox: lightboxTarget
+        ? {
+          src: lightboxTarget.getAttribute('data-lightbox-src') || '',
+          title: lightboxTarget.getAttribute('data-lightbox-title') || '',
+        }
+        : null,
+    }
+    setScrollPosition(vp.scrollLeft)
+    suppressClickRef.current = false
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId)
+    } catch { }
+  }, [cancelScrollAnimation])
+
+  const onPointerMove = React.useCallback((e) => {
+    if (!dragRef.current.active) return
+    const vp = viewportRef.current
+    if (!vp) return
+
+    const dx = e.clientX - dragRef.current.startX
+    if (!dragRef.current.moved && Math.abs(dx) > MOVE_THRESHOLD) {
+      dragRef.current.moved = true
+      setIsDragging(true)
+      dragRef.current.lightbox = null
+    }
+    if (!dragRef.current.moved) return
+    e.preventDefault()
+
+    const maxScroll = Math.max(0, vp.scrollWidth - vp.clientWidth)
+    const nextScroll = clamp(dragRef.current.startScroll - dx, 0, maxScroll)
+    vp.scrollLeft = nextScroll
+    setScrollPosition(nextScroll)
+  }, [])
+
+  const settleAfterDrag = React.useCallback(() => {
+    const vp = viewportRef.current
+    if (!vp || !stepSize) return
+    const targetIndex = Math.round(vp.scrollLeft / stepSize)
+    scrollToIndex(targetIndex)
+  }, [scrollToIndex, stepSize])
+
+  const onPointerUp = React.useCallback((e) => {
+    if (!dragRef.current.active) return
+    try {
+      e.currentTarget.releasePointerCapture?.(e.pointerId)
+    } catch { }
+    const didMove = dragRef.current.moved
+    const lightbox = dragRef.current.lightbox
+    endDrag(didMove)
+    if (didMove) {
+      settleAfterDrag()
+    } else if (lightbox && lightbox.src) {
+      openImageLightbox(lightbox.src, lightbox.title)
+    }
+    dragRef.current.lightbox = null
+  }, [endDrag, settleAfterDrag, openImageLightbox])
+
+  const onPointerCancel = React.useCallback(() => {
+    if (!dragRef.current.active) return
+    const didMove = dragRef.current.moved
+    dragRef.current.lightbox = null
+    endDrag(didMove)
+    if (didMove) settleAfterDrag()
+  }, [endDrag, settleAfterDrag])
+
+  const onClickCapture = React.useCallback((e) => {
+    if (!suppressClickRef.current) return
+    suppressClickRef.current = false
+    e.preventDefault()
+    e.stopPropagation()
   }, [])
 
   React.useEffect(() => {
-    measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
-  }, [measure])
-
-  const offset = React.useMemo(() => {
-    if (!slideWidth) return 0
-    return index * (slideWidth + gap)
-  }, [slideWidth, index])
-
-  const next = React.useCallback(() => setIndex((i) => Math.min(i + 1, maxIndex)), [maxIndex])
-  const prev = React.useCallback(() => setIndex((i) => Math.max(i - 1, 0)), [])
-
-  const imageMidY = React.useMemo(() => (slideWidth ? (slideWidth * 3) / 4 / 2 : 0), [slideWidth])
-
-  // Derived values for dragging
-  const stepSize = slideWidth + gap
-  const maxOffset = Math.max(0, maxIndex * stepSize)
-  const SNAP_RATIO = 0.18 // fraction of a slide to advance
-  const MOVE_THRESHOLD = 8 // px before we treat it as a drag
-
-  // Track whether we've exceeded the move threshold in this gesture
-  const suppressClickRef = React.useRef(false)
-
-  // Read the current visual translateX (in px) from the track element
-  const getCurrentOffset = React.useCallback(() => {
-    const el = trackRef.current
-    if (!el) return offset
-    try {
-      const style = window.getComputedStyle(el)
-      const t = style.transform || style.webkitTransform || 'none'
-      if (!t || t === 'none') return offset
-      if (t.startsWith('matrix3d(')) {
-        const parts = t.slice(9, -1).split(',').map(parseFloat)
-        const tx = parts[12] || 0
-        return Math.max(0, -tx)
-      }
-      if (t.startsWith('matrix(')) {
-        const parts = t.slice(7, -1).split(',').map(parseFloat)
-        const tx = parts[4] || 0
-        return Math.max(0, -tx)
-      }
-    } catch { }
-    return offset
-  }, [offset])
-
-  const onPointerDown = React.useCallback((e) => {
-    // Only left mouse button or touch/pen
-    if (typeof e.button === 'number' && e.button !== 0) return
-    if (!slideWidth) return
-    // Do not initiate dragging when clicking interactive controls
-    const tgt = e.target
-    if (tgt && (tgt.closest && (tgt.closest('a,button')))) return
-    const current = getCurrentOffset()
-    const startIdx = stepSize > 0 ? Math.round(current / stepSize) : index
-    dragRef.current = { startX: e.clientX, startOffset: current, moved: false, startIndex: startIdx }
-    setDragOffset(current)
-    setIsDragging(true)
-  }, [getCurrentOffset, slideWidth, stepSize, index])
-
-  const onPointerMove = React.useCallback((e) => {
-    if (!isDragging) return
-    const dx = e.clientX - dragRef.current.startX
-    let nextOffset = dragRef.current.startOffset - dx
-    if (nextOffset < 0) nextOffset = 0
-    if (nextOffset > maxOffset) nextOffset = maxOffset
-    if (!dragRef.current.moved && Math.abs(dx) > MOVE_THRESHOLD) {
-      dragRef.current.moved = true
-      try { e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId) } catch { }
+    return () => {
+      cancelScrollAnimation()
     }
-    setDragOffset(nextOffset)
-  }, [isDragging, maxOffset])
+  }, [cancelScrollAnimation])
 
-  const endDrag = React.useCallback(() => {
-    if (!isDragging) return
-    // Snap using a shorter threshold than 50%
-    const origin = dragRef.current.startIndex || 0
-    let clamped = origin
-    if (stepSize > 0) {
-      const movedFrac = (dragOffset - (dragRef.current.startOffset || 0)) / stepSize
-      if (movedFrac > SNAP_RATIO) clamped = origin + 1
-      else if (movedFrac < -SNAP_RATIO) clamped = origin - 1
-      clamped = Math.max(0, Math.min(clamped, maxIndex))
-    }
-    setIndex(clamped)
-    setIsDragging(false)
-    // Remember if this gesture moved enough to count as a drag
-    suppressClickRef.current = !!dragRef.current.moved
-    dragRef.current.moved = false
-  }, [dragOffset, isDragging, maxIndex, setIndex, stepSize])
-
-  const onPointerUp = React.useCallback((e) => {
-    const wasDrag = suppressClickRef.current
-    endDrag()
-    if (wasDrag) {
-      // Prevent the synthetic click from firing after a drag
-      try { e.preventDefault() } catch { }
-      try { e.stopPropagation() } catch { }
-      suppressClickRef.current = false
-    }
-  }, [endDrag])
-  const onPointerCancel = React.useCallback(() => endDrag(), [endDrag])
-  // No global click capture; we suppress click via pointerup when needed
+  const next = React.useCallback(() => scrollToIndex(index + 1), [scrollToIndex, index])
+  const prev = React.useCallback(() => scrollToIndex(index - 1), [scrollToIndex, index])
 
   return (
     <section id="projects" className="py-40 bg-white" style={{ overflowX: 'hidden' }}>
@@ -170,90 +335,121 @@ export default function Projects() {
         </Reveal>
       </div>
 
-      {/* Slider viewport within main container margins */}
-      <div
-        ref={viewportRef}
-        className="relative overflow-hidden select-none"
-        style={{ touchAction: 'pan-y', cursor: isDragging ? 'grabbing' : 'grab' }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerCancel}
-      >
-        {/* Track */}
+      {/* Scrollable viewport within main container margins */}
+      <div className="relative">
         <div
-          ref={trackRef}
-          className="flex items-stretch will-change-transform"
+          ref={viewportRef}
+          className="overflow-x-auto overflow-y-hidden select-none [scrollbar-width:none] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden"
           style={{
-            paddingLeft: gutter,
-            paddingRight: gutter,
-            gap: `${gap}px`,
-            transform: `translateX(${- (isDragging ? dragOffset : offset)}px)`,
-            transition: isDragging ? 'none' : 'transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1)',
+            scrollSnapType: 'none',
+            WebkitOverflowScrolling: 'touch',
+            scrollPaddingLeft: `${leadingPadding}px`,
+            scrollPaddingRight: `${trailingPadding + trailingInset}px`,
+            cursor: isDragging ? 'grabbing' : 'grab',
+            touchAction: 'pan-y',
           }}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
+          onPointerLeave={onPointerCancel}
+          onClickCapture={onClickCapture}
         >
-          {projects.map((project, i) => {
-            const isFocused = i >= index && i < index + visible
-            const companyUrl = project.companyUrl
-            const companyLabel = project.companyDisplayName || project.companyName || ''
-            return (
-              <div
-                key={i}
-                className="flex-none group"
-                style={{ width: slideWidth ? `${slideWidth}px` : undefined, opacity: isFocused ? 1 : 0.7, transition: 'opacity 300ms ease' }}
-              >
-                <div className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover cursor-pointer"
-                    draggable={false}
-                    onDragStart={(e) => e.preventDefault()}
-                    onClick={() => { setImageSrc(project.image); setImageAlt(project.title || ''); setImageOpen(true) }}
-                  />
-                </div>
-                <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
-                <p className="text-gray-600 text-xl leading-relaxed">{[project.type, project.role].filter(Boolean).join(' · ')}</p>
-                <div className="mt-3 flex items-center xl:gap-8 md:gap-5 gap-4 text-black">
-                  {project.trailer && (
-                    <a
-                      href={project.trailer}
-                      onClick={(e) => {
+          {/* Track */}
+          <div
+            className="flex items-stretch"
+            style={{
+              paddingLeft: `${leadingPadding}px`,
+              paddingRight: `${trailingPadding + trailingInset}px`,
+              gap: `${gap}px`,
+            }}
+          >
+            {projects.map((project, i) => {
+              const windowStart = focusPosition
+              const windowEnd = focusPosition + Math.max(visible - 1, 0)
+              let distance = 0
+              if (i < windowStart) {
+                distance = windowStart - i
+              } else if (i > windowEnd) {
+                distance = i - windowEnd
+              }
+              const opacity = clamp(1 - Math.min(distance, 1) * 0.4, 0.6, 1)
+              const companyUrl = project.companyUrl
+              const companyLabel = project.companyDisplayName || project.companyName || ''
+              return (
+                <div
+                  key={i}
+                  className="flex-none group"
+                  style={{
+                    width: slideWidth ? `${slideWidth}px` : undefined,
+                    opacity,
+                    transition: 'opacity 160ms ease',
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
+                  }}
+                >
+                  <div
+                    className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/30"
+                    role="button"
+                    tabIndex={0}
+                    data-lightbox-src={project.image}
+                    data-lightbox-title={project.title || ''}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        const preferNewTab = visible === 1 || (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(orientation: portrait)').matches)
-                        if (preferNewTab) {
-                          window.open(project.trailer, '_blank', 'noopener,noreferrer')
-                          return
-                        }
-                        const embed = toEmbedSrc(project.trailer)
-                        if (embed) {
-                          setVideoSrc(embed)
-                          setVideoTitle(`Trailer for ${project.title}`)
-                          setVideoOpen(true)
-                        } else {
-                          window.open(project.trailer, '_blank', 'noopener,noreferrer')
-                        }
-                      }}
-                      className="font-medium text-xl underline"
-                    >
-                      Trailer
-                    </a>
-                  )}
-                  {project.imdb && (
-                    <a href={project.imdb} target="_blank" rel="noopener noreferrer"
-                      className="font-medium text-xl underline">IMDb</a>
-                  )}
-                  {companyUrl && (
-                    <>
-                      <span className="mx-1 text-black">|</span>
-                      <a href={companyUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-xl no-underline font-light hover:opacity-80">{companyLabel || 'Company'}</a>
-                    </>
-                  )}
+                        openImageLightbox(project.image, project.title)
+                      }
+                    }}
+                  >
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover select-none"
+                      draggable={false}
+                      onDragStart={(e) => e.preventDefault()}
+                    />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">{project.title}</h3>
+                  <p className="text-gray-600 text-xl leading-relaxed">{[project.type, project.role].filter(Boolean).join(' \u00B7 ')}</p>
+                  <div className="mt-3 flex items-center xl:gap-8 md:gap-5 gap-4 text-black">
+                    {project.trailer && (
+                      <a
+                        href={project.trailer}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          const preferNewTab = visible === 1 || (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(orientation: portrait)').matches)
+                          if (preferNewTab) {
+                            window.open(project.trailer, '_blank', 'noopener,noreferrer')
+                            return
+                          }
+                          const embed = toEmbedSrc(project.trailer)
+                          if (embed) {
+                            setVideoSrc(embed)
+                            setVideoTitle(`Trailer for ${project.title}`)
+                            setVideoOpen(true)
+                          } else {
+                            window.open(project.trailer, '_blank', 'noopener,noreferrer')
+                          }
+                        }}
+                        className="font-medium text-xl underline"
+                      >
+                        Trailer
+                      </a>
+                    )}
+                    {project.imdb && (
+                      <a href={project.imdb} target="_blank" rel="noopener noreferrer" className="font-medium text-xl underline">IMDb</a>
+                    )}
+                    {companyUrl && (
+                      <>
+                        <span className="mx-1 text-black">|</span>
+                        <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="text-xl no-underline font-light hover:opacity-80">{companyLabel || 'Company'}</a>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
         {/* Controls */}
