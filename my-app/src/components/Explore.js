@@ -39,7 +39,7 @@ export default function Explore() {
               return (
                 <div
                   key={item.slug || idx}
-                  className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start py-12"
+                  className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start md:py-12 pt-10 pb-16"
                 >
                   <div className="text-left">
                     <h3 className="text-3xl text-black font-medium text-balance">{item.title}</h3>
@@ -66,7 +66,7 @@ export default function Explore() {
                     </div>
                     <Link
                       to={`/projects/${item.slug}`}
-                      className="inline-flex items-center justify-center border border-black px-12 py-2 text-sm font-medium uppercase tracking-[0.25em] text-black transition-colors duration-200 hover:bg-black hover:text-white mt-6 md:mt-auto self-end min-w-[14rem]"
+                      className="inline-flex items-center justify-center border border-black px-14 py-1.5 text-xs uppercase tracking-[0.22em] text-black transition-colors duration-200 hover:bg-black hover:text-white mt-6 md:mt-auto self-end min-w-[13.5rem]"
                     >
                       More...
                     </Link>
