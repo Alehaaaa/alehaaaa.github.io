@@ -1,4 +1,5 @@
 import projectsData from '../projects.json'
+import projectDetails from '../data/projectDetails'
 
 // Minimal className merge utility compatible with objects/arrays/strings
 export function cn(...args) {
@@ -53,23 +54,122 @@ export function toPublicUrl(p) {
   return baseClean ? `${baseClean}/${rel}` : `/${rel}`
 }
 
+const slugify = (value, fallback) => {
+  const base = (value || fallback || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return base || fallback || 'project'
+}
+
+const parseTimelinePoint = (point) => {
+  if (!point || typeof point !== 'object') return null
+  const month = typeof point.month === 'string' ? point.month.trim() : ''
+  const rawYear =
+    typeof point.year === 'number'
+      ? point.year
+      : typeof point.year === 'string'
+        ? Number(point.year)
+        : NaN
+  const year = Number.isFinite(rawYear) ? rawYear : null
+  if (!month && year === null) return null
+  return { month, year }
+}
+
+const parseTimeline = (timeline) => {
+  if (!timeline || typeof timeline !== 'object') return null
+  const start = parseTimelinePoint(timeline.start)
+  const end = parseTimelinePoint(timeline.end)
+  if (!start && !end) return null
+  return {
+    start,
+    end: end || start || null,
+  }
+}
+
+const deriveYearsFromTimeline = (timeline) => {
+  if (!timeline) return []
+  const years = []
+  const push = (val) => {
+    if (!Number.isFinite(val)) return
+    if (!years.includes(val)) years.push(val)
+  }
+  push(timeline.start?.year ?? null)
+  push(timeline.end?.year ?? null)
+  return years.sort((a, b) => a - b)
+}
+
 export const projects = projectsData.projects
   .filter((item) => !item.disabled)
-  .map((item) => {
-    const companyUrl = item.companyUrl || ''
-    const companyName = (item.companyName || '').trim()
-    let companyDisplayName = companyName
-    if (!companyDisplayName && companyUrl) {
-      try {
-        const { hostname } = new URL(companyUrl)
-        companyDisplayName = hostname.replace(/^www\./, '')
-      } catch { }
-    }
-    const years = Array.isArray(item.year)
+  .map((item, index) => {
+    const rawCompanies = Array.isArray(item.companies) ? item.companies : []
+    const fallbackNeeded =
+      !rawCompanies.length && (item.companyName || item.companyUrl || item.companyLogo)
+    const companiesSource = fallbackNeeded
+      ? [
+        {
+          name: item.companyName,
+          url: item.companyUrl,
+          logo: item.companyLogo,
+        },
+      ]
+      : rawCompanies
+
+    const companies = companiesSource
+      .map((company) => {
+        if (!company || typeof company !== 'object') return null
+        const url = company.url || ''
+        const name = (company.name || '').trim()
+        let displayName = (company.displayName || '').trim() || name
+        if (!displayName && url) {
+          try {
+            const { hostname } = new URL(url)
+            displayName = hostname.replace(/^www\./, '')
+          } catch { }
+        }
+        const logo = toPublicUrl(company.logo)
+        if (!name && !url && !logo) return null
+        return {
+          name,
+          url,
+          displayName,
+          logo,
+        }
+      })
+      .filter(Boolean)
+
+    const primaryCompany = companies[0] || {}
+    const companyUrl = primaryCompany.url || ''
+    const companyName = primaryCompany.name || ''
+    const companyDisplayName =
+      primaryCompany.displayName ||
+      (() => {
+        if (companyName) return companyName
+        if (!companyUrl) return ''
+        try {
+          const { hostname } = new URL(companyUrl)
+          return hostname.replace(/^www\./, '')
+        } catch {
+          return ''
+        }
+      })()
+
+    const timeline = parseTimeline(item.timeline)
+
+    const yearsFromTimeline = deriveYearsFromTimeline(timeline)
+
+    const yearsRaw = Array.isArray(item.year)
       ? item.year
       : typeof item.year === 'number'
         ? [item.year]
         : []
+    const years = yearsRaw.length ? yearsRaw : yearsFromTimeline
+    const slug = slugify(item.slug || item.title, `project-${index + 1}`)
+    const detailOverrides = projectDetails[slug] || {}
+    const detailSocials = Array.isArray(detailOverrides.socials) ? detailOverrides.socials : []
+    const detailContent = Array.isArray(detailOverrides.content) ? detailOverrides.content : []
     return {
       title: item.title,
       image: toPublicUrl(item.poster),
@@ -78,8 +178,24 @@ export const projects = projectsData.projects
       companyUrl,
       companyName,
       companyDisplayName,
+      companyLogo: primaryCompany.logo || '',
+      companies,
       years,
+      timeline,
       imdb: item.imdbLink,
       trailer: item.trailerLink,
+      slug,
+      detail: {
+        subtitle: detailOverrides.subtitle || '',
+        content: detailContent,
+        socials: detailSocials,
+      },
     }
   })
+
+export const projectsBySlug = projects.reduce((acc, project) => {
+  acc[project.slug] = project
+  return acc
+}, {})
+
+export const getProjectBySlug = (slug) => projectsBySlug[slug]

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Reveal from "./Reveal";
 import { projects } from "../lib/utils";
 import LightboxVideo, { toEmbedSrc } from "./LightboxVideo";
@@ -196,7 +197,7 @@ export default function Projects() {
               return (
                 <div
                   key={i}
-                  className="flex-none group transition-opacity duration-200"
+                  className="flex-none group transition-opacity duration-200 h-full"
                   style={{
                     width: `${slideWidth}px`,
                     scrollSnapAlign: "start",
@@ -204,22 +205,23 @@ export default function Projects() {
                     opacity,
                   }}
                 >
-                  <div
-                    className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => {
-                      setImageSrc(p.image);
-                      setImageAlt(p.title);
-                      setImageOpen(true);
-                    }}
-                  >
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="w-full h-full object-cover select-none"
-                      draggable={false}
-                    />
+                  <div className="flex h-full flex-col">
+                    <div
+                      className="aspect-[4/3] overflow-hidden mb-6 bg-gray-200"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
+                        setImageSrc(p.image);
+                        setImageAlt(p.title);
+                        setImageOpen(true);
+                      }}
+                    >
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="w-full h-full object-cover select-none"
+                        draggable={false}
+                      />
                   </div>
                   <h3 className="text-3xl md:text-4xl font-medium text-black mb-2">
                     {p.title}
@@ -270,6 +272,15 @@ export default function Projects() {
                         </a>
                       </>
                     )}
+                  </div>
+                  <div className="mt-auto flex justify-end pt-6">
+                    {/* <Link
+                      to={`/projects/${p.slug}`}
+                      className="inline-flex items-center justify-center border border-black px-5 py-1 text-xs font-medium uppercase tracking-[0.3em] text-black transition-colors duration-200 hover:bg-black hover:text-white"
+                    >
+                      More...
+                    </Link> */}
+                  </div>
                   </div>
                 </div>
               );
