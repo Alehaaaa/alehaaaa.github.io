@@ -64,12 +64,12 @@ export default function Explore() {
                         </>
                       )}
                     </div>
-                    <Link
+                    {/* <Link
                       to={`/projects/${item.slug}`}
                       className="inline-flex items-center justify-center border border-black px-14 py-1.5 text-xs uppercase tracking-[0.22em] text-black transition-colors duration-200 hover:bg-black hover:text-white mt-6 md:mt-auto self-end min-w-[13.5rem]"
                     >
                       More...
-                    </Link>
+                    </Link> */}
                   </div>
                   <div>
                     <div className="aspect-[3/2] overflow-hidden bg-gray-200">
