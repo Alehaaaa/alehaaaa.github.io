@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import Reveal from './Reveal'
+import { MAIN_REEL } from '../data/projects'
 
 export default function About() {
   const [reelOpen, setReelOpen] = useState(false)
-  const reelUrl = 'https://vimeo.com/957666816?fl=ip&fe=ec'
+  const reelUrl = MAIN_REEL.url
   const reelSrc = useMemo(() => toEmbedSrc(reelUrl) || reelUrl, [reelUrl])
 
   const openReel = (e) => {
@@ -43,7 +44,7 @@ export default function About() {
                   href="/cv/CV_EN.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border border-black text-xl lg:text-2xl font-base text-black hover:bg-black hover:text-white transition-colors"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 >
                   CV
                 </a>
@@ -51,14 +52,14 @@ export default function About() {
                   href="https://www.linkedin.com/in/alejandro-martin-407527215"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border border-black text-xl lg:text-2xl font-base text-black hover:bg-black hover:text-white transition-colors"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 >
                   LinkedIn
                 </a>
                 <button
                   type="button"
                   onClick={openReel}
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border border-black text-xl lg:text-2xl font-base text-black hover:bg-black hover:text-white transition-colors"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                 >
                   Reel
                 </button>
@@ -67,7 +68,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <LightboxVideo open={reelOpen} onClose={() => setReelOpen(false)} src={reelSrc} title="Animation Reel" />
+      <LightboxVideo open={reelOpen} onClose={() => setReelOpen(false)} src={reelSrc} title={MAIN_REEL.title} />
     </>
   )
 }
