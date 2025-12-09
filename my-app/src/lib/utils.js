@@ -58,3 +58,12 @@ export const projectsBySlug = projects.reduce((acc, p) => {
 }, {})
 
 export const getProjectBySlug = (slug) => projectsBySlug[slug]
+
+export const describeProject = (item) => [item.type, item.role].filter(Boolean).join('\u00A0· ')
+
+export const formatTimeline = (t) => {
+  if (!t?.start) return ''
+  const start = `${t.start.month} ${t.start.year}`
+  const end = t.end ? `${t.end.month} ${t.end.year}` : 'Present'
+  return `${start} - ${end}`
+}

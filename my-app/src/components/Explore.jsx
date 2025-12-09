@@ -1,66 +1,16 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import Reveal from './Reveal'
-import { projects } from '../lib/utils'
+import { projects, describeProject, formatTimeline } from '../lib/utils'
 import LightboxImage from './LightboxImage'
-
-const formatTimeline = (t) => {
-  if (!t?.start) return ''
-  const start = `${t.start.month} ${t.start.year}`
-  const end = t.end ? `${t.end.month} ${t.end.year}` : 'Present'
-  return `${start} - ${end}`
-}
-
-const describeProject = (item) => [item.type, item.role].filter(Boolean).join('\u00A0· ')
-
-/**
- * Logo component that auto-sizes width based on image aspect ratio.
- * Uses background-image to bypass ad-blocker detection.
- */
-function CompanyLogo({ src, name, scale = 1, url }) {
-  const [dims, setDims] = React.useState({ width: 0, height: 0 })
-  const heightRem = 3.5 * scale
-
-  React.useEffect(() => {
-    const img = new Image()
-    img.onload = () => {
-      const aspectRatio = img.naturalWidth / img.naturalHeight
-      setDims({ width: heightRem * aspectRatio, height: heightRem })
-    }
-    img.src = src
-  }, [src, heightRem])
-
-  // Don't render until we know the dimensions
-  if (dims.width === 0) return null
-
-  return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group inline-block p-2 border border-transparent hover:bg-black transition-colors duration-200"
-    >
-      <div
-        role="img"
-        aria-label={name}
-        style={{
-          backgroundImage: `url(${src})`,
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          height: `${dims.height}rem`,
-          width: `${dims.width}rem`,
-        }}
-        className="transition-all duration-200 group-hover:invert"
-      />
-    </a>
-  )
-}
+import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
+import { CompanyLogo } from './CompanyLogo'
 
 export default function Explore() {
-  const [lightbox, setLightbox] = React.useState({ open: false, src: null, alt: '', description: '' })
+  const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '' })
+  const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' })
 
   /* Extract unique tags from types */
-  const allTags = React.useMemo(() => {
+  const allTags = useMemo(() => {
     const tags = new Set()
     projects.forEach(p => {
       if (p.type) tags.add(p.type)
@@ -68,7 +18,7 @@ export default function Explore() {
     return Array.from(tags).sort()
   }, [])
 
-  const [selectedTags, setSelectedTags] = React.useState([])
+  const [selectedTags, setSelectedTags] = useState([])
 
   const toggleTag = (tag) => {
     setSelectedTags(prev =>
@@ -78,7 +28,7 @@ export default function Explore() {
     )
   }
 
-  const filteredProjects = React.useMemo(() => {
+  const filteredProjects = useMemo(() => {
     if (selectedTags.length === 0) return projects
     return projects.filter(p => selectedTags.includes(p.type))
   }, [selectedTags])
@@ -87,6 +37,13 @@ export default function Explore() {
     open: true,
     src: item.image,
     alt: item.title || '',
+    description: describeProject(item)
+  })
+
+  const openVideo = (item, embedSrc) => setVideo({
+    open: true,
+    src: embedSrc,
+    title: item.title || '',
     description: describeProject(item)
   })
 
@@ -161,6 +118,37 @@ export default function Explore() {
                       <div className="flex flex-wrap items-center text-xl font-medium text-black mt-0 pl-4 pb-2">
                         <p>{timelineStr}</p>
                       </div>
+                      {(item.trailer || item.imdb) && (
+                        <div className="flex items-center gap-3 mt-auto justify-end">
+                          {item.trailer && (
+                            <a
+                              href={item.trailer}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => {
+                                const embed = toEmbedSrc(item.trailer);
+                                if (window.innerWidth >= 768 && embed) {
+                                  e.preventDefault();
+                                  openVideo(item, embed);
+                                }
+                              }}
+                              className="px-4 py-1.5 border-2 border-black bg-white text-base font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
+                            >
+                              Trailer
+                            </a>
+                          )}
+                          {item.imdb && (
+                            <a
+                              href={item.imdb}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-1.5 border-2 border-black bg-white text-base font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
+                            >
+                              IMDb
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="aspect-[3/2] overflow-hidden bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
@@ -185,6 +173,13 @@ export default function Explore() {
         src={lightbox.src}
         alt={`Poster for ${lightbox.alt}`}
         description={lightbox.description}
+      />
+      <LightboxVideo
+        open={video.open}
+        onClose={() => setVideo(prev => ({ ...prev, open: false }))}
+        src={video.src}
+        title={`Trailer for ${video.title}`}
+        description={video.description}
       />
     </section>
   )

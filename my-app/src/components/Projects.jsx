@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, animate } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Reveal from "./Reveal";
 import { projects } from "@/lib/utils";
@@ -13,23 +13,172 @@ export default function Projects() {
   const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' });
   const [image, setImage] = useState({ open: false, src: null, alt: '', description: '' });
 
+  // Drag state for desktop
+  const [isDragging, setIsDragging] = useState(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const lastX = useRef(0);
+  const lastTime = useRef(0);
+  const velocity = useRef(0);
+
+  const CLICK_THRESHOLD = 10;
+  const dragDistance = useRef(0);
+
+  const getItemWidth = () => {
+    const container = scrollContainerRef.current;
+    if (!container || !container.children[0]) return 0;
+    // Assuming the first child is the "sizer" or all are same width
+    // The previous code used container.children[0].offsetWidth + 24 (gap)
+    // We should be careful to get the actual item width.
+    // The children are mapped inside.
+    const item = container.querySelector('.project-card-container');
+    return item ? item.offsetWidth + 24 : container.clientWidth * 0.45; // Fallback
+  };
+
+  const handleMouseDown = (e) => {
+    if (window.innerWidth < 768) return;
+    setIsDragging(true);
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+    lastX.current = e.pageX;
+    lastTime.current = Date.now();
+    velocity.current = 0;
+    dragDistance.current = 0;
+
+    // Stop any ongoing animation
+    if (scrollContainerRef.current.animation) {
+      scrollContainerRef.current.animation.stop();
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current);
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+
+    // Track velocity
+    const now = Date.now();
+    const dt = now - lastTime.current;
+    if (dt > 0) {
+      const dx = e.pageX - lastX.current;
+      velocity.current = dx / dt; // pixels per ms
+      lastX.current = e.pageX;
+      lastTime.current = now;
+    }
+
+    dragDistance.current = Math.abs(walk);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    // If it was just a click, don't snap/scroll
+    if (dragDistance.current < CLICK_THRESHOLD) return;
+
+    const container = scrollContainerRef.current;
+    const itemWidth = getItemWidth();
+
+    // Calculate target
+    // Project where the scroll would end up with current velocity
+    // Simple physics: friction slows it down.
+    // We can use a simplified approach: predict end point and snap to nearest.
+
+    // Current scroll position
+    const currentScroll = container.scrollLeft;
+
+    // Velocity is pixels/ms. 
+    // Let's amplify it a bit for "flick" feel.
+    // A typical flick might be ~1-3 px/ms.
+    // We want to add (velocity * constant) to currentScroll.
+    // Note: scrolling left means positive scroll value increases. 
+    // Dragging mouse LEFT (negative dx) INCREASES scrollLeft.
+    // So if velocity is negative (mouse moving left), we are adding to scrollLeft!
+    // Wait, scrollLeft = initial - walk. 
+    // if mouse moves left, walk is negative, scrollLeft increases. Correct.
+    // velocity is negative.
+    // So we should SUBTRACT velocity contribution? 
+    // If I flick LEFT (velocity < 0), I want to scroll FURTHER RIGHT (increase scrollLeft).
+    // So target = current - (velocity * factor).
+
+    const inertiaFactor = 300; // ms worth of travel
+    const projectedScroll = currentScroll - (velocity.current * inertiaFactor);
+
+    // Snap to nearest item
+    const targetIndex = Math.round(projectedScroll / itemWidth);
+
+    // Clamp
+    const maxIndex = projects.length - 1;
+    const clampedIndex = Math.max(0, Math.min(targetIndex, maxIndex));
+
+    const targetScroll = clampedIndex * itemWidth;
+
+    const distance = Math.abs(targetScroll - currentScroll);
+    if (distance === 0) return;
+
+    // Animate
+    const controls = animate(currentScroll, targetScroll, {
+      type: "spring",
+      stiffness: 200,
+      damping: 30,
+      mass: 1,
+      onUpdate: (v) => {
+        if (container) container.scrollLeft = v;
+      },
+      onComplete: () => {
+        container.animation = null;
+      }
+    });
+    container.animation = controls;
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) handleMouseUp();
+  };
+
+  const wasDrag = () => dragDistance.current > CLICK_THRESHOLD;
+
   const scroll = (direction) => {
     if (!scrollContainerRef.current) return;
-    const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
-    scrollContainerRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth'
+    const itemWidth = getItemWidth();
+    const currentScroll = scrollContainerRef.current.scrollLeft;
+    const currentIndex = Math.round(currentScroll / itemWidth);
+
+    const targetIndex = direction === 'left'
+      ? Math.max(0, currentIndex - 1)
+      : Math.min(projects.length - 1, currentIndex + 1);
+
+    const targetScroll = targetIndex * itemWidth;
+
+    // Cancel any existing animation
+    if (scrollContainerRef.current.animation) {
+      scrollContainerRef.current.animation.stop();
+    }
+
+    const controls = animate(currentScroll, targetScroll, {
+      type: "spring",
+      stiffness: 200,
+      damping: 30,
+      onUpdate: (v) => {
+        if (scrollContainerRef.current) scrollContainerRef.current.scrollLeft = v;
+      }
     });
+    scrollContainerRef.current.animation = controls;
   };
 
   const describeProject = (p) => [p.type, p.role].filter(Boolean).join(' · ');
 
-  const openImage = (p) => setImage({
-    open: true,
-    src: p.image,
-    alt: p.title,
-    description: describeProject(p)
-  });
+  const openImage = (p) => {
+    if (wasDrag()) return; // Prevent opening when drag exceeded threshold
+    setImage({
+      open: true,
+      src: p.image,
+      alt: p.title,
+      description: describeProject(p)
+    });
+  };
 
   const openVideo = (p, embedSrc) => setVideo({
     open: true,
@@ -72,8 +221,16 @@ export default function Projects() {
 
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory scrollbar-none px-6 md:px-16 scroll-pl-6 md:scroll-pl-16"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex overflow-x-auto gap-6 pb-12 scrollbar-none px-6 md:px-16 md:cursor-grab active:cursor-grabbing select-none"
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            scrollSnapType: 'none' // Disable CSS snap
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
         >
           {projects.map((p, i) => (
             <motion.div
@@ -82,18 +239,19 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="flex-none snap-start w-[85vw] md:w-[45vw] lg:w-[30vw]"
+              className="flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] project-card-container"
             >
               <div className="flex flex-col h-full group">
                 <div
-                  className="relative aspect-[4/3] overflow-hidden mb-6 bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
+                  className="relative aspect-[4/3] overflow-hidden mb-6 bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
                   onClick={() => openImage(p)}
                 >
                   <img
                     src={p.image || "/placeholder.svg"}
                     alt={p.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none"
                     loading="lazy"
+                    draggable="false"
                   />
                 </div>
 
@@ -112,6 +270,8 @@ export default function Projects() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:bg-black hover:text-white px-1 -ml-1 transition-colors"
+                            draggable="false"
+                            onDragStart={(e) => e.preventDefault()}
                           >
                             {p.companyDisplayName || p.companyName || 'Company'}
                           </a>
@@ -129,27 +289,32 @@ export default function Projects() {
 
                 <div className="mt-auto flex items-center gap-4">
                   {p.trailer && (
-                    <button
+                    <a
+                      href={p.trailer}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={(e) => {
-                        e.preventDefault();
                         const embed = toEmbedSrc(p.trailer);
-                        if (window.innerWidth < 768 || !embed) {
-                          window.open(p.trailer, '_blank', 'noopener,noreferrer');
-                        } else {
+                        if (window.innerWidth >= 768 && embed) {
+                          e.preventDefault();
                           openVideo(p, embed);
                         }
                       }}
-                      className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
+                      className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
+                      draggable="false"
+                      onDragStart={(e) => e.preventDefault()}
                     >
                       Trailer
-                    </button>
+                    </a>
                   )}
                   {p.imdb && (
                     <a
                       href={p.imdb}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
+                      className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
+                      draggable="false"
+                      onDragStart={(e) => e.preventDefault()}
                     >
                       IMDb
                     </a>
