@@ -221,11 +221,10 @@ export default function Projects() {
 
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto gap-6 pb-12 scrollbar-none px-6 md:px-16 md:cursor-grab active:cursor-grabbing select-none"
+          className="flex overflow-x-auto gap-6 pb-12 scrollbar-none px-6 md:px-16 md:cursor-grab active:cursor-grabbing select-none snap-x snap-mandatory md:snap-none"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            scrollSnapType: 'none' // Disable CSS snap
           }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -237,9 +236,9 @@ export default function Projects() {
               key={i}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: true, margin: "0px 200px 0px 0px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] project-card-container"
+              className="flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] project-card-container snap-center"
             >
               <div className="flex flex-col h-full group">
                 <div
@@ -250,7 +249,6 @@ export default function Projects() {
                     src={p.image || "/placeholder.svg"}
                     alt={p.title}
                     className="w-full h-full object-cover pointer-events-none"
-                    loading="lazy"
                     draggable="false"
                   />
                 </div>
