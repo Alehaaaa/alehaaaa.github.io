@@ -1,3 +1,5 @@
+import { PROFILE } from '../data/profile'
+
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-24 border-t-8 border-black">
@@ -13,30 +15,30 @@ export default function Footer() {
             <h4 className="font-bold uppercase text-2xl mb-6 tracking-tight">Contact</h4>
             <div className="flex flex-col space-y-4 text-xl font-medium">
               <a
-                href="mailto:alehamartinva@gmail.com"
+                href={`mailto:${PROFILE.links.email}`}
                 className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4"
               >
-                alehamartinva@gmail.com
+                {PROFILE.links.email}
               </a>
               <a
-                href="tel:+34671213938"
+                href={`tel:${PROFILE.links.phone.replace(/\s/g, '')}`}
                 className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4"
               >
-                +34 671 21 39 38
+                {PROFILE.links.phone}
               </a>
             </div>
           </div>
           <div>
             <h4 className="font-bold uppercase text-2xl mb-6 tracking-tight">Socials</h4>
             <div className="flex flex-col space-y-4 text-xl font-medium">
-              <a className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alejandro-martin-407527215">LinkedIn</a>
-              <a className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/alejandro_anim/">Instagram</a>
+              <a className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4" target="_blank" rel="noopener noreferrer" href={PROFILE.links.linkedin}>LinkedIn</a>
+              <a className="hover:text-gray-300 transition-colors hover:underline decoration-2 underline-offset-4" target="_blank" rel="noopener noreferrer" href={PROFILE.links.instagram}>Instagram</a>
             </div>
           </div>
         </div>
         <div className="border-t-4 border-white mt-16 pt-12 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-base font-bold uppercase tracking-widest text-white/50">
-            © 2025 Alejandro Martín
+            © {new Date().getFullYear()} {PROFILE.name}
           </p>
           {/* <p className="text-base font-bold uppercase tracking-widest text-white/50">
             Designed with Force
