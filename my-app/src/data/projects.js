@@ -10,7 +10,7 @@ export const projects = [
         "year": [
             2025
         ],
-        "type": "Cinematic Demo",
+        "type": "Videogame Demo",
         "title": "Fall Guys CES 2026",
         "role": "3D Animator",
         "companies": [
@@ -33,23 +33,13 @@ export const projects = [
                 "year": 2025
             }
         },
-        "color1": [
-            28,
-            79,
-            90
-        ],
-        "color2": [
-            37,
-            31,
-            8
-        ],
         "colorAccent": [
             255,
             218,
             77
         ],
         "tags": [
-            "Demo",
+            "videogame demo",
         ]
     },
     {
@@ -86,23 +76,13 @@ export const projects = [
                 "year": 2025
             }
         },
-        "color1": [
-            28,
-            79,
-            90
-        ],
-        "color2": [
-            37,
-            31,
-            8
-        ],
         "colorAccent": [
             40,
             200,
             185
         ],
         "tags": [
-            "Feature Film",
+            "feature film",
         ]
     },
     {
@@ -134,23 +114,13 @@ export const projects = [
                 "year": 2025
             }
         },
-        "color1": [
-            90,
-            28,
-            34
-        ],
-        "color2": [
-            45,
-            11,
-            24
-        ],
         "colorAccent": [
             255,
             77,
             94
         ],
         "tags": [
-            "Feature Film",
+            "feature film",
         ]
     },
     {
@@ -182,23 +152,13 @@ export const projects = [
                 "year": 2024
             }
         },
-        "color1": [
-            28,
-            72,
-            90
-        ],
-        "color2": [
-            56,
-            16,
-            35
-        ],
         "colorAccent": [
             175,
             205,
             100
         ],
         "tags": [
-            "Feature Film",
+            "feature film",
         ]
     },
     {
@@ -230,23 +190,13 @@ export const projects = [
                 "year": 2023
             }
         },
-        "color1": [
-            117,
-            25,
-            111
-        ],
-        "color2": [
-            73,
-            21,
-            71
-        ],
         "colorAccent": [
             255,
             77,
             243
         ],
         "tags": [
-            "Short Film",
+            "short film",
         ]
     },
     {
@@ -277,23 +227,13 @@ export const projects = [
                 "year": 2022
             }
         },
-        "color1": [
-            40,
-            74,
-            94
-        ],
-        "color2": [
-            13,
-            37,
-            51
-        ],
         "colorAccent": [
             77,
             189,
             255
         ],
         "tags": [
-            "Studies",
+            "studies",
         ]
     },
     {
@@ -324,23 +264,13 @@ export const projects = [
                 "year": 2023
             }
         },
-        "color1": [
-            131,
-            96,
-            31
-        ],
-        "color2": [
-            85,
-            61,
-            24
-        ],
         "colorAccent": [
             255,
             185,
             77
         ],
         "tags": [
-            "Studies",
+            "studies",
         ]
     }
 ]

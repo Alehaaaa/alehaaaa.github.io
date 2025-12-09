@@ -13,15 +13,22 @@ export default function Explore() {
   /* Extract unique tags from projects (excluding companies) */
   const allTags = useMemo(() => {
     const tags = new Set()
+
     projects.forEach(p => {
       if (Array.isArray(p.tags)) {
-        p.tags.forEach(tag => tags.add(tag))
+        p.tags.forEach(tag => tags.add(tag.toLowerCase()))
       } else if (p.tags) {
-        tags.add(p.tags)
+        tags.add(p.tags.toLowerCase())
       }
     })
-    return Array.from(tags).sort()
+
+    return Array.from(tags).sort((a, b) => {
+      if (a === "studies") return 1
+      if (b === "studies") return -1
+      return a.localeCompare(b)
+    })
   }, [])
+
 
   /* Extract unique companies */
   const allCompanies = useMemo(() => {
@@ -36,55 +43,53 @@ export default function Explore() {
     return Array.from(companies).sort()
   }, [])
 
+
   const [selectedTags, setSelectedTags] = useState([])
   const [selectedCompanies, setSelectedCompanies] = useState([])
 
+
   const toggleTag = (tag) => {
+    const t = tag.toLowerCase()
     setSelectedTags(prev =>
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
+      prev.includes(t)
+        ? prev.filter(x => x !== t)
+        : [...prev, t]
     )
   }
 
+
   const toggleCompany = (company) => {
     setSelectedCompanies(prev => {
-      // If currently "All" (empty), we are unchecking one, so return all minus that one
       if (prev.length === 0) {
         return allCompanies.filter(c => c !== company)
       }
 
-      // If checks exist
       if (prev.includes(company)) {
         const newSelection = prev.filter(c => c !== company)
-        // If we unchecked the last one, we go back to "All" (empty) - or explicit none? 
-        // For this app, let's revert to "All" to avoid empty state, matching the "Implicit All" behavior.
         return newSelection.length === 0 ? [] : newSelection
       } else {
         const newSelection = [...prev, company]
-        // If we selected the last remaining unchecked one, we have ALL, so switch to Implicit All
         return newSelection.length === allCompanies.length ? [] : newSelection
       }
     })
   }
 
+
   const filteredProjects = useMemo(() => {
-    // If no filters are active (implicit All), return all projects
     if (selectedTags.length === 0 && selectedCompanies.length === 0) return projects
 
     return projects.filter(p => {
-      // 1. Check Tags Match (OR logic within tags)
+      // TAGS — now fully case-insensitive
       let tagsMatch = true
       if (selectedTags.length > 0) {
         const projectTags = new Set()
-        if (Array.isArray(p.tags)) p.tags.forEach(t => projectTags.add(t))
-        else if (p.tags) projectTags.add(p.tags)
+        if (Array.isArray(p.tags)) p.tags.forEach(t => projectTags.add(t.toLowerCase()))
+        else if (p.tags) projectTags.add(p.tags.toLowerCase())
 
         tagsMatch = selectedTags.some(tag => projectTags.has(tag))
       }
 
-      // 2. Check Companies Match (OR logic within companies)
-      // Implicit All (length 0) means Match = True
+      // COMPANIES — keep original casing (names)
       let companiesMatch = true
       if (selectedCompanies.length > 0) {
         const projectCompanies = new Set()
@@ -93,10 +98,10 @@ export default function Explore() {
         companiesMatch = selectedCompanies.some(company => projectCompanies.has(company))
       }
 
-      // Combine with AND
       return tagsMatch && companiesMatch
     })
-  }, [selectedTags, selectedCompanies, allCompanies]) // Added allCompanies dependency
+  }, [selectedTags, selectedCompanies, allCompanies])
+
 
   const openLightbox = (item) => setLightbox({
     open: true,
