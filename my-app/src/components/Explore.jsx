@@ -1,35 +1,63 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Reveal from './Reveal'
 import { projects } from '../lib/utils'
 import LightboxImage from './LightboxImage'
 
-const formatYears = (years) => {
-  if (!Array.isArray(years) || years.length === 0) return ''
-  if (years.length === 1) return String(years[0])
-  const sorted = [...years].sort()
-  const first = sorted[0]
-  const last = sorted[sorted.length - 1]
-  return `${first} - ${last}`
-}
-
-const formatTimeline = (timeline) => {
-  if (!timeline || !timeline.start) return ''
-  const start = `${timeline.start.month} ${timeline.start.year}`
-  const end = timeline.end ? `${timeline.end.month} ${timeline.end.year}` : 'Present'
+const formatTimeline = (t) => {
+  if (!t?.start) return ''
+  const start = `${t.start.month} ${t.start.year}`
+  const end = t.end ? `${t.end.month} ${t.end.year}` : 'Present'
   return `${start} - ${end}`
 }
 
-const describeProject = (item) => {
-  const parts = [item.type, item.role].filter(Boolean)
-  return parts.join('\u00A0· ')
+const describeProject = (item) => [item.type, item.role].filter(Boolean).join('\u00A0· ')
+
+/**
+ * Logo component that auto-sizes width based on image aspect ratio.
+ * Uses background-image to bypass ad-blocker detection.
+ */
+function CompanyLogo({ src, name, scale = 1, url }) {
+  const [dims, setDims] = React.useState({ width: 0, height: 0 })
+  const heightRem = 3.5 * scale
+
+  React.useEffect(() => {
+    const img = new Image()
+    img.onload = () => {
+      const aspectRatio = img.naturalWidth / img.naturalHeight
+      setDims({ width: heightRem * aspectRatio, height: heightRem })
+    }
+    img.src = src
+  }, [src, heightRem])
+
+  // Don't render until we know the dimensions
+  if (dims.width === 0) return null
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-block p-2 border border-transparent hover:bg-black transition-colors duration-200"
+    >
+      <div
+        role="img"
+        aria-label={name}
+        style={{
+          backgroundImage: `url(${src})`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          height: `${dims.height}rem`,
+          width: `${dims.width}rem`,
+        }}
+        className="transition-all duration-200 group-hover:invert"
+      />
+    </a>
+  )
 }
 
 export default function Explore() {
-  const [imageOpen, setImageOpen] = React.useState(false)
-  const [imageSrc, setImageSrc] = React.useState(null)
-  const [imageAlt, setImageAlt] = React.useState('')
-  const [imageDescription, setImageDescription] = React.useState('')
+  const [lightbox, setLightbox] = React.useState({ open: false, src: null, alt: '', description: '' })
 
   /* Extract unique tags from types */
   const allTags = React.useMemo(() => {
@@ -54,6 +82,13 @@ export default function Explore() {
     if (selectedTags.length === 0) return projects
     return projects.filter(p => selectedTags.includes(p.type))
   }, [selectedTags])
+
+  const openLightbox = (item) => setLightbox({
+    open: true,
+    src: item.image,
+    alt: item.title || '',
+    description: describeProject(item)
+  })
 
   return (
     <section id="explore" className="py-40 bg-white min-h-screen">
@@ -108,23 +143,14 @@ export default function Explore() {
                     <div className="text-left">
                       <h3 className="text-4xl text-black font-black uppercase text-balance tracking-tighter mb-3">{item.title}</h3>
                       <div className="flex flex-row md:flex-col items-start gap-4">
-                        {item.companies && item.companies.map((company, cIdx) => (
-                          company.logo && (
-                            <a
-                              key={cIdx}
-                              href={company.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="group block p-1 border border-transparent hover:bg-black transition-colors duration-200"
-                            >
-                              <img
-                                src={company.logo}
-                                alt={company.name}
-                                style={{ height: `${3.5 * (company.scale || 1)}rem` }}
-                                className="w-auto object-contain object-left transition-all duration-200 group-hover:invert"
-                              />
-                            </a>
-                          )
+                        {item.companies?.filter(c => c.logo).map((company, cIdx) => (
+                          <CompanyLogo
+                            key={cIdx}
+                            src={company.logo}
+                            name={company.name}
+                            scale={company.scale || 1}
+                            url={company.url}
+                          />
                         ))}
                       </div>
                     </div>
@@ -142,12 +168,7 @@ export default function Explore() {
                           src={item.image}
                           alt={item.title || 'Project artwork'}
                           className="w-full h-full object-cover"
-                          onClick={() => {
-                            setImageSrc(item.image)
-                            setImageOpen(true)
-                            setImageAlt(item.title || '')
-                            setImageDescription(describeProject(item))
-                          }}
+                          onClick={() => openLightbox(item)}
                         />
                       </div>
                     </div>
@@ -159,11 +180,11 @@ export default function Explore() {
         </div>
       </div>
       <LightboxImage
-        open={imageOpen}
-        onClose={() => setImageOpen(false)}
-        src={imageSrc}
-        alt={`Poster for ${imageAlt}`}
-        description={imageDescription}
+        open={lightbox.open}
+        onClose={() => setLightbox(prev => ({ ...prev, open: false }))}
+        src={lightbox.src}
+        alt={`Poster for ${lightbox.alt}`}
+        description={lightbox.description}
       />
     </section>
   )

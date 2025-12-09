@@ -5,9 +5,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
           <div className="pb-8 border-b-2 border-white/20 md:border-none md:pb-0">
             <h3 className="text-4xl font-black uppercase mb-6 tracking-tighter">Alejandro</h3>
-            <p className="text-white font-medium text-xl leading-relaxed max-w-sm">
+            {/* <p className="text-white font-medium text-xl leading-relaxed max-w-sm">
               Character animation with clear storytelling, strong acting, and clean polish.
-            </p>
+            </p> */}
           </div>
           <div className="pb-8 border-b-2 border-white/20 md:border-none md:pb-0">
             <h4 className="font-bold uppercase text-2xl mb-6 tracking-tight">Contact</h4>
@@ -38,9 +38,9 @@ export default function Footer() {
           <p className="text-base font-bold uppercase tracking-widest text-white/50">
             © 2025 Alejandro Martín
           </p>
-          <p className="text-base font-bold uppercase tracking-widest text-white/50">
+          {/* <p className="text-base font-bold uppercase tracking-widest text-white/50">
             Designed with Force
-          </p>
+          </p> */}
         </div>
       </div>
     </footer>

@@ -10,25 +10,33 @@ import LightboxImage from "./LightboxImage";
 export default function Projects() {
   const scrollContainerRef = useRef(null);
 
-  const [videoOpen, setVideoOpen] = useState(false);
-  const [videoSrc, setVideoSrc] = useState(null);
-  const [videoTitle, setVideoTitle] = useState("");
-  const [videoDescription, setVideoDescription] = useState("");
-  const [imageOpen, setImageOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [imageAlt, setImageAlt] = useState("");
-  const [imageDescription, setImageDescription] = useState("");
+  const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' });
+  const [image, setImage] = useState({ open: false, src: null, alt: '', description: '' });
 
   const scroll = (direction) => {
     if (!scrollContainerRef.current) return;
-    const { clientWidth } = scrollContainerRef.current;
-    const scrollAmount = clientWidth * 0.8; // scroll 80% of width
-
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
     scrollContainerRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth'
     });
   };
+
+  const describeProject = (p) => [p.type, p.role].filter(Boolean).join(' · ');
+
+  const openImage = (p) => setImage({
+    open: true,
+    src: p.image,
+    alt: p.title,
+    description: describeProject(p)
+  });
+
+  const openVideo = (p, embedSrc) => setVideo({
+    open: true,
+    src: embedSrc,
+    title: p.title,
+    description: describeProject(p)
+  });
 
   return (
     <section id="projects" className="py-24 md:py-32 bg-background overflow-hidden">
@@ -79,12 +87,7 @@ export default function Projects() {
               <div className="flex flex-col h-full group">
                 <div
                   className="relative aspect-[4/3] overflow-hidden mb-6 bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
-                  onClick={() => {
-                    setImageSrc(p.image);
-                    setImageAlt(p.title);
-                    setImageDescription([p.type, p.role].filter(Boolean).join(" · "));
-                    setImageOpen(true);
-                  }}
+                  onClick={() => openImage(p)}
                 >
                   <img
                     src={p.image || "/placeholder.svg"}
@@ -99,7 +102,7 @@ export default function Projects() {
                 </h3>
 
                 <div className="text-black font-bold text-lg mb-4 border-l-4 border-black pl-3 flex flex-col gap-1">
-                  <span>{[p.type, p.role].filter(Boolean).join(" · ")}</span>
+                  <span>{describeProject(p)}</span>
                   <div className="flex items-center text-base font-bold text-gray-500">
                     <div className="flex items-center gap-2">
                       {p.companyUrl && (
@@ -129,16 +132,11 @@ export default function Projects() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        const isMobile = window.innerWidth < 768; // md breakpoint
                         const embed = toEmbedSrc(p.trailer);
-
-                        if (isMobile || !embed) {
-                          window.open(p.trailer, "_blank", "noopener,noreferrer");
+                        if (window.innerWidth < 768 || !embed) {
+                          window.open(p.trailer, '_blank', 'noopener,noreferrer');
                         } else {
-                          setVideoSrc(embed);
-                          setVideoTitle(p.title);
-                          setVideoDescription([p.type, p.role].filter(Boolean).join(" · "));
-                          setVideoOpen(true);
+                          openVideo(p, embed);
                         }
                       }}
                       className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
@@ -164,18 +162,18 @@ export default function Projects() {
       </div>
 
       <LightboxVideo
-        open={videoOpen}
-        onClose={() => setVideoOpen(false)}
-        src={videoSrc}
-        title={`Trailer for ${videoTitle}`}
-        description={videoDescription}
+        open={video.open}
+        onClose={() => setVideo(prev => ({ ...prev, open: false }))}
+        src={video.src}
+        title={`Trailer for ${video.title}`}
+        description={video.description}
       />
       <LightboxImage
-        open={imageOpen}
-        onClose={() => setImageOpen(false)}
-        src={imageSrc}
-        alt={`Poster for ${imageAlt}`}
-        description={imageDescription}
+        open={image.open}
+        onClose={() => setImage(prev => ({ ...prev, open: false }))}
+        src={image.src}
+        alt={`Poster for ${image.alt}`}
+        description={image.description}
       />
     </section>
   );

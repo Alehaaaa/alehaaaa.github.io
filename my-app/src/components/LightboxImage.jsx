@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ExternalLink } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useScrollLock } from '@/hooks/useScrollLock'
 
 export default function LightboxImage({ open, onClose, src, alt, description }) {

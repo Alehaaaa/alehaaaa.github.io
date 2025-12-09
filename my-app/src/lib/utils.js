@@ -16,8 +16,7 @@ const slugify = (value, fallback) => {
   return base || fallback || 'project'
 }
 
-// Helper to handle public assets in Vite
-// In Vite, assets in public/ are served at root /, so 'public/img.jpg' -> '/img.jpg'
+/** Normalize paths: 'public/img.jpg' -> '/img.jpg' */
 export function toPublicUrl(p) {
   if (!p) return ''
   if (/^https?:\/\//i.test(p)) return p
@@ -27,17 +26,9 @@ export function toPublicUrl(p) {
 export const projects = sourceProjects
   .filter((item) => !item.disabled)
   .map((item, index) => {
-    // Simplified mapping logic
     const slug = slugify(item.slug || item.title, `project-${index + 1}`)
-
-    // Handle specific fields
     const companies = (Array.isArray(item.companies) ? item.companies : [])
-      .map(c => ({
-        ...c,
-        logo: toPublicUrl(c.logo)
-      }))
-
-    // Fallback company logic if needed
+      .map(c => ({ ...c, logo: toPublicUrl(c.logo) }))
     const primaryCompany = companies[0] || {
       name: item.companyName,
       url: item.companyUrl,
@@ -61,8 +52,8 @@ export const projects = sourceProjects
     }
   })
 
-export const projectsBySlug = projects.reduce((acc, project) => {
-  acc[project.slug] = project
+export const projectsBySlug = projects.reduce((acc, p) => {
+  acc[p.slug] = p
   return acc
 }, {})
 
