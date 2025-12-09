@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, animate } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -24,6 +24,22 @@ export default function Projects() {
   const CLICK_THRESHOLD = 10;
   const dragDistance = useRef(0);
 
+  // New: Detect Desktop Mouse Environment
+  const [isDesktopMouse, setIsDesktopMouse] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      // We consider "Desktop Mouse" if screen is wide enough AND has a fine pointer (mouse)
+      const isLarge = window.innerWidth >= 768;
+      const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+      setIsDesktopMouse(isLarge && isFinePointer);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
   const getItemWidth = () => {
     const container = scrollContainerRef.current;
     if (!container || !container.children[0]) return 0;
@@ -36,7 +52,9 @@ export default function Projects() {
   };
 
   const handleMouseDown = (e) => {
-    if (window.innerWidth < 768) return;
+    // Only allow custom drag if we match our "Desktop Mouse" criteria
+    if (!isDesktopMouse) return;
+
     setIsDragging(true);
     startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
     scrollLeft.current = scrollContainerRef.current.scrollLeft;
@@ -88,20 +106,6 @@ export default function Projects() {
 
     // Current scroll position
     const currentScroll = container.scrollLeft;
-
-    // Velocity is pixels/ms. 
-    // Let's amplify it a bit for "flick" feel.
-    // A typical flick might be ~1-3 px/ms.
-    // We want to add (velocity * constant) to currentScroll.
-    // Note: scrolling left means positive scroll value increases. 
-    // Dragging mouse LEFT (negative dx) INCREASES scrollLeft.
-    // So if velocity is negative (mouse moving left), we are adding to scrollLeft!
-    // Wait, scrollLeft = initial - walk. 
-    // if mouse moves left, walk is negative, scrollLeft increases. Correct.
-    // velocity is negative.
-    // So we should SUBTRACT velocity contribution? 
-    // If I flick LEFT (velocity < 0), I want to scroll FURTHER RIGHT (increase scrollLeft).
-    // So target = current - (velocity * factor).
 
     const inertiaFactor = 300; // ms worth of travel
     const projectedScroll = currentScroll - (velocity.current * inertiaFactor);
@@ -221,7 +225,7 @@ export default function Projects() {
 
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto gap-6 pb-12 scrollbar-none px-6 md:px-16 md:cursor-grab active:cursor-grabbing select-none snap-x snap-mandatory md:snap-none"
+          className={`flex overflow-x-auto gap-6 pb-12 scrollbar-none px-6 md:px-16 md:cursor-e-resize select-none snap-x snap-mandatory ${isDesktopMouse ? 'snap-none' : ''}`}
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',

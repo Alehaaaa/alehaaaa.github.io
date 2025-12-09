@@ -47,6 +47,9 @@ export const projects = [
             255,
             218,
             77
+        ],
+        "tags": [
+            "Demo",
         ]
     },
     {
@@ -97,6 +100,9 @@ export const projects = [
             40,
             200,
             185
+        ],
+        "tags": [
+            "Feature Film",
         ]
     },
     {
@@ -142,6 +148,9 @@ export const projects = [
             255,
             77,
             94
+        ],
+        "tags": [
+            "Feature Film",
         ]
     },
     {
@@ -187,6 +196,9 @@ export const projects = [
             175,
             205,
             100
+        ],
+        "tags": [
+            "Feature Film",
         ]
     },
     {
@@ -232,6 +244,9 @@ export const projects = [
             255,
             77,
             243
+        ],
+        "tags": [
+            "Short Film",
         ]
     },
     {
@@ -276,6 +291,9 @@ export const projects = [
             77,
             189,
             255
+        ],
+        "tags": [
+            "Studies",
         ]
     },
     {
@@ -320,6 +338,9 @@ export const projects = [
             255,
             185,
             77
+        ],
+        "tags": [
+            "Studies",
         ]
     }
 ]

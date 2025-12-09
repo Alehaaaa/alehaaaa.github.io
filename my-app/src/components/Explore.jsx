@@ -8,17 +8,36 @@ import { CompanyLogo } from './CompanyLogo'
 export default function Explore() {
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '' })
   const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' })
+  const [companiesOpen, setCompaniesOpen] = useState(false)
 
-  /* Extract unique tags from types */
+  /* Extract unique tags from projects (excluding companies) */
   const allTags = useMemo(() => {
     const tags = new Set()
     projects.forEach(p => {
-      if (p.type) tags.add(p.type)
+      if (Array.isArray(p.tags)) {
+        p.tags.forEach(tag => tags.add(tag))
+      } else if (p.tags) {
+        tags.add(p.tags)
+      }
     })
     return Array.from(tags).sort()
   }, [])
 
+  /* Extract unique companies */
+  const allCompanies = useMemo(() => {
+    const companies = new Set()
+    projects.forEach(p => {
+      if (Array.isArray(p.companies)) {
+        p.companies.forEach(c => {
+          if (c.name) companies.add(c.name)
+        })
+      }
+    })
+    return Array.from(companies).sort()
+  }, [])
+
   const [selectedTags, setSelectedTags] = useState([])
+  const [selectedCompanies, setSelectedCompanies] = useState([])
 
   const toggleTag = (tag) => {
     setSelectedTags(prev =>
@@ -28,10 +47,56 @@ export default function Explore() {
     )
   }
 
+  const toggleCompany = (company) => {
+    setSelectedCompanies(prev => {
+      // If currently "All" (empty), we are unchecking one, so return all minus that one
+      if (prev.length === 0) {
+        return allCompanies.filter(c => c !== company)
+      }
+
+      // If checks exist
+      if (prev.includes(company)) {
+        const newSelection = prev.filter(c => c !== company)
+        // If we unchecked the last one, we go back to "All" (empty) - or explicit none? 
+        // For this app, let's revert to "All" to avoid empty state, matching the "Implicit All" behavior.
+        return newSelection.length === 0 ? [] : newSelection
+      } else {
+        const newSelection = [...prev, company]
+        // If we selected the last remaining unchecked one, we have ALL, so switch to Implicit All
+        return newSelection.length === allCompanies.length ? [] : newSelection
+      }
+    })
+  }
+
   const filteredProjects = useMemo(() => {
-    if (selectedTags.length === 0) return projects
-    return projects.filter(p => selectedTags.includes(p.type))
-  }, [selectedTags])
+    // If no filters are active (implicit All), return all projects
+    if (selectedTags.length === 0 && selectedCompanies.length === 0) return projects
+
+    return projects.filter(p => {
+      // 1. Check Tags Match (OR logic within tags)
+      let tagsMatch = true
+      if (selectedTags.length > 0) {
+        const projectTags = new Set()
+        if (Array.isArray(p.tags)) p.tags.forEach(t => projectTags.add(t))
+        else if (p.tags) projectTags.add(p.tags)
+
+        tagsMatch = selectedTags.some(tag => projectTags.has(tag))
+      }
+
+      // 2. Check Companies Match (OR logic within companies)
+      // Implicit All (length 0) means Match = True
+      let companiesMatch = true
+      if (selectedCompanies.length > 0) {
+        const projectCompanies = new Set()
+        if (Array.isArray(p.companies)) p.companies.forEach(c => projectCompanies.add(c.name))
+
+        companiesMatch = selectedCompanies.some(company => projectCompanies.has(company))
+      }
+
+      // Combine with AND
+      return tagsMatch && companiesMatch
+    })
+  }, [selectedTags, selectedCompanies, allCompanies]) // Added allCompanies dependency
 
   const openLightbox = (item) => setLightbox({
     open: true,
@@ -47,14 +112,17 @@ export default function Explore() {
     description: describeProject(item)
   })
 
+  // Helper to determine if a company is checked
+  const isCompanyChecked = (company) => selectedCompanies.length === 0 || selectedCompanies.includes(company)
+
   return (
     <section id="explore" className="py-40 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
         <Reveal className="mb-12 text-left">
           <h2 className="text-6xl md:text-7xl font-light text-black mb-8">Explore</h2>
 
-          {/* Tag Cloud */}
-          <div className="flex flex-wrap gap-4">
+          {/* Tag Cloud & Filters */}
+          <div className="flex flex-wrap gap-4 items-center">
             {allTags.map(tag => {
               const isActive = selectedTags.includes(tag)
               return (
@@ -72,9 +140,64 @@ export default function Explore() {
                 </button>
               )
             })}
-            {selectedTags.length > 0 && (
+
+            {/* Separator - thinner than main divider */}
+            <div className="w-[2px] h-10 bg-black mx-2 hidden sm:block"></div>
+
+            {/* Companies Dropdown */}
+            <div className="relative">
               <button
-                onClick={() => setSelectedTags([])}
+                onClick={() => setCompaniesOpen(!companiesOpen)}
+                className={`
+                  flex items-center gap-2 px-4 py-2 border-2 border-black text-lg font-bold uppercase transition-all
+                  ${companiesOpen || selectedCompanies.length > 0
+                    ? 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]'
+                    : 'bg-white text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'}
+                `}
+              >
+                Companies {selectedCompanies.length > 0 ? `(${selectedCompanies.length})` : '(ALL)'}
+                <svg
+                  className={`w-4 h-4 transition-transform ${companiesOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {companiesOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setCompaniesOpen(false)}
+                  ></div>
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-20 max-h-80 overflow-y-auto">
+                    {allCompanies.map(company => (
+                      <label
+                        key={company}
+                        className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer text-lg font-bold uppercase"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isCompanyChecked(company)}
+                          onChange={() => toggleCompany(company)}
+                          className="mr-3 w-5 h-5 border-2 border-black rounded-none appearance-none checked:bg-black checked:after:content-['✓'] checked:after:text-white checked:after:block checked:after:text-center checked:after:text-sm checked:after:leading-4"
+                        />
+                        {company}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {(selectedTags.length > 0 || selectedCompanies.length > 0) && (
+              <button
+                onClick={() => {
+                  setSelectedTags([])
+                  setSelectedCompanies([])
+                }}
                 className="px-4 py-2 text-lg font-bold underline decoration-2 underline-offset-4 hover:text-gray-600 ml-2"
               >
                 Clear
@@ -83,10 +206,10 @@ export default function Explore() {
           </div>
         </Reveal>
 
-        <div className="border-t-4 border-b-4 border-black">
+        <div className="border-t-4 border-b-4 border-black mt-12">
           <div className="divide-y-2 divide-black">
             {filteredProjects.length === 0 ? (
-              <div className="py-12 text-center text-xl font-bold">No projects found with selected tags.</div>
+              <div className="py-12 text-center text-xl font-bold">No projects found with selected filters.</div>
             ) : (
               filteredProjects.map((item, idx) => {
                 const timelineStr = formatTimeline(item.timeline)
