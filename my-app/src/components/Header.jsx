@@ -107,7 +107,7 @@ export default function Header() {
                 ))}
                 <button
                   onClick={openReel}
-                  className="text-2xl font-light uppercase text-foreground text-left cursor-pointer"
+                  className="text-2xl font-light text-foreground text-left cursor-pointer"
                 >
                   Reel
                 </button>
