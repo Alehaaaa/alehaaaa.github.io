@@ -18,7 +18,7 @@ export const projects = [
                 "name": "Passion Pictures",
                 "url": "https://www.passion-pictures.com/",
                 "logo": "/logos/passion_pictures.png",
-                "scale": 1.1
+                "scale": 1.2
             }
         ],
         "poster": "/projects/project_fall_guys_6.jpg",
@@ -98,7 +98,7 @@ export const projects = [
                 "name": "Lumatic Animation & VFX",
                 "url": "https://lumatic.xyz/",
                 "logo": "/logos/lumatic.png",
-                "scale": 0.6
+                "scale": 0.5
             }
         ],
         "poster": "/projects/project_magischen_tiere_4.jpg",
@@ -136,7 +136,7 @@ export const projects = [
                 "name": "Lumatic Animation & VFX",
                 "url": "https://lumatic.xyz/",
                 "logo": "/logos/lumatic.png",
-                "scale": 0.6
+                "scale": 0.5
             }
         ],
         "poster": "/projects/project_magischen_tiere_3.jpg",
@@ -212,7 +212,7 @@ export const projects = [
                 "name": "ECIB",
                 "url": "https://www.ecib.es/cursos-3/master-en-animacion3d/",
                 "logo": "/logos/ecib.png",
-                "scale": 0.85
+                "scale": 0.75
             }
         ],
         "poster": "/studies/en/master_ecib.jpg",
@@ -241,15 +241,14 @@ export const projects = [
             2022,
             2023
         ],
-        "type": "Animation and Cinema",
-        "title": "Diploma",
-        "role": "2D, 3D and Stop Motion",
+        "title": "Diploma in Animation",
+        "role": "Animation in 2D, 3D and Stop Motion, Cinema and Drawing",
         "companies": [
             {
                 "name": "ECIB",
                 "url": "https://www.ecib.es/cursos-3/diploma-en-animacion/",
                 "logo": "/logos/ecib.png",
-                "scale": 0.9
+                "scale": 0.75
             }
         ],
         "poster": "/studies/en/diploma_ecib.jpg",
