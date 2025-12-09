@@ -10,8 +10,8 @@ export const projects = [
         "year": [
             2025
         ],
-        "type": "Cinematic Trailer",
-        "title": "Fall Guys",
+        "type": "Cinematic Demo",
+        "title": "Fall Guys CES 2026",
         "role": "3D Animator",
         "companies": [
             {
