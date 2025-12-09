@@ -177,7 +177,7 @@ export default function Explore() {
                     className="fixed inset-0 z-10"
                     onClick={() => setCompaniesOpen(false)}
                   ></div>
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-20 max-h-80 overflow-y-auto">
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-20 max-h-80 overflow-y-auto">
                     {allCompanies.map(company => (
                       <label
                         key={company}
