@@ -47,7 +47,7 @@ export const projects = [
             2025
         ],
         "type": "Feature Film",
-        "title": "Three Bags Full",
+        "title": "The Sheep Detectives",
         "role": "3D Animator",
         "companies": [
             {
@@ -63,9 +63,9 @@ export const projects = [
                 "scale": 1.0
             }
         ],
-        "poster": "/projects/project_three_bags_full.jpg",
+        "poster": "dist/projects/project_the_sheep_detectives.jpg",
+        "trailerLink": "https://www.youtube.com/watch?v=pyZI5oM6hWk",
         "imdbLink": "https://www.imdb.com/title/tt32565993/",
-        "trailerLink": "",
         "timeline": {
             "start": {
                 "month": "Jun.",
