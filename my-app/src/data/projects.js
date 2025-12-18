@@ -63,7 +63,7 @@ export const projects = [
                 "scale": 1.0
             }
         ],
-        "poster": "dist/projects/project_the_sheep_detectives.jpg",
+        "poster": "/projects/project_the_sheep_detectives.jpg",
         "trailerLink": "https://www.youtube.com/watch?v=pyZI5oM6hWk",
         "imdbLink": "https://www.imdb.com/title/tt32565993/",
         "timeline": {
