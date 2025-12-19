@@ -121,10 +121,10 @@ export default function Explore() {
   const isCompanyChecked = (company) => selectedCompanies.length === 0 || selectedCompanies.includes(company)
 
   return (
-    <section id="explore" className="py-40 bg-white min-h-screen">
+    <section id="explore" className="py-40 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
         <Reveal className="mb-12 text-left">
-          <h2 className="text-6xl md:text-7xl font-light text-black mb-8">Explore</h2>
+          <h2 className="text-6xl md:text-7xl font-light text-foreground mb-8">Explore</h2>
 
           {/* Tag Cloud & Filters */}
           <div className="flex flex-wrap gap-4 items-center">
@@ -135,10 +135,10 @@ export default function Explore() {
                   key={tag}
                   onClick={() => toggleTag(tag)}
                   className={`
-                    px-4 py-2 border-2 border-black text-lg font-bold uppercase transition-all
+                    px-4 py-2 border-2 border-[color:var(--neo-border)] text-lg font-bold uppercase transition-all
                     ${isActive
-                      ? 'bg-black text-white shadow-none translate-x-[2px] translate-y-[2px]'
-                      : 'bg-white text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'}
+                      ? 'bg-foreground text-background shadow-none translate-x-[2px] translate-y-[2px]'
+                      : 'bg-background text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px]'}
                   `}
                 >
                   {tag}
@@ -147,17 +147,17 @@ export default function Explore() {
             })}
 
             {/* Separator - thinner than main divider */}
-            <div className="w-[2px] h-10 bg-black mx-2 hidden sm:block"></div>
+            <div className="w-[2px] h-10 bg-foreground mx-2 hidden sm:block"></div>
 
             {/* Companies Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setCompaniesOpen(!companiesOpen)}
                 className={`
-                  flex items-center gap-2 px-4 py-2 border-2 border-black text-lg font-bold uppercase transition-all
+                  flex items-center gap-2 px-4 py-2 border-2 border-[color:var(--neo-border)] text-lg font-bold uppercase transition-all
                   ${companiesOpen || selectedCompanies.length > 0
-                    ? 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]'
-                    : 'bg-white text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'}
+                    ? 'bg-background text-foreground shadow-[2px_2px_0px_0px_var(--neo-shadow)] translate-x-[2px] translate-y-[2px]'
+                    : 'bg-background text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px]'}
                 `}
               >
                 Companies {selectedCompanies.length > 0 ? `(${selectedCompanies.length})` : '(ALL)'}
@@ -177,17 +177,17 @@ export default function Explore() {
                     className="fixed inset-0 z-10"
                     onClick={() => setCompaniesOpen(false)}
                   ></div>
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-20 max-h-80 overflow-y-auto">
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-background border-2 border-[color:var(--neo-border)] shadow-[4px_4px_0px_0px_var(--neo-shadow)] z-20 max-h-80 overflow-y-auto">
                     {allCompanies.map(company => (
                       <label
                         key={company}
-                        className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer text-lg font-bold uppercase"
+                        className="flex items-center px-4 py-2 hover:bg-muted cursor-pointer text-lg font-bold uppercase"
                       >
                         <input
                           type="checkbox"
                           checked={isCompanyChecked(company)}
                           onChange={() => toggleCompany(company)}
-                          className="mr-3 w-5 h-5 border-2 border-black rounded-none appearance-none checked:bg-black checked:after:content-['✓'] checked:after:text-white checked:after:block checked:after:text-center checked:after:text-sm checked:after:leading-4"
+                          className="mr-3 w-5 h-5 border-2 border-[color:var(--neo-border)] rounded-none appearance-none checked:bg-foreground checked:after:content-['✓'] checked:after:text-background checked:after:block checked:after:text-center checked:after:text-sm checked:after:leading-4"
                         />
                         {company}
                       </label>
@@ -211,8 +211,8 @@ export default function Explore() {
           </div>
         </Reveal>
 
-        <div className="border-t-4 border-b-4 border-black mt-12">
-          <div className="divide-y-2 divide-black">
+        <div className="border-t-4 border-b-4 border-[color:var(--neo-border)] mt-12">
+          <div className="divide-y-2 divide-[color:var(--neo-border)]">
             {filteredProjects.length === 0 ? (
               <div className="py-12 text-center text-xl font-bold">No projects found with selected filters.</div>
             ) : (
@@ -226,7 +226,7 @@ export default function Explore() {
                     className="grid grid-cols-1 md:grid-cols-[1fr_1.25fr_1fr] gap-7 items-start md:py-12 pt-10 pb-16"
                   >
                     <div className="text-left">
-                      <h3 className="text-4xl text-black font-black uppercase text-balance tracking-tighter mb-3">{item.title}</h3>
+                      <h3 className="text-4xl text-foreground font-black uppercase text-balance tracking-tighter mb-3">{item.title}</h3>
                       <div className="flex flex-row md:flex-col items-start gap-4">
                         {item.companies?.filter(c => c.logo).map((company, cIdx) => (
                           <CompanyLogo
@@ -240,10 +240,10 @@ export default function Explore() {
                       </div>
                     </div>
                     <div className="text-left flex flex-col h-full">
-                      <p className="text-2xl text-black font-bold leading-tight text-balance mb-1 border-l-2 border-black pl-4 pt-2">
+                      <p className="text-2xl text-foreground font-bold leading-tight text-balance mb-1 border-l-2 border-[color:var(--neo-border)] pl-4 pt-2">
                         {description}
                       </p>
-                      <div className="flex flex-wrap items-center text-xl font-medium text-black mt-0 pl-4 pb-2">
+                      <div className="flex flex-wrap items-center text-xl font-medium text-foreground mt-0 pl-4 pb-2">
                         <p>{timelineStr}</p>
                       </div>
                       {(item.trailer || item.imdb) && (
@@ -260,7 +260,7 @@ export default function Explore() {
                                   openVideo(item, embed);
                                 }
                               }}
-                              className="px-4 py-1.5 border-2 border-black bg-white text-base font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
+                              className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
                             >
                               Trailer
                             </a>
@@ -270,7 +270,7 @@ export default function Explore() {
                               href={item.imdb}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-4 py-1.5 border-2 border-black bg-white text-base font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
+                              className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
                             >
                               IMDb
                             </a>
@@ -279,7 +279,7 @@ export default function Explore() {
                       )}
                     </div>
                     <div>
-                      <div className="aspect-[3/2] overflow-hidden bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
+                      <div className="aspect-[3/2] overflow-hidden bg-background border-2 border-[color:var(--neo-border)] shadow-[6px_6px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_var(--neo-shadow)] transition-all cursor-pointer">
                         <img
                           src={item.image}
                           alt={item.title || 'Project artwork'}

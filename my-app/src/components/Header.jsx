@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import { useScroll } from '@/hooks/useScroll'
+import ThemeToggle from './ThemeToggle'
 import { MAIN_REEL } from '../data/projects'
 
 const NAVBAR_HEIGHT = 80 // approx 16 * 5 or similar, depending on design
@@ -34,11 +35,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b-2 border-black transition-all">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b-2 border-[color:var(--neo-border)] transition-all">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center">
-              <a href="#" className="text-3xl md:text-4xl font-bold uppercase text-black tracking-tighter hover:underline decoration-4 underline-offset-4">
+              <a href="#" className="text-3xl md:text-4xl font-bold uppercase text-foreground tracking-tighter hover:underline decoration-4 underline-offset-4">
                 Alejandro animates
               </a>
             </div>
@@ -49,7 +50,7 @@ export default function Header() {
                 <a
                   key={link.href}
                   href={`#${link.href}`}
-                  className="text-xl font-bold uppercase text-black hover:bg-black hover:text-white px-2 py-1 transition-colors"
+                  className="text-xl font-bold uppercase text-foreground hover:bg-foreground hover:text-background px-2 py-1 transition-colors"
                   onClick={(e) => handleNavClick(e, link.href)}
                 >
                   {link.label}
@@ -62,16 +63,20 @@ export default function Header() {
               >
                 Reel
               </button>
+              <ThemeToggle />
             </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-foreground"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Header Controls */}
+            <div className="md:hidden flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                className="p-2 text-foreground"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </header>

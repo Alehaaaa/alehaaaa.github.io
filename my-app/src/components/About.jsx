@@ -16,16 +16,16 @@ export default function About() {
 
   return (
     <>
-      <section id="about" className="py-40 bg-gray-50">
+      <section id="about" className="py-40 bg-secondary/20">
         <div className="max-w-7xl mx-auto px-4 text-left">
           <Reveal>
-            <h2 className="text-6xl lg:text-7xl font-light text-black mb-10">About</h2>
+            <h2 className="text-6xl lg:text-7xl font-light text-foreground mb-10">About</h2>
           </Reveal>
           <div className="lg:flex lg:items-start lg:gap-24">
             <div className="lg:flex-1">
               {PROFILE.bio.map((paragraph, i) => (
                 <Reveal key={i} delay={100 + (i * 50)}>
-                  <p className="text-xl text-gray-600 leading-relaxed mb-8">
+                  <p className="text-xl text-muted-foreground leading-relaxed mb-8">
                     {paragraph}
                   </p>
                 </Reveal>
@@ -37,7 +37,7 @@ export default function About() {
                   href={PROFILE.links.cv}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl lg:text-2xl font-medium text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 >
                   CV
                 </a>
@@ -45,14 +45,14 @@ export default function About() {
                   href={PROFILE.links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl lg:text-2xl font-medium text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                 >
                   LinkedIn
                 </a>
                 <button
                   type="button"
                   onClick={openReel}
-                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-black bg-white text-xl lg:text-2xl font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
+                  className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl lg:text-2xl font-medium text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                 >
                   Reel
                 </button>

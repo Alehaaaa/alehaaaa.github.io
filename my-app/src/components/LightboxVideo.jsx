@@ -65,14 +65,14 @@ export default function LightboxVideo({ open, onClose, src, title, description }
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: "spring", duration: 0.4, bounce: 0 }}
-            className="relative z-10 w-full max-w-6xl bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col overflow-hidden"
+            className="relative z-10 w-full max-w-6xl bg-background border-2 border-[color:var(--neo-border)] shadow-[8px_8px_0px_0px_var(--neo-shadow)] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header / Controls */}
-            <div className="flex items-center justify-end px-4 py-3 border-b-2 border-black bg-white">
+            <div className="flex items-center justify-end px-4 py-3 border-b-2 border-[color:var(--neo-border)] bg-background">
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-black hover:text-white transition-colors border-2 border-transparent hover:border-black rounded-none cursor-pointer"
+                className="p-2 hover:bg-foreground hover:text-background transition-colors border-2 border-transparent hover:border-[color:var(--neo-border)] rounded-none cursor-pointer"
                 aria-label="Close"
               >
                 <X size={24} className="cursor-pointer" />
@@ -94,9 +94,9 @@ export default function LightboxVideo({ open, onClose, src, title, description }
 
             {/* Footer */}
             {(title || description) && (
-              <div className="p-6 bg-white border-t-2 border-black">
+              <div className="p-6 bg-background border-t-2 border-[color:var(--neo-border)]">
                 {title && <p className="text-lg font-medium">{title}</p>}
-                {description && <p className="text-gray-600 mt-2">{description}</p>}
+                {description && <p className="text-muted-foreground mt-2">{description}</p>}
               </div>
             )}
 

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -81,28 +84,47 @@
   --destructive-foreground: 210 40% 98%;
   --ring: 215 20.2% 65.1%;
   --radius: 0.5rem;
+  --neo-border: #000000;
+  --neo-shadow: #000000;
 }
 
 .dark {
-  --background: 224 71% 4%;
-  --foreground: 213 31% 91%;
-  --muted: 223 47% 11%;
-  --muted-foreground: 215.4 16.3% 56.9%;
-  --accent: 216 34% 17%;
-  --accent-foreground: 210 40% 98%;
-  --popover: 224 71% 4%;
-  --popover-foreground: 215 20.2% 65.1%;
-  --border: 216 34% 17%;
-  --input: 216 34% 17%;
-  --card: 224 71% 4%;
-  --card-foreground: 213 31% 91%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 1.2%;
-  --secondary: 222.2 47.4% 11.2%;
-  --secondary-foreground: 210 40% 98%;
-  --destructive: 0 63% 31%;
-  --destructive-foreground: 210 40% 98%;
-  --ring: 216 34% 17%;
+  /* Neutral Dark Theme - No Blues, Pure Greyscale Neo-Brutalism */
+  --background: 0 0% 10%;
+  /* Dark distinct grey, not black */
+  --foreground: 0 0% 98%;
+  /* White */
+
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 65%;
+
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 98%;
+
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 98%;
+
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 98%;
+
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 9%;
+
+  --secondary: 0 0% 15%;
+  /* Neutral grey for section backgrounds */
+  --secondary-foreground: 0 0% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+
+  --ring: 0 0% 83.9%;
+
+  /* High Contrast Neo-Brutalist Borders */
+  --neo-border: #ffffff;
+  --neo-shadow: #ffffff;
 }
 
 /* Global styles */
@@ -117,6 +139,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
+    /* Explicitly use the variable color to avoid FOUC or scroll white bars */
+    background-color: hsl(var(--background));
     @apply bg-background text-foreground;
   }
 
@@ -127,13 +151,13 @@
 
 @layer components {
   .neo-button {
-    @apply px-8 py-4 border-2 border-black bg-white text-xl font-medium text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    @apply px-8 py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl font-medium text-foreground transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    box-shadow: 4px 4px 0px 0px var(--neo-shadow);
   }
 
   .neo-button:hover {
     transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+    box-shadow: 2px 2px 0px 0px var(--neo-shadow);
   }
 
   .neo-button:active {
@@ -142,12 +166,12 @@
   }
 
   .neo-card {
-    @apply border-2 border-black bg-white;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    @apply border-2 border-[color:var(--neo-border)] bg-background text-foreground;
+    box-shadow: 4px 4px 0px 0px var(--neo-shadow);
   }
 
   .neo-input {
-    @apply border-2 border-black p-3 bg-white focus:outline-none focus:ring-0;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    @apply border-2 border-[color:var(--neo-border)] p-3 bg-background text-foreground focus:outline-none focus:ring-0;
+    box-shadow: 4px 4px 0px 0px var(--neo-shadow);
   }
 }

@@ -25,7 +25,7 @@ export function CompanyLogo({ src, name, scale = 1, url }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-block p-2 border border-transparent hover:bg-black transition-colors duration-200"
+            className="group inline-block p-2 border border-transparent hover:bg-black dark:hover:bg-white transition-colors duration-200"
         >
             <div
                 role="img"
@@ -38,7 +38,7 @@ export function CompanyLogo({ src, name, scale = 1, url }) {
                     height: `${dims.height}rem`,
                     width: `${dims.width}rem`,
                 }}
-                className="transition-all duration-200 group-hover:invert"
+                className="dark:invert-100 group-hover:invert-100 dark:group-hover:invert-0"
             />
         </a>
     )

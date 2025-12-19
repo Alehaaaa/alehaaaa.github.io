@@ -58,7 +58,7 @@ export default function Projects() {
         <div className="absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
           <button
             onClick={scrollPrev}
-            className="p-3 bg-white border-2 border-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+            className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -68,7 +68,7 @@ export default function Projects() {
         <div className="absolute top-1/2 -translate-y-1/2 right-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
           <button
             onClick={scrollNext}
-            className="p-3 bg-white border-2 border-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+            className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6" />
@@ -94,7 +94,7 @@ export default function Projects() {
               >
                 <div className="flex flex-col h-full group">
                   <div
-                    className="relative aspect-[4/3] overflow-hidden mb-6 bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer select-none"
+                    className="relative aspect-[4/3] overflow-hidden mb-6 bg-background border-2 border-[color:var(--neo-border)] shadow-[6px_6px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_var(--neo-shadow)] transition-all cursor-pointer select-none"
                     onClick={() => openImage(p)}
                   >
                     <img
@@ -104,13 +104,13 @@ export default function Projects() {
                     />
                   </div>
 
-                  <h3 className="text-3xl md:text-4xl font-black text-black uppercase mb-2 tracking-tighter select-none">
+                  <h3 className="text-3xl md:text-4xl font-black text-foreground uppercase mb-2 tracking-tighter select-none">
                     {p.title}
                   </h3>
 
-                  <div className="text-black font-bold text-lg mb-4 border-l-4 border-black pl-3 flex flex-col gap-1 select-none">
+                  <div className="text-foreground font-bold text-lg mb-4 border-l-4 border-[color:var(--neo-border)] pl-3 flex flex-col gap-1 select-none">
                     <span>{describeProject(p)}</span>
-                    <div className="flex items-center text-base font-bold text-gray-500">
+                    <div className="flex items-center text-base font-bold text-muted-foreground">
                       <div className="flex items-center gap-2">
                         {p.companyUrl && (
                           <>
@@ -150,7 +150,7 @@ export default function Projects() {
                             openVideo(p, embed);
                           }
                         }}
-                        className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer select-none"
+                        className="px-6 py-2 border-2 border-[color:var(--neo-border)] bg-background text-lg font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer select-none"
                       >
                         Trailer
                       </a>
@@ -160,7 +160,7 @@ export default function Projects() {
                         href={p.imdb}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-2 border-2 border-black bg-white text-lg font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all select-none"
+                        className="px-6 py-2 border-2 border-[color:var(--neo-border)] bg-background text-lg font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all select-none"
                       >
                         IMDb
                       </a>

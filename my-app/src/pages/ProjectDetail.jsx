@@ -62,13 +62,13 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-background">
         <div className="max-w-4xl mx-auto px-4 text-left">
-          <h1 className="text-5xl md:text-6xl font-light text-black mb-6">Project not found</h1>
-          <p className="text-xl text-black mb-10">
+          <h1 className="text-5xl md:text-6xl font-light text-foreground mb-6">Project not found</h1>
+          <p className="text-xl text-foreground mb-10">
             We could not locate that project. It may have been renamed or removed.
           </p>
-          <Link to="/" className="text-xl underline text-black">
+          <Link to="/" className="text-xl underline text-foreground">
             Back to the homepage
           </Link>
         </div>
@@ -89,17 +89,17 @@ export default function ProjectDetail() {
   const companies = Array.isArray(project.companies) ? project.companies : []
 
   return (
-    <section className="py-24 md:py-32 bg-white">
+    <section className="py-24 md:py-32 bg-background">
       <div className="max-w-[120em] w-[80vw] mx-auto px-4">
         <Link
           to="/"
           state={{ focus: 'explore' }}
-          className="inline-flex items-center gap-2 text-black text-lg underline mb-10"
+          className="inline-flex items-center gap-2 text-foreground text-lg underline mb-10"
           aria-label="Open project image in lightbox"
         >
           <svg
             aria-hidden="true"
-            className="h-3 w-8 text-black"
+            className="h-3 w-8 text-foreground"
             viewBox="0 0 44 18"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -120,7 +120,7 @@ export default function ProjectDetail() {
         </Link>
 
         <div
-          className="aspect-[16/9] md:aspect-[3/2] overflow-hidden bg-gray-200 cursor-pointer"
+          className="aspect-[16/9] md:aspect-[3/2] overflow-hidden bg-muted cursor-pointer"
           onClick={() => setLightboxOpen(true)}
           role="button"
           tabIndex={0}
@@ -141,23 +141,22 @@ export default function ProjectDetail() {
         <header className="mt-16 md:mt-20 text-left">
           <div className="grid gap-12 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] items-start">
             <div>
-              <h1 className="text-5xl md:text-7xl font-light text-black leading-tight">
+              <h1 className="text-5xl md:text-7xl font-light text-foreground leading-tight">
                 {project.title}
               </h1>
               {detailsLine && (
-                <p className="mt-4 text-xl md:text-2xl text-black font-light tracking-wide uppercase">
+                <p className="mt-4 text-xl md:text-2xl text-foreground font-light tracking-wide uppercase">
                   {detailsLine}
                 </p>
               )}
             </div>
 
             {(companies.length > 0 || socials.length > 0 || timelineLabel || years) && (
-              <div className="space-y-8 md:pl-10 md:border-l border-black border-b md:border-b-0 pb-8">
+              <div className="space-y-8 md:pl-10 md:border-l border-[color:var(--neo-border)] border-b md:border-b-0 pb-8">
                 {companies.length > 0 && (
                   <div
-                    className={`flex items-center gap-0 ${
-                      companies.length === 1 ? 'justify-start' : 'justify-between'
-                    }`}
+                    className={`flex items-center gap-0 ${companies.length === 1 ? 'justify-start' : 'justify-between'
+                      }`}
                   >
                     {companies.map((company, idx) => {
                       const label = company.displayName || company.name || 'Company'
@@ -184,7 +183,7 @@ export default function ProjectDetail() {
                           />
                         </>
                       ) : (
-                        <span className="text-lg font-light underline decoration-black/60 decoration-[1.5px] underline-offset-4 text-black">
+                        <span className="text-lg font-light underline decoration-foreground/60 decoration-[1.5px] underline-offset-4 text-foreground">
                           {label}
                         </span>
                       )
@@ -209,14 +208,14 @@ export default function ProjectDetail() {
                 )}
 
                 {socials.length > 0 && (
-                  <div className="flex flex-wrap gap-4 text-xl text-black uppercase">
+                  <div className="flex flex-wrap gap-4 text-xl text-foreground uppercase">
                     {socials.map((item) => (
                       <a
                         key={item.href}
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline decoration-black/60 decoration-[1.5px] underline-offset-4 hover:opacity-80"
+                        className="underline decoration-foreground/60 decoration-[1.5px] underline-offset-4 hover:opacity-80"
                       >
                         {item.label}
                       </a>
@@ -225,7 +224,7 @@ export default function ProjectDetail() {
                 )}
 
                 {(timelineLabel || years) && (
-                  <p className="text-xl text-black font-light tracking-wide uppercase">
+                  <p className="text-xl text-foreground font-light tracking-wide uppercase">
                     {timelineLabel || years}
                   </p>
                 )}
@@ -233,15 +232,15 @@ export default function ProjectDetail() {
             )}
           </div>
         </header>
-              {subtitle && (
-                <p className="mt-8 text-2xl md:text-3xl font-light text-black leading-snug">
-                  {subtitle}
-                </p>
-              )}
+        {subtitle && (
+          <p className="mt-8 text-2xl md:text-3xl font-light text-foreground leading-snug">
+            {subtitle}
+          </p>
+        )}
 
         <div className="mt-10 md:mt-16 space-y-8 text-left">
           {content.map((paragraph, idx) => (
-            <p key={idx} className="text-lg md:text-xl text-black leading-relaxed">
+            <p key={idx} className="text-lg md:text-xl text-foreground leading-relaxed">
               {paragraph}
             </p>
           ))}

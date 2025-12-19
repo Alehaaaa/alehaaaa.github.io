@@ -6,7 +6,7 @@ import ProjectDetail from './pages/ProjectDetail'
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <Header />
       <main className="pt-16">
         <Routes>
