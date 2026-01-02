@@ -129,9 +129,6 @@
 
 /* Global styles */
 @layer base {
-  html {
-    /* Background logic moved to html::before for overscroll effect */
-  }
 
   html::before {
     content: "";
