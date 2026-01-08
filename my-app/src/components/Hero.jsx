@@ -1,4 +1,4 @@
-import { HERO_REEL } from '../data/projects'
+import { HERO_REEL } from '../data/profile'
 
 export default function Hero() {
   return (

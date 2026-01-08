@@ -3,8 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // Import data for injection
-import { PROFILE } from './src/data/profile.js';
-import { MAIN_REEL } from './src/data/projects.js';
+import { PROFILE, PRIVATE_REEL } from './src/data/profile.js';
 
 // Generate HTML for noscript
 const noscriptHtml = `
@@ -99,7 +98,7 @@ const noscriptHtml = `
     <div class="ns-buttons">
       <a href="${PROFILE.links.cv}" class="ns-btn" target="_blank">CV</a>
       <a href="${PROFILE.links.linkedin}" class="ns-btn" target="_blank">LinkedIn</a>
-      <a href="${MAIN_REEL.url}" class="ns-btn" target="_blank">Reel</a>
+      <a href="${PRIVATE_REEL.url}" class="ns-btn" target="_blank">Reel</a>
     </div>
   </div>
 `;

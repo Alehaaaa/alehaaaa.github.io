@@ -1,9 +1,3 @@
-export const MAIN_REEL = {
-    url: 'https://vimeo.com/957666816?fl=ip&fe=ec',
-    title: 'Animation Reel 2025'
-}
-export const HERO_REEL = 'https://player.vimeo.com/video/875111175?autoplay=1&muted=1&controls=1&title=0&dnt=1&loop=1'
-
 export const projects = [
     {
         "disabled": false,

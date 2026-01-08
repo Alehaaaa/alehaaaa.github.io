@@ -54,26 +54,17 @@ export function useTheme() {
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             const savedTheme = localStorage.getItem('theme')
-            if (savedTheme) return savedTheme
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            // Default to 'system' if nothing is saved
+            return savedTheme || 'system'
         }
-        return 'light'
+        return 'system'
     })
 
     useEffect(() => {
-        console.log('Theme changed to:', theme)
         const root = window.document.documentElement
         root.classList.remove('light', 'dark')
 
         if (theme === 'system') {
-            // If user chose system, we need to defer to matchMedia
-            // But currently 'theme' state purely holds 'light' or 'dark' in the original code,
-            // except the original code referenced handling 'system' in the effect? 
-            // Wait, the original initialization logic (lines 4-17) returns 'light' or 'dark' or 'savedTheme'.
-            // But line 26 checks `theme === 'system'`. So 'system' IS a possible state 
-            // if the user SETS it to 'system'. But the initializer didn't seem to return it?
-            // Ah, checking line 6: `localStorage.getItem('theme')` could be 'system'.
-
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
             const applySystem = (e) => {
                 const sysTheme = e.matches ? 'dark' : 'light'
@@ -83,6 +74,7 @@ export function useTheme() {
 
             applySystem(mediaQuery)
             mediaQuery.addEventListener('change', applySystem)
+            localStorage.removeItem('theme') // Or set to 'system'
             return () => mediaQuery.removeEventListener('change', applySystem)
         } else {
             root.classList.add(theme)
@@ -91,8 +83,12 @@ export function useTheme() {
     }, [theme])
 
     const toggleTheme = () => {
-        setTheme(prev => prev === 'dark' ? 'light' : 'dark')
+        setTheme(prev => {
+            if (prev === 'system') return 'light'
+            if (prev === 'light') return 'dark'
+            return 'system'
+        })
     }
 
-    return { theme, toggleTheme }
+    return { theme, setTheme, toggleTheme }
 }

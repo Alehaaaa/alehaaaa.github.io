@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import Reveal from './Reveal'
-import { MAIN_REEL } from '../data/projects'
-import { PROFILE } from '../data/profile'
+import { PROFILE, PRIVATE_REEL } from '../data/profile'
 
 export default function About() {
   const [reelOpen, setReelOpen] = useState(false)
-  const reelUrl = MAIN_REEL.url
+  const reelUrl = PRIVATE_REEL.url
   const reelSrc = useMemo(() => toEmbedSrc(reelUrl) || reelUrl, [reelUrl])
 
   const openReel = (e) => {
@@ -61,7 +60,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <LightboxVideo open={reelOpen} onClose={() => setReelOpen(false)} src={reelSrc} title={MAIN_REEL.title} />
+      <LightboxVideo open={reelOpen} onClose={() => setReelOpen(false)} src={reelSrc} title={PRIVATE_REEL.title} />
     </>
   )
 }

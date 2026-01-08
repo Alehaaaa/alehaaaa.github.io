@@ -40,12 +40,12 @@ export default function Explore() {
         })
       }
     })
-    return Array.from(companies).sort()
+    return Array.from(companies)
   }, [])
 
 
   const [selectedTags, setSelectedTags] = useState([])
-  const [selectedCompanies, setSelectedCompanies] = useState([])
+  const [selectedCompanies, setSelectedCompanies] = useState(allCompanies)
 
 
   const toggleTag = (tag) => {
@@ -59,19 +59,11 @@ export default function Explore() {
 
 
   const toggleCompany = (company) => {
-    setSelectedCompanies(prev => {
-      if (prev.length === 0) {
-        return allCompanies.filter(c => c !== company)
-      }
-
-      if (prev.includes(company)) {
-        const newSelection = prev.filter(c => c !== company)
-        return newSelection.length === 0 ? [] : newSelection
-      } else {
-        const newSelection = [...prev, company]
-        return newSelection.length === allCompanies.length ? [] : newSelection
-      }
-    })
+    setSelectedCompanies(prev =>
+      prev.includes(company)
+        ? prev.filter(c => c !== company)
+        : [...prev, company]
+    )
   }
 
 
@@ -118,7 +110,7 @@ export default function Explore() {
   })
 
   // Helper to determine if a company is checked
-  const isCompanyChecked = (company) => selectedCompanies.length === 0 || selectedCompanies.includes(company)
+  const isCompanyChecked = (company) => selectedCompanies.includes(company)
 
   return (
     <section id="explore" className="py-40 bg-background min-h-screen">
@@ -160,7 +152,7 @@ export default function Explore() {
                     : 'bg-background text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px]'}
                 `}
               >
-                Companies {selectedCompanies.length > 0 ? `(${selectedCompanies.length})` : '(ALL)'}
+                Companies {(selectedCompanies.length === 0 || selectedCompanies.length === allCompanies.length) ? '(ALL)' : `(${selectedCompanies.length})`}
                 <svg
                   className={`w-4 h-4 transition-transform ${companiesOpen ? 'rotate-180' : ''}`}
                   fill="none"
@@ -197,11 +189,11 @@ export default function Explore() {
               )}
             </div>
 
-            {(selectedTags.length > 0 || selectedCompanies.length > 0) && (
+            {(selectedTags.length > 0 || (selectedCompanies.length !== allCompanies.length && selectedCompanies.length > 0)) && (
               <button
                 onClick={() => {
                   setSelectedTags([])
-                  setSelectedCompanies([])
+                  setSelectedCompanies(allCompanies)
                 }}
                 className="px-4 py-2 text-lg font-bold underline decoration-2 underline-offset-4 hover:text-gray-600 ml-2"
               >
