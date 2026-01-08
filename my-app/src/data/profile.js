@@ -7,7 +7,7 @@ export const PROFILE = {
         "I hit deadlines, keep quality high, support my colleagues, and always bring joy to every shot."
     ],
     links: {
-        cv: '/cv/CV Alejandro Martín 2026.pdf',
+        cv: '/cv/CV_Alejandro_Martin_2026.pdf',
         linkedin: 'https://www.linkedin.com/in/alejandro-martin-407527215',
         instagram: 'https://www.instagram.com/alejandro_anim/',
         email: 'alehamartinva@gmail.com',
