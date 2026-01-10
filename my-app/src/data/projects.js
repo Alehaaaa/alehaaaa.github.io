@@ -16,7 +16,7 @@ export const projects = [
             }
         ],
         "poster": "/projects/project_fall_guys_6.jpg",
-        // "trailerLink": "https://www.youtube.com/watch?v=lHSumsnr9ZE",
+        "trailerLink": "https://youtube.com/shorts/7oJvDujD82w",
         "timeline": {
             "start": {
                 "month": "Nov.",
