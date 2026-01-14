@@ -2,8 +2,11 @@ import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { projects as sourceProjects } from '../data/projects'
 
-export function cn(...inputs) {
-  return twMerge(clsx(inputs))
+export const cn = (...inputs) => twMerge(clsx(inputs))
+
+const monthMap = {
+  "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
+  "Jul.": 6, "Aug.": 7, "Sep.": 8, "Oct.": 9, "Nov.": 10, "Dec.": 11
 }
 
 const slugify = (value, fallback) => {
@@ -16,54 +19,75 @@ const slugify = (value, fallback) => {
   return base || fallback || 'project'
 }
 
-/** Normalize paths: 'public/img.jpg' -> '/img.jpg' */
-export function toPublicUrl(p) {
+export const toPublicUrl = (p) => {
   if (!p) return ''
   if (/^https?:\/\//i.test(p)) return p
   return p.replace(/^public\//, '/').replace(/^\/?/, '/')
 }
 
-export const projects = sourceProjects
-  .filter((item) => !item.disabled)
-  .map((item, index) => {
-    const slug = slugify(item.slug || item.title, `project-${index + 1}`)
-    const companies = (Array.isArray(item.companies) ? item.companies : [])
-      .map(c => ({ ...c, logo: toPublicUrl(c.logo) }))
-    const primaryCompany = companies[0] || {
-      name: item.companyName,
-      url: item.companyUrl,
-      logo: toPublicUrl(item.companyLogo)
-    }
+const isFuture = (monthStr, year) => {
+  const month = monthMap[monthStr] ?? 11
+  return new Date(year, month + 1, 1) > new Date()
+}
 
-    return {
-      ...item,
-      title: item.title,
-      image: toPublicUrl(item.poster),
-      type: item.type,
-      role: item.role,
-      companyUrl: primaryCompany.url,
-      companyName: primaryCompany.name,
-      companyDisplayName: primaryCompany.displayName || primaryCompany.name,
-      companies,
-      slug,
-      imdb: item.imdbLink,
-      trailer: item.trailerLink,
-      years: item.year || [],
-    }
-  })
+const formatPoint = (p) => [p?.month, p?.year].filter(Boolean).join(' ')
 
-export const projectsBySlug = projects.reduce((acc, p) => {
-  acc[p.slug] = p
-  return acc
-}, {})
+const getYears = (t) => {
+  if (!t?.start) return ''
+  const start = t.start.year
+  const future = !t.end || isFuture(t.end.month, t.end.year)
+  const end = future ? "Currently" : t.end.year
 
-export const getProjectBySlug = (slug) => projectsBySlug[slug]
-
-export const describeProject = (item) => [item.type, item.role].filter(Boolean).join('\u00A0· ')
+  return start === end ? `${start}` : `${start} - ${end}`
+}
 
 export const formatTimeline = (t) => {
   if (!t?.start) return ''
-  const start = `${t.start.month} ${t.start.year}`
-  const end = t.end ? `${t.end.month} ${t.end.year}` : 'Present'
-  return `${start} - ${end}`
+  const start = formatPoint(t.start)
+  const future = !t.end || isFuture(t.end.month, t.end.year)
+
+  if (future) return `${start} - Currently`
+
+  const end = formatPoint(t.end)
+  return start === end ? start : `${start} - ${end}`
 }
+
+export const describeProject = (item) =>
+  [item.type, item.role].filter(Boolean).join('\u00A0· ')
+
+export const projects = sourceProjects
+  .filter((p) => !p.disabled)
+  .map((p, i) => {
+    const slug = slugify(p.slug || p.title, `project-${i + 1}`)
+
+    const companies = (Array.isArray(p.companies) ? p.companies : [])
+      .map(c => ({ ...c, logo: toPublicUrl(c.logo) }))
+
+    const mainCompany = companies[0] || {
+      name: p.companyName,
+      url: p.companyUrl,
+      logo: toPublicUrl(p.companyLogo)
+    }
+
+    return {
+      ...p,
+      title: p.title,
+      image: toPublicUrl(p.poster),
+      type: p.type,
+      role: p.role,
+      companyUrl: mainCompany.url,
+      companyName: mainCompany.name,
+      companyDisplayName: mainCompany.displayName || mainCompany.name,
+      companies,
+      slug,
+      imdb: p.imdbLink,
+      trailer: p.trailerLink,
+      years: getYears(p.timeline),
+    }
+  })
+
+export const projectsBySlug = Object.fromEntries(
+  projects.map(p => [p.slug, p])
+)
+
+export const getProjectBySlug = (slug) => projectsBySlug[slug]

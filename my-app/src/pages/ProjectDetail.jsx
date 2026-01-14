@@ -1,35 +1,11 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getProjectBySlug, toPublicUrl } from '../lib/utils'
+import { getProjectBySlug, toPublicUrl, formatTimeline } from '../lib/utils'
 import LightboxImage from '../components/LightboxImage'
 
-const formatYears = (years) => {
-  if (!Array.isArray(years) || years.length === 0) return ''
-  if (years.length === 1) return `${years[0]}`
-  const sorted = [...years].sort()
-  const first = sorted[0]
-  const last = sorted[sorted.length - 1]
-  return first === last ? `${first}` : `${first} - ${last}`
-}
 
-const formatTimelinePoint = (point) => {
-  if (!point) return ''
-  const month = point.month || ''
-  const year = point.year
-  if (month && Number.isFinite(year)) return `${month} ${year}`
-  if (Number.isFinite(year)) return `${year}`
-  return month
-}
 
-const formatTimeline = (timeline) => {
-  if (!timeline) return ''
-  const start = formatTimelinePoint(timeline.start)
-  const end = formatTimelinePoint(timeline.end)
-  if (start && end && start !== end) return `${start} – ${end}`
-  return start || end || ''
-}
-
-const buildSocials = (project) => {
+const buildLinks = (project) => {
   const items = []
   const append = (entry) => {
     if (!entry) return
@@ -42,8 +18,8 @@ const buildSocials = (project) => {
     items.push({ href, label, logo, ariaLabel })
   }
 
-  const detailSocials = Array.isArray(project.detail?.socials) ? project.detail.socials : []
-  detailSocials.forEach((entry) => append(entry))
+  const detailLinks = Array.isArray(project.detail?.links) ? project.detail.links : []
+  detailLinks.forEach((entry) => append(entry))
 
   if (project.trailer) append({ label: 'Trailer', href: project.trailer })
   if (project.imdb) append({ label: 'IMDb', href: project.imdb })
@@ -83,9 +59,9 @@ export default function ProjectDetail() {
     Array.isArray(project.detail?.content) && project.detail.content.length > 0
       ? project.detail.content
       : ['Project write-up coming soon.']
-  const years = formatYears(project.years)
+  const years = project.years
   const timelineLabel = formatTimeline(project.timeline)
-  const socials = buildSocials(project)
+  const links = buildLinks(project)
   const companies = Array.isArray(project.companies) ? project.companies : []
 
   return (
@@ -151,7 +127,7 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {(companies.length > 0 || socials.length > 0 || timelineLabel || years) && (
+            {(companies.length > 0 || links.length > 0 || timelineLabel || years) && (
               <div className="space-y-8 md:pl-10 md:border-l border-[color:var(--neo-border)] border-b md:border-b-0 pb-8">
                 {companies.length > 0 && (
                   <div
@@ -207,9 +183,9 @@ export default function ProjectDetail() {
                   </div>
                 )}
 
-                {socials.length > 0 && (
+                {links.length > 0 && (
                   <div className="flex flex-wrap gap-4 text-xl text-foreground uppercase">
-                    {socials.map((item) => (
+                    {links.map((item) => (
                       <a
                         key={item.href}
                         href={item.href}

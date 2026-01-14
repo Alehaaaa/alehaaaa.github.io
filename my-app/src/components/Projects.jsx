@@ -89,7 +89,7 @@ export default function Projects() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "0px 200px 0px 0px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.5 }}
                 className="flex-[0_0_85vw] md:flex-[0_0_45vw] lg:flex-[0_0_30vw] min-w-0"
               >
                 <div className="flex flex-col h-full group">
@@ -127,9 +127,7 @@ export default function Projects() {
                           </>
                         )}
                         <span>
-                          {p.years && p.years.length > 0 ? (
-                            p.years.length === 1 ? p.years[0] : `${Math.min(...p.years)} - ${Math.max(...p.years)}`
-                          ) : ''}
+                          {p.years}
                         </span>
                       </div>
                     </div>

@@ -100,13 +100,13 @@ export default function Header() {
                     {link.label}
                   </a>
                 ))}
-                <button
-                  type="button"
+                <a
+                  href={reelUrl}
                   onClick={openReel}
                   className="neo-button px-4 py-1.5 lg:px-6 lg:py-2 uppercase text-base lg:text-lg cursor-pointer transition-all"
                 >
                   Reel
-                </button>
+                </a>
                 <div className="shrink-0">
                   <ThemeToggle />
                 </div>
@@ -159,12 +159,13 @@ export default function Header() {
                     {link.label}
                   </a>
                 ))}
-                <button
+                <a
+                  href={reelUrl}
                   onClick={openReel}
                   className="text-2xl font-light text-foreground text-left cursor-pointer"
                 >
                   Reel
-                </button>
+                </a>
               </nav>
             </motion.div>
           </>

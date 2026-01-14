@@ -1,9 +1,40 @@
 export const projects = [
     {
-        "disabled": false,
-        "year": [
-            2025
+        "disabled": true,
+
+        "type": "Feature Film",
+        "title": "Bottanix",
+        "role": "3D Animator",
+        "companies": [
+            {
+                "name": "Traumhaus Studios",
+                "url": "https://traumhaus-studios.de/",
+                "logo": "/logos/traumhaus_studios.png",
+                "scale": 1.2
+            }
         ],
+        "poster": "/projects/project_bottanix.jpg",
+        "trailerLink": null,
+        "timeline": {
+            "start": {
+                "month": "Feb.",
+                "year": 2026
+            },
+            "end": {
+                "month": "Dec.",
+                "year": 2026
+            }
+        },
+        "colorAccent": [
+            255,
+            218,
+            77
+        ],
+        "tags": [
+            "feature film",
+        ]
+    },
+    {
         "type": "Videogame Demo",
         "title": "Fall Guys CES 2026",
         "role": "3D Animator",
@@ -37,9 +68,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2025
-        ],
         "type": "Feature Film",
         "title": "The Sheep Detectives",
         "role": "3D Animator",
@@ -80,10 +108,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2024,
-            2025
-        ],
         "type": "Feature Film",
         "title": "Die Schule der magischen Tiere 4",
         "role": "Junior/Mid 3D Animator",
@@ -118,10 +142,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2023,
-            2024
-        ],
         "type": "Feature Film",
         "title": "Die Schule der magischen Tiere 3",
         "role": "Junior 3D Animator",
@@ -156,10 +176,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2022,
-            2023
-        ],
         "type": "Short Film",
         "title": "\"El Mega Robo\"",
         "role": "3D & Technical Animator",
@@ -194,10 +210,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2021,
-            2022
-        ],
         "type": "3D Character Animation",
         "title": "Master's Degree",
         "role": "Advanced Acting",
@@ -231,10 +243,6 @@ export const projects = [
         ]
     },
     {
-        "year": [
-            2022,
-            2023
-        ],
         "title": "Diploma in Animation",
         "role": "Animation in 2D, 3D and Stop Motion, Cinema and Drawing",
         "companies": [

@@ -48,13 +48,13 @@ export default function About() {
                 >
                   LinkedIn
                 </a>
-                <button
-                  type="button"
+                <a
+                  href={reelUrl}
                   onClick={openReel}
                   className="flex-1 lg:flex-none inline-flex justify-center w-full px-8 py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl lg:text-2xl font-medium text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none cursor-pointer"
                 >
                   Reel
-                </button>
+                </a>
               </div>
             </Reveal>
           </div>
