@@ -3,6 +3,48 @@ export const projects = [
         "disabled": true,
 
         "type": "Feature Film",
+        "title": "Narnia: The Magician's Nephew",
+        "role": "3D Animator",
+        "companies": [
+            {
+                "name": "Framestore",
+                "url": "https://framestore.com/",
+                "logo": "/logos/framestore.png",
+                "scale": 1.0
+            },
+            {
+                "name": "Panot Studio",
+                "url": "https://studiopanot.com/",
+                "logo": "/logos/panot.png",
+                "scale": 1.0
+            }
+        ],
+        "poster": "/projects/project_narnia_1.jpg",
+        "trailerLink": null,
+        "imdbLink": "https://www.imdb.com/title/tt9077514/",
+        "timeline": {
+            "start": {
+                "month": "Feb.",
+                "year": 2026
+            },
+            "end": {
+                "month": "Sep.",
+                "year": 2026
+            }
+        },
+        "colorAccent": [
+            40,
+            200,
+            185
+        ],
+        "tags": [
+            "feature film",
+        ]
+    },
+    {
+        "disabled": true,
+
+        "type": "Feature Film",
         "title": "Bottanix",
         "role": "3D Animator",
         "companies": [
