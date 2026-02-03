@@ -1,7 +1,5 @@
 export const projects = [
     {
-        "disabled": true,
-
         "type": "Feature Film",
         "title": "Narnia: The Magician's Nephew",
         "role": "3D Animator",
