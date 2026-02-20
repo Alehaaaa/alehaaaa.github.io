@@ -1,7 +1,7 @@
 export const projects = [
     {
         "type": "Feature Film",
-        "title": "Narnia: The Magician's Nephew",
+        "title": "Upcoming Project",
         "role": "3D Animator",
         "companies": [
             {
@@ -17,9 +17,9 @@ export const projects = [
                 "scale": 1.0
             }
         ],
-        "poster": "/projects/project_narnia_1.jpg",
+        "poster": "/projects/project_upcoming.jpg",
         "trailerLink": null,
-        "imdbLink": "https://www.imdb.com/title/tt9077514/",
+        "imdbLink": null,
         "timeline": {
             "start": {
                 "month": "Feb.",
