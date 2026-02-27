@@ -37,7 +37,8 @@ export const projects = [
         ],
         "tags": [
             "feature film",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     },
     {
         "disabled": true,
@@ -72,7 +73,8 @@ export const projects = [
         ],
         "tags": [
             "feature film",
-        ]
+        ],
+        "location": { "name": "Halle", "lat": 51.4816, "long": 11.9682 }
     },
     {
         "type": "Videogame Demo",
@@ -105,7 +107,8 @@ export const projects = [
         ],
         "tags": [
             "videogame demo",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     },
     {
         "type": "Feature Film",
@@ -145,7 +148,8 @@ export const projects = [
         ],
         "tags": [
             "feature film",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     },
     {
         "type": "Feature Film",
@@ -179,7 +183,8 @@ export const projects = [
         ],
         "tags": [
             "feature film",
-        ]
+        ],
+        "location": { "name": "Berlin", "lat": 52.52, "long": 13.405 }
     },
     {
         "type": "Feature Film",
@@ -213,7 +218,8 @@ export const projects = [
         ],
         "tags": [
             "feature film",
-        ]
+        ],
+        "location": { "name": "Berlin", "lat": 52.53, "long": 13.41 }
     },
     {
         "type": "Short Film",
@@ -247,7 +253,8 @@ export const projects = [
         ],
         "tags": [
             "short film",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     },
     {
         "type": "3D Character Animation",
@@ -280,7 +287,8 @@ export const projects = [
         ],
         "tags": [
             "studies",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     },
     {
         "title": "Diploma in Animation",
@@ -312,6 +320,7 @@ export const projects = [
         ],
         "tags": [
             "studies",
-        ]
+        ],
+        "location": { "name": "Barcelona", "lat": 41.3851, "long": 2.1734 }
     }
 ]

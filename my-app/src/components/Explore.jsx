@@ -215,31 +215,47 @@ export default function Explore() {
                 return (
                   <div
                     key={item.slug || idx}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_1.25fr_1fr] gap-7 items-start md:py-12 pt-10 pb-16"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start md:py-12 pt-10 pb-16"
                   >
-                    <div className="text-left">
-                      <h3 className="text-4xl text-foreground font-black uppercase text-balance tracking-tighter mb-3">{item.title}</h3>
-                      <div className="flex flex-row md:flex-col items-start gap-4">
-                        {item.companies?.filter(c => c.logo).map((company, cIdx) => (
-                          <CompanyLogo
-                            key={cIdx}
-                            src={company.logo}
-                            name={company.name}
-                            scale={company.scale || 1}
-                            url={company.url}
-                          />
-                        ))}
+                    <div className="md:col-span-2 text-left py-1 flex flex-col h-full">
+                      <div className="flex flex-col md:flex-row gap-8 items-stretch flex-grow mb-6">
+                        {/* Title and Logos side */}
+                        <div className="flex-[2]">
+                          <h3 className="text-4xl md:text-5xl text-foreground font-black uppercase text-balance tracking-tighter leading-none mb-6">
+                            {item.title}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-0">
+                            {item.companies?.filter(c => c.logo).map((company, cIdx) => (
+                              <CompanyLogo
+                                key={cIdx}
+                                src={company.logo}
+                                name={company.name}
+                                scale={company.scale || 1}
+                                url={company.url}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="flex-1 flex flex-col">
+                          <div className="border-l-2 border-[color:var(--neo-border)] pl-6 flex flex-col gap-2 mb-6">
+                            <p className="text-2xl text-foreground font-bold leading-tight text-balance">
+                              {description}
+                            </p>
+                            {item.location && (
+                              <p className="text-xl text-foreground font-bold">
+                                {item.location.name}
+                              </p>
+                            )}
+                            <div className="flex flex-wrap items-center text-xl font-medium text-muted-foreground">
+                              <p>{timelineStr}</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-left flex flex-col h-full">
-                      <p className="text-2xl text-foreground font-bold leading-tight text-balance mb-1 border-l-2 border-[color:var(--neo-border)] pl-4 pt-2">
-                        {description}
-                      </p>
-                      <div className="flex flex-wrap items-center text-xl font-medium text-foreground mt-0 pl-4 pb-2">
-                        <p>{timelineStr}</p>
-                      </div>
+
                       {(item.trailer || item.imdb) && (
-                        <div className="flex items-center gap-3 mt-auto justify-end">
+                        <div className="flex flex-wrap items-center gap-3 mt-auto ml-auto">
                           {item.trailer && (
                             <a
                               href={item.trailer}

@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react'
  */
 export function CompanyLogo({ src, name, scale = 1, url }) {
     const [dims, setDims] = useState({ width: 0, height: 0 })
-    const heightRem = 3.5 * scale
+    const heightRem = 3.8 * scale
 
     useEffect(() => {
         const img = new Image()
@@ -25,7 +25,7 @@ export function CompanyLogo({ src, name, scale = 1, url }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-block p-2 border border-transparent hover:bg-black dark:hover:bg-white transition-colors duration-200"
+            className="group inline-block p-1 border border-transparent hover:bg-black dark:hover:bg-white transition-colors duration-200"
         >
             <div
                 role="img"

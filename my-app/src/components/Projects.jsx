@@ -44,8 +44,8 @@ export default function Projects() {
   });
 
   return (
-    <section id="projects" className="py-24 md:py-32 bg-background overflow-hidden">
-      <div className="container px-4 md:px-6 mx-auto mb-12">
+    <section id="projects" className="relative z-20 py-24 md:py-32 bg-transparent overflow-hidden pointer-events-none">
+      <div className="container px-4 md:px-6 mx-auto mb-12 pointer-events-auto">
         <Reveal>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground mb-4 tracking-tight">
             Projects
@@ -53,7 +53,7 @@ export default function Projects() {
         </Reveal>
       </div>
 
-      <div className="relative group/container">
+      <div className="relative group/container pointer-events-auto">
         {/* Navigation Buttons */}
         <div className="absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
           <button
@@ -108,7 +108,7 @@ export default function Projects() {
                     {p.title}
                   </h3>
 
-                  <div className="text-foreground font-bold text-lg mb-4 border-l-4 border-[color:var(--neo-border)] pl-3 flex flex-col gap-1 select-none">
+                  <div className="text-foreground font-bold text-lg mb-4 border-l-2 border-[color:var(--neo-border)] pl-3 flex flex-col gap-1 select-none">
                     <span>{describeProject(p)}</span>
                     <div className="flex items-center text-base font-bold text-muted-foreground">
                       <div className="flex items-center gap-2">
@@ -123,6 +123,12 @@ export default function Projects() {
                             >
                               {p.companyDisplayName || p.companyName || 'Company'}
                             </a>
+                            <span>·</span>
+                          </>
+                        )}
+                        {p.location && (
+                          <>
+                            <span>{p.location.name}</span>
                             <span>·</span>
                           </>
                         )}
