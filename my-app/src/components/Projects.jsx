@@ -25,6 +25,16 @@ export default function Projects() {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
+  // Disable Embla drag when lightbox is open
+  useEffect(() => {
+    if (!emblaApi) return;
+    if (video.open || image.open) {
+      emblaApi.reInit({ watchDrag: false });
+    } else {
+      emblaApi.reInit({ watchDrag: true });
+    }
+  }, [video.open, image.open, emblaApi]);
+
   const describeProject = (p) => [p.type, p.role].filter(Boolean).join(' · ');
 
   const openImage = (p) => {
@@ -55,7 +65,7 @@ export default function Projects() {
 
       <div className="relative group/container pointer-events-auto">
         {/* Navigation Buttons */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
+        <div className={`absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity ${video.open || image.open ? 'pointer-events-none' : ''}`}>
           <button
             onClick={scrollPrev}
             className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
@@ -65,7 +75,7 @@ export default function Projects() {
           </button>
         </div>
 
-        <div className="absolute top-1/2 -translate-y-1/2 right-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
+        <div className={`absolute top-1/2 -translate-y-1/2 right-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity ${video.open || image.open ? 'pointer-events-none' : ''}`}>
           <button
             onClick={scrollNext}
             className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
@@ -77,7 +87,7 @@ export default function Projects() {
 
         {/* Embla Viewport */}
         <div
-          className="overflow-hidden px-6 md:px-16 cursor-grab active:cursor-grabbing md:cursor-ew-resize"
+          className={`overflow-hidden px-6 md:px-16 transition-all ${video.open || image.open ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing md:cursor-ew-resize'}`}
           ref={emblaRef}
           style={{ paddingBlock: '1em' }}
         >

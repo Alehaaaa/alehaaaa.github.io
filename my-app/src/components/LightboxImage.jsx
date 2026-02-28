@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useScrollLock } from '@/hooks/useScrollLock'
@@ -15,10 +16,12 @@ export default function LightboxImage({ open, onClose, src, alt, description }) 
     return () => document.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  return (
+  if (typeof window === 'undefined') return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-8">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 pointer-events-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -67,6 +70,7 @@ export default function LightboxImage({ open, onClose, src, alt, description }) 
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }
