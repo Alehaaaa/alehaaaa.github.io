@@ -202,9 +202,12 @@ export default function DottedMap({ onHoverCity }) {
         const ctx = canvasRef.current.getContext('2d', { alpha: true });
         if (!ctx) return;
 
+        const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
         let animationFrameId;
 
         const render = () => {
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.clearRect(0, 0, dimensions.width, dimensions.height);
             const { x: mouseX, y: mouseY } = mouseRef.current;
             const isDark = document.documentElement.classList.contains('dark');
@@ -279,7 +282,13 @@ export default function DottedMap({ onHoverCity }) {
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
                 style={{ backgroundImage: 'radial-gradient(currentColor 1px, transparent 0)', backgroundSize: '40px 40px' }} />
 
-            <canvas ref={canvasRef} width={dimensions.width} height={dimensions.height} className="block w-full h-full" />
+            <canvas
+                ref={canvasRef}
+                width={dimensions.width * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1)}
+                height={dimensions.height * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1)}
+                style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
+                className="block"
+            />
 
             {/* Fade Overlays */}
             <div className="absolute top-0 left-0 right-0 h-32 md:h-48 bg-gradient-to-b from-background to-transparent pointer-events-none" />
