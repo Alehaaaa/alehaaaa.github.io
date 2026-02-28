@@ -14,7 +14,7 @@ export const projects = [
                 "name": "Panot Studio",
                 "url": "https://studiopanot.com/",
                 "logo": "/logos/panot.png",
-                "scale": 1.0
+                "scale": 0.95
             }
         ],
         "poster": "/projects/project_upcoming.jpg",
@@ -85,7 +85,7 @@ export const projects = [
                 "name": "Passion Pictures",
                 "url": "https://www.passion-pictures.com/",
                 "logo": "/logos/passion_pictures.png",
-                "scale": 1.2
+                "scale": 1.43
             }
         ],
         "poster": "/projects/project_fall_guys_6.jpg",
@@ -125,7 +125,7 @@ export const projects = [
                 "name": "Panot Studio",
                 "url": "https://studiopanot.com/",
                 "logo": "/logos/panot.png",
-                "scale": 1.0
+                "scale": 0.95
             }
         ],
         "poster": "/projects/project_the_sheep_detectives.jpg",
@@ -160,7 +160,7 @@ export const projects = [
                 "name": "Lumatic Animation & VFX",
                 "url": "https://lumatic.xyz/",
                 "logo": "/logos/lumatic.png",
-                "scale": 0.5
+                "scale": 0.55
             }
         ],
         "poster": "/projects/project_magischen_tiere_4.jpg",
@@ -195,7 +195,7 @@ export const projects = [
                 "name": "Lumatic Animation & VFX",
                 "url": "https://lumatic.xyz/",
                 "logo": "/logos/lumatic.png",
-                "scale": 0.5
+                "scale": 0.55
             }
         ],
         "poster": "/projects/project_magischen_tiere_3.jpg",
@@ -219,7 +219,7 @@ export const projects = [
         "tags": [
             "feature film",
         ],
-        "location": { "name": "Berlin", "lat": 52.53, "long": 13.41 }
+        "location": { "name": "Berlin", "lat": 52.52, "long": 13.405 }
     },
     {
         "type": "Short Film",
@@ -230,7 +230,7 @@ export const projects = [
                 "name": "9zeros",
                 "url": "https://ecib.es/cortometraje/el-mega-robo/",
                 "logo": "/logos/9zeros.png",
-                "scale": 1.15
+                "scale": 1.3
             }
         ],
         "poster": "/projects/project_robo.jpg",
@@ -265,7 +265,7 @@ export const projects = [
                 "name": "ECIB",
                 "url": "https://www.ecib.es/cursos-3/master-en-animacion3d/",
                 "logo": "/logos/ecib.png",
-                "scale": 0.75
+                "scale": 0.85
             }
         ],
         "poster": "/studies/en/master_ecib.jpg",
@@ -298,7 +298,7 @@ export const projects = [
                 "name": "ECIB",
                 "url": "https://www.ecib.es/cursos-3/diploma-en-animacion/",
                 "logo": "/logos/ecib.png",
-                "scale": 0.75
+                "scale": 0.85
             }
         ],
         "poster": "/studies/en/diploma_ecib.jpg",
