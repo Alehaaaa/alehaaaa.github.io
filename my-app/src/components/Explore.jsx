@@ -4,6 +4,7 @@ import { projects, describeProject, formatTimeline } from '../lib/utils'
 import LightboxImage from './LightboxImage'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import { CompanyLogo } from './CompanyLogo'
+import { MapPin } from 'lucide-react'
 
 export default function Explore() {
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '' })
@@ -243,7 +244,8 @@ export default function Explore() {
                               {description}
                             </p>
                             {item.location && (
-                              <p className="text-xl text-foreground font-bold">
+                              <p className="text-xl text-foreground font-bold flex items-center gap-2">
+                                <MapPin size={18} strokeWidth={1.5} />
                                 {item.location.name}
                               </p>
                             )}
