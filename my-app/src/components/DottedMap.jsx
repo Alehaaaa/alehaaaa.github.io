@@ -231,7 +231,9 @@ export default function DottedMap({ onHoverCity }) {
             suppressionRef.current += ((hoveredCity ? 1 : 0) - suppressionRef.current) * anim.suppressionSpeed;
             const currSupp = suppressionRef.current;
 
-            // Draw Dots (Unified Loop)
+            // Draw Dots (Two-pass Rendering)
+            const highlightedDots = [];
+
             dotsRef.current.forEach(dot => {
                 const isCity = dot.isHighlight;
                 const dist = Math.hypot(dot.x - mouseX, dot.y - mouseY);
@@ -245,17 +247,26 @@ export default function DottedMap({ onHoverCity }) {
                     const colorVal = isDark ? (theme.base + suppSoft * theme.hoverAdd) : (theme.base - suppSoft * theme.hoverSub);
                     const scale = colorVal / maxF;
                     ctx.fillStyle = `rgba(${Math.floor(fr * scale)}, ${Math.floor(fg * scale)}, ${Math.floor(fb * scale)}, ${dot.currentAlpha})`;
+
+                    dot.currentScale += (dot.targetScale - dot.currentScale) * anim.transitionSpeed;
+                    dot.currentAlpha += (dot.targetAlpha - dot.currentAlpha) * anim.transitionSpeed;
+
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, dot.radius * dot.currentScale * radMulti, 0, Math.PI * 2);
+                    ctx.fill();
                 } else {
                     const isHovered = hoveredCity?.name === dot.name;
                     dot.targetScale = (isHovered ? hConf.hoveredZoomFactor : 1) * (1 + softFactor * hConf.rippleScale);
-                    ctx.fillStyle = rgbColor;
+                    dot.currentScale += (dot.targetScale - dot.currentScale) * anim.highlightSpeed;
+                    highlightedDots.push(dot);
                 }
+            });
 
-                dot.currentScale += (dot.targetScale - dot.currentScale) * (isCity ? anim.highlightSpeed : anim.transitionSpeed);
-                if (!isCity) dot.currentAlpha += (dot.targetAlpha - dot.currentAlpha) * anim.transitionSpeed;
-
+            // Draw highlighted dots on top
+            highlightedDots.forEach(dot => {
+                ctx.fillStyle = rgbColor;
                 ctx.beginPath();
-                ctx.arc(dot.x, dot.y, dot.radius * dot.currentScale * (isCity ? 1 : radMulti), 0, Math.PI * 2);
+                ctx.arc(dot.x, dot.y, dot.radius * dot.currentScale, 0, Math.PI * 2);
                 ctx.fill();
             });
 
