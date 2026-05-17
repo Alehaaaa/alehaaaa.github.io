@@ -15,7 +15,7 @@ export default function Projects() {
   });
 
   const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' });
-  const [image, setImage] = useState({ open: false, src: null, alt: '', description: '' });
+  const [image, setImage] = useState({ open: false, src: null, alt: '', description: '', trailer: null, imdb: null });
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -42,7 +42,9 @@ export default function Projects() {
       open: true,
       src: p.image,
       alt: p.title,
-      description: describeProject(p)
+      description: describeProject(p),
+      trailer: p.trailer,
+      imdb: p.imdb
     });
   };
 
@@ -200,6 +202,8 @@ export default function Projects() {
         src={image.src}
         alt={`Poster for ${image.alt}`}
         description={image.description}
+        trailer={image.trailer}
+        imdb={image.imdb}
       />
     </section>
   );

@@ -10,8 +10,8 @@ export default function Home() {
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    if (location.state && location.state.focus === 'explore') {
-      const section = document.getElementById('explore')
+    if (location.state && location.state.focus) {
+      const section = document.getElementById(location.state.focus)
       if (section) {
         section.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }

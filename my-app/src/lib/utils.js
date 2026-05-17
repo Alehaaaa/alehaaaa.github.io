@@ -1,8 +1,11 @@
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { projects as sourceProjects } from '../data/projects'
+import { projects as sourceProjects } from '../projects'
 
 export const cn = (...inputs) => twMerge(clsx(inputs))
+
+// Master toggle to compress projects with future end dates into "Currently" (disabled for now)
+export const COMPRESS_FUTURE_DATES = false
 
 const monthMap = {
   "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
@@ -35,7 +38,7 @@ const formatPoint = (p) => [p?.month, p?.year].filter(Boolean).join(' ')
 const getYears = (t) => {
   if (!t?.start) return ''
   const start = t.start.year
-  const future = !t.end || isFuture(t.end.month, t.end.year)
+  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end.month, t.end.year))
   const end = future ? "Currently" : t.end.year
 
   return start === end ? `${start}` : `${start} - ${end}`
@@ -44,7 +47,7 @@ const getYears = (t) => {
 export const formatTimeline = (t) => {
   if (!t?.start) return ''
   const start = formatPoint(t.start)
-  const future = !t.end || isFuture(t.end.month, t.end.year)
+  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end.month, t.end.year))
 
   if (future) return `${start} - Currently`
 

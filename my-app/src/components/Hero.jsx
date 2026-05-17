@@ -25,13 +25,11 @@ export default function Hero() {
             and I animate.
           </h1>
           <p className="mt-6 text-4xl md:text-6xl font-medium border-l-4 border-[color:var(--neo-border)] pl-6 text-foreground transition-all duration-300 pointer-events-auto">
-            From{' '}
-            <span
-              className="font-extrabold text-foreground transition-all duration-300"
-            >
+            <span>From </span>
+            <span className="font-extrabold text-foreground transition-all duration-300">
               {hoveredCity ? hoveredCity.name : 'the world'}
             </span>
-            , or wherever you are.
+            <span>, or wherever you are.</span>
           </p>
         </div>
       </div>

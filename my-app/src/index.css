@@ -197,4 +197,12 @@
     @apply border-2 border-[color:var(--neo-border)] p-3 bg-background text-foreground focus:outline-none focus:ring-0;
     box-shadow: 4px 4px 0px 0px var(--neo-shadow);
   }
+
+  .logo-theme-invert {
+    filter: none;
+    transition: filter 0.2s ease;
+  }
+  .dark .logo-theme-invert {
+    filter: invert(1) brightness(2);
+  }
 }

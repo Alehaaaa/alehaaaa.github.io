@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
@@ -16,6 +17,9 @@ export default function Header() {
   const containerRef = useRef(null)
   const desktopNavRef = useRef(null)
   const logoRef = useRef(null)
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const reelUrl = PRIVATE_REEL.url
   const reelSrc = useMemo(() => toEmbedSrc(reelUrl) || reelUrl, [reelUrl])
@@ -48,7 +52,20 @@ export default function Header() {
   const handleNavClick = (e, id) => {
     e.preventDefault()
     setIsMenuOpen(false)
-    scrollTo(id)
+    if (location.pathname === '/') {
+      scrollTo(id)
+    } else {
+      navigate('/', { state: { focus: id } })
+    }
+  }
+
+  const handleLogoClick = (e) => {
+    e.preventDefault()
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      navigate('/')
+    }
   }
 
   const openReel = (e) => {
@@ -70,7 +87,7 @@ export default function Header() {
           <div className="flex items-center justify-between h-16 md:h-20 transition-all duration-300 relative">
 
             <div ref={logoRef} className="flex items-center shrink-0">
-              <a href="#" className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase text-foreground tracking-tighter hover:underline decoration-4 underline-offset-4 transition-all whitespace-nowrap">
+              <a href="/" onClick={handleLogoClick} className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase text-foreground tracking-tighter hover:underline decoration-4 underline-offset-4 transition-all whitespace-nowrap">
                 Alejandro animates
               </a>
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as d3Geo from 'd3-geo';
 import * as topojson from 'topojson-client';
-import { projects } from '../data/projects';
+import { projects } from '../lib/utils';
 
 // --- Configuration ---
 const WORLD_DATA_URL = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
@@ -131,7 +131,9 @@ export default function DottedMap({ onHoverCity }) {
                     .fitExtent([[padX, padYTop], [dimensions.width - padX, dimensions.height - padY]], boundsFeature);
 
                 const scale = projection.scale();
-                const dotDensityStep = MAP_CONFIG.dotDensity / (scale * (Math.PI / 180));
+                // Dynamically tighten dot spacing (smaller pixel gap) for smaller scales (longer distances) to preserve map definition
+                const dynamicDensity = Math.max(13.5, Math.min(MAP_CONFIG.dotDensity, 13.5 + ((scale - 200) / 600) * (MAP_CONFIG.dotDensity - 13.5)));
+                const dotDensityStep = dynamicDensity / (scale * (Math.PI / 180));
 
                 const landDataArr = getLandDetectionData(dimensions.width, dimensions.height, countries, projection);
                 if (!landDataArr) return;

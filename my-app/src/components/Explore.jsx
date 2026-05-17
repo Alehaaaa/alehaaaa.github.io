@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Reveal from './Reveal'
 import { projects, describeProject, formatTimeline } from '../lib/utils'
 import LightboxImage from './LightboxImage'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import { CompanyLogo } from './CompanyLogo'
-import { MapPin } from 'lucide-react'
+import { MapPin, ExternalLink } from 'lucide-react'
 
 export default function Explore() {
-  const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '' })
+  const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '', trailer: null, imdb: null })
   const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' })
   const [companiesOpen, setCompaniesOpen] = useState(false)
 
@@ -72,7 +73,7 @@ export default function Explore() {
     if (selectedTags.length === 0 && selectedCompanies.length === 0) return projects
 
     return projects.filter(p => {
-      // TAGS — now fully case-insensitive
+      // TAGS - now fully case-insensitive
       let tagsMatch = true
       if (selectedTags.length > 0) {
         const projectTags = new Set()
@@ -82,7 +83,7 @@ export default function Explore() {
         tagsMatch = selectedTags.some(tag => projectTags.has(tag))
       }
 
-      // COMPANIES — keep original casing (names)
+      // COMPANIES - keep original casing (names)
       let companiesMatch = true
       if (selectedCompanies.length > 0) {
         const projectCompanies = new Set()
@@ -100,7 +101,9 @@ export default function Explore() {
     open: true,
     src: item.image,
     alt: item.title || '',
-    description: describeProject(item)
+    description: describeProject(item),
+    trailer: item.trailer,
+    imdb: item.imdb
   })
 
   const openVideo = (item, embedSrc) => setVideo({
@@ -256,37 +259,44 @@ export default function Explore() {
                         </div>
                       </div>
 
-                      {(item.trailer || item.imdb) && (
-                        <div className="flex flex-wrap items-center gap-3 mt-auto ml-auto">
-                          {item.trailer && (
-                            <a
-                              href={item.trailer}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => {
-                                const embed = toEmbedSrc(item.trailer);
-                                if (window.innerWidth >= 768 && embed) {
-                                  e.preventDefault();
-                                  openVideo(item, embed);
-                                }
-                              }}
-                              className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
-                            >
-                              Trailer
-                            </a>
-                          )}
-                          {item.imdb && (
-                            <a
-                              href={item.imdb}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
-                            >
-                              IMDb
-                            </a>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex flex-wrap items-center gap-3 mt-auto ml-auto">
+                        {item.trailer && (
+                          <a
+                            href={item.trailer}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => {
+                              const embed = toEmbedSrc(item.trailer);
+                              if (window.innerWidth >= 768 && embed) {
+                                e.preventDefault();
+                                openVideo(item, embed);
+                              }
+                            }}
+                            className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
+                          >
+                            Trailer
+                          </a>
+                        )}
+                        {item.imdb && (
+                          <a
+                            href={item.imdb}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all"
+                          >
+                            IMDb
+                          </a>
+                        )}
+                        {item.detail && (
+                          <Link
+                            to={`/projects/${item.slug}`}
+                            className="h-10 w-10 text-foreground hover:bg-foreground hover:text-background transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                            title="View project reflections & details"
+                          >
+                            <ExternalLink size={24} />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <div className="aspect-[3/2] overflow-hidden bg-background border-2 border-[color:var(--neo-border)] shadow-[6px_6px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_var(--neo-shadow)] transition-all cursor-pointer">
@@ -311,6 +321,8 @@ export default function Explore() {
         src={lightbox.src}
         alt={`Poster for ${lightbox.alt}`}
         description={lightbox.description}
+        trailer={lightbox.trailer}
+        imdb={lightbox.imdb}
       />
       <LightboxVideo
         open={video.open}

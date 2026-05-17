@@ -9,6 +9,7 @@ export const PROFILE = {
     links: {
         cv: '/cv/CV_Alejandro_Martin_2026.pdf',
         linkedin: 'https://www.linkedin.com/in/alejandro-martin-407527215',
+        imdb: 'https://www.imdb.com/name/nm16673060/',
         instagram: 'https://www.instagram.com/alejandro_anim/',
         email: 'alehamartinva@gmail.com',
         phone: '+34 671 21 39 38'

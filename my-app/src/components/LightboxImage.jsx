@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useScrollLock } from '@/hooks/useScrollLock'
 
-export default function LightboxImage({ open, onClose, src, alt, description }) {
+export default function LightboxImage({ open, onClose, src, alt, description, trailer, imdb }) {
   useScrollLock(open)
 
   useEffect(() => {
@@ -17,6 +17,8 @@ export default function LightboxImage({ open, onClose, src, alt, description }) 
   }, [open, onClose])
 
   if (typeof window === 'undefined') return null;
+
+  const cleanTitle = alt?.replace(/^Poster for\s+/i, '') || ''
 
   return createPortal(
     <AnimatePresence>
@@ -61,10 +63,36 @@ export default function LightboxImage({ open, onClose, src, alt, description }) 
             </div>
 
             {/* Footer / Description */}
-            {(description || alt) && (
-              <div className="p-6 bg-background border-t-2 border-[color:var(--neo-border)] shrink-0">
-                <p className="text-lg font-medium">{alt}</p>
-                {description && <p className="text-muted-foreground mt-2">{description}</p>}
+            {(description || cleanTitle || trailer || imdb) && (
+              <div className="p-8 bg-background border-t-2 border-[color:var(--neo-border)] shrink-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8">
+                <div className="text-left flex-1 min-w-0">
+                  <p className="text-lg font-medium">{cleanTitle}</p>
+                  {description && <p className="text-muted-foreground mt-2">{description}</p>}
+                </div>
+                {(trailer || imdb) && (
+                  <div className="flex flex-wrap items-center gap-4 shrink-0">
+                    {trailer && (
+                      <a
+                        href={trailer}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-2 border-2 border-[color:var(--neo-border)] bg-background text-lg font-bold text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] transition-all cursor-pointer"
+                      >
+                        Trailer
+                      </a>
+                    )}
+                    {imdb && (
+                      <a
+                        href={imdb}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-2 border-2 border-[color:var(--neo-border)] bg-background text-lg font-bold text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[4px] active:translate-y-[4px] transition-all cursor-pointer"
+                      >
+                        IMDb
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </motion.div>
