@@ -1,5 +1,5 @@
 const dataModules = import.meta.glob('./*/data.js', { eager: true });
-const blogModules = import.meta.glob('./*/blog.js', { eager: true });
+const blogModules = import.meta.glob('./*/blog.mdx', { eager: true });
 
 const monthMap = {
   "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
@@ -36,17 +36,18 @@ export const projects = Object.keys(dataModules)
     const folderName = filePath.split('/')[1];
     
     const data = dataModules[filePath].default;
-    const blogPath = `./${folderName}/blog.js`;
+    const blogPath = `./${folderName}/blog.mdx`;
     const blog = blogModules[blogPath] ? blogModules[blogPath].default : null;
-    const hasBlog = blog && Array.isArray(blog.content) && blog.content.length > 0;
+    const frontmatter = blogModules[blogPath]?.frontmatter || {};
+    const hasBlog = Boolean(blog);
 
     return {
       ...data,
       slug: folderName, // slug is programmatically determined by the folder name!
       detail: hasBlog ? {
-        subtitle: blog.subtitle,
-        experienceTitle: blog.experienceTitle,
-        content: blog.content
+        subtitle: frontmatter.subtitle,
+        experienceTitle: frontmatter.title,
+        Content: blog
       } : null
     };
   })

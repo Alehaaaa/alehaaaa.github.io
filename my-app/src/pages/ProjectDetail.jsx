@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { getProjectBySlug, toPublicUrl, formatTimeline } from '../lib/utils'
 import LightboxImage from '../components/LightboxImage'
 import { CompanyLogo } from '../components/CompanyLogo'
+import { mdxComponents } from '../components/blog/MdxComponents'
 
 const buildLinks = (project) => {
   const items = []
@@ -70,10 +71,7 @@ export default function ProjectDetail() {
   // Reflections / Experience properties
   const experienceTitle = (project.detail?.experienceTitle || 'Reflections & Experience').trim()
   const subtitle = (project.detail?.subtitle || '').trim()
-  const content =
-    Array.isArray(project.detail?.content) && project.detail.content.length > 0
-      ? project.detail.content
-      : ['Project reflections and write-up coming soon.']
+  const Blog = project.detail?.Content
 
   return (
     <section className="py-24 md:py-32 bg-background min-h-screen">
@@ -81,6 +79,7 @@ export default function ProjectDetail() {
         {/* Back navigation arrow */}
         <Link
           to="/"
+          state={{ focus: 'explore' }}
           onClick={handleBack}
           className="inline-flex items-center gap-2 text-foreground text-lg underline mb-10 group"
           aria-label="Back to explore section"
@@ -202,9 +201,11 @@ export default function ProjectDetail() {
           </div>
 
           <div className="space-y-6 max-w-4xl text-lg md:text-xl text-foreground leading-relaxed font-light">
-            {content.map((paragraph, idx) => (
-              <p key={idx} dangerouslySetInnerHTML={{ __html: paragraph }} />
-            ))}
+            {Blog ? (
+              <Blog components={mdxComponents} />
+            ) : (
+              <p>Project reflections and write-up coming soon.</p>
+            )}
           </div>
         </div>
       </div>

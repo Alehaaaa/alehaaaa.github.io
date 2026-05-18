@@ -62,11 +62,11 @@ export default function About() {
     <>
       <section id="about" className="py-40 bg-secondary/20">
         <div className="max-w-7xl mx-auto px-4 text-left">
-          <Reveal>
-            <h2 className="text-6xl lg:text-7xl font-light text-foreground mb-10">About</h2>
-          </Reveal>
-          <div className="lg:flex lg:items-start lg:gap-24">
-            <div className="lg:flex-1">
+          <div className="lg:flex lg:items-center lg:gap-24">
+            <div className="lg:min-w-0 lg:flex-1">
+              <Reveal>
+                <h2 className="text-6xl lg:text-7xl font-light text-foreground mb-10">About</h2>
+              </Reveal>
               {PROFILE.bio.map((paragraph, i) => (
                 <Reveal key={i} delay={100 + (i * 50)}>
                   <p className="text-xl text-muted-foreground leading-relaxed mb-8">
@@ -75,8 +75,8 @@ export default function About() {
                 </Reveal>
               ))}
             </div>
-            <Reveal delay={250}>
-              <div className="mt-12 lg:mt-0 lg:ml-auto w-full max-w-full lg:max-w-sm grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-5">
+            <Reveal delay={250} className="mt-12 w-full lg:mt-0 lg:w-80 lg:flex-shrink-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-5">
                 <a
                   href={PROFILE.links.cv}
                   target="_blank"
@@ -157,4 +157,3 @@ export default function About() {
     </>
   )
 }
-

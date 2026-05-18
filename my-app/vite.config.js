@@ -1,9 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import mdx from '@mdx-js/rollup';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import path from 'path';
 
 // Import data for injection
 import { PROFILE, PRIVATE_REEL } from './src/data/profile.js';
+
+const escapeHtml = (value = '') => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
 
 // Generate HTML for noscript
 const noscriptHtml = `
@@ -91,14 +101,15 @@ const noscriptHtml = `
     }
   </style>
   <div class="ns-container">
-    <h1 class="ns-header">${PROFILE.name}</h1>
+    <h1 class="ns-header">${escapeHtml(PROFILE.name)}</h1>
     <h2 class="ns-title">About</h2>
-    ${PROFILE.bio.map(p => `<p class="ns-text">${p}</p>`).join('')}
+    ${PROFILE.bio.map(p => `<p class="ns-text">${escapeHtml(p)}</p>`).join('')}
     
     <div class="ns-buttons">
-      <a href="${PROFILE.links.cv}" class="ns-btn" target="_blank">CV</a>
-      <a href="${PROFILE.links.linkedin}" class="ns-btn" target="_blank">LinkedIn</a>
-      <a href="${PRIVATE_REEL.url}" class="ns-btn" target="_blank">Reel</a>
+      <a href="${escapeHtml(PROFILE.links.cv)}" class="ns-btn" target="_blank" rel="noopener noreferrer">CV</a>
+      <a href="${escapeHtml(PROFILE.links.linkedin)}" class="ns-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="${escapeHtml(PROFILE.links.imdb)}" class="ns-btn" target="_blank" rel="noopener noreferrer">IMDb</a>
+      <a href="${escapeHtml(PRIVATE_REEL.url)}" class="ns-btn" target="_blank" rel="noopener noreferrer">Reel</a>
     </div>
   </div>
 `;
@@ -116,7 +127,19 @@ const noscriptPlugin = () => {
 }
 
 export default defineConfig({
-  plugins: [react(), noscriptPlugin()],
+  plugins: [
+    {
+      enforce: 'pre',
+      ...mdx({
+        remarkPlugins: [
+          remarkFrontmatter,
+          [remarkMdxFrontmatter, { name: 'frontmatter' }]
+        ]
+      })
+    },
+    react(),
+    noscriptPlugin()
+  ],
   base: '/', // User page typically served at root
   resolve: {
     alias: {

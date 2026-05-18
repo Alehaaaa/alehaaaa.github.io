@@ -4,7 +4,7 @@ import * as topojson from 'topojson-client';
 import { projects } from '../lib/utils';
 
 // --- Configuration ---
-const WORLD_DATA_URL = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
+const WORLD_DATA_URL = '/countries-110m.json';
 
 const MAP_CONFIG = {
     dotDensity: 18, // Target pixel distance between dots

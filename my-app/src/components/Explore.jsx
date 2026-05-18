@@ -70,7 +70,7 @@ export default function Explore() {
 
 
   const filteredProjects = useMemo(() => {
-    if (selectedTags.length === 0 && selectedCompanies.length === 0) return projects
+    if (selectedTags.length === 0 && selectedCompanies.length === allCompanies.length) return projects
 
     return projects.filter(p => {
       // TAGS - now fully case-insensitive
@@ -84,8 +84,8 @@ export default function Explore() {
       }
 
       // COMPANIES - keep original casing (names)
-      let companiesMatch = true
-      if (selectedCompanies.length > 0) {
+      let companiesMatch = selectedCompanies.length === allCompanies.length
+      if (!companiesMatch && selectedCompanies.length > 0) {
         const projectCompanies = new Set()
         if (Array.isArray(p.companies)) p.companies.forEach(c => projectCompanies.add(c.name))
 
@@ -156,7 +156,7 @@ export default function Explore() {
                     : 'bg-background text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px]'}
                 `}
               >
-                Companies {(selectedCompanies.length === 0 || selectedCompanies.length === allCompanies.length) ? '(ALL)' : `(${selectedCompanies.length})`}
+                Companies {selectedCompanies.length === allCompanies.length ? '(ALL)' : `(${selectedCompanies.length})`}
                 <svg
                   className={`w-4 h-4 transition-transform ${companiesOpen ? 'rotate-180' : ''}`}
                   fill="none"
@@ -193,7 +193,7 @@ export default function Explore() {
               )}
             </div>
 
-            {(selectedTags.length > 0 || (selectedCompanies.length !== allCompanies.length && selectedCompanies.length > 0)) && (
+            {(selectedTags.length > 0 || selectedCompanies.length !== allCompanies.length) && (
               <button
                 onClick={() => {
                   setSelectedTags([])
