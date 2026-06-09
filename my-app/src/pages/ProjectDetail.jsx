@@ -63,7 +63,7 @@ export default function ProjectDetail() {
 
   const descriptionParts = [project.type, project.role].filter(Boolean)
   const detailsLine = descriptionParts.join(' / ')
-  
+
   const timelineLabel = formatTimeline(project.timeline)
   const companies = Array.isArray(project.companies) ? project.companies : []
   const links = buildLinks(project)
@@ -108,7 +108,7 @@ export default function ProjectDetail() {
 
         {/* Two Column Layout: Details on left, Poster on top right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-20 items-start mb-20">
-          
+
           {/* Left Column: Title, Type, Date, Company Label + Logo */}
           <div className="text-left space-y-8">
             <div>
@@ -200,7 +200,7 @@ export default function ProjectDetail() {
             )}
           </div>
 
-          <div className="space-y-6 max-w-4xl text-lg md:text-xl text-foreground leading-relaxed font-light">
+          <div className="space-y-6 text-lg md:text-xl text-foreground leading-relaxed font-light">
             {Blog ? (
               <Blog components={mdxComponents} />
             ) : (
