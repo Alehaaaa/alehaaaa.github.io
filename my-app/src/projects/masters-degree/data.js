@@ -13,20 +13,9 @@ export default {
     "poster": "/studies/en/master_ecib.jpg",
     "trailerLink": "https://vimeo.com/894582147",
     "timeline": {
-        "start": {
-            "month": "Oct.",
-            "year": 2021
-        },
-        "end": {
-            "month": "Jun.",
-            "year": 2022
-        }
+        "start": "2021-10",
+        "end": "2022-06"
     },
-    "colorAccent": [
-        77,
-        189,
-        255
-    ],
     "tags": [
         "studies"
     ],

@@ -1,6 +1,7 @@
 export default {
+    "upcoming": "2027-06-11",
     "type": "Feature Film",
-    "title": "Upcoming Project",
+    "title": "How to Train Your Dragon 2",
     "role": "3D Animator",
     "companies": [
         {
@@ -16,30 +17,19 @@ export default {
             "scale": 0.95
         }
     ],
-    "poster": "/projects/project_upcoming.jpg",
+    "poster": "/projects/project_how_to_train_your_dragon_2.jpg",
     "trailerLink": null,
-    "imdbLink": null,
+    "imdbLink": "https://www.imdb.com/title/tt36416299/",
     "timeline": {
-        "start": {
-            "month": "Feb.",
-            "year": 2026
-        },
-        "end": {
-            "month": "Sep.",
-            "year": 2026
-        }
+        "start": "2026-07",
+        "end": "2027-02"
     },
-    "colorAccent": [
-        40,
-        200,
-        185
-    ],
     "tags": [
         "feature film"
     ],
     "location": {
-        "name": "London",
-        "lat": 51.5074,
-        "long": -0.1278
+        "name": "Barcelona",
+        "lat": 41.3851,
+        "long": 2.1734
     }
 };

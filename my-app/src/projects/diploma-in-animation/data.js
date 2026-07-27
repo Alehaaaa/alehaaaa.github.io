@@ -12,20 +12,9 @@ export default {
     "poster": "/studies/en/diploma_ecib.jpg",
     "trailerLink": "https://vimeo.com/875108181",
     "timeline": {
-        "start": {
-            "month": "Sep.",
-            "year": 2022
-        },
-        "end": {
-            "month": "Jun.",
-            "year": 2023
-        }
+        "start": "2022-09",
+        "end": "2023-06"
     },
-    "colorAccent": [
-        255,
-        185,
-        77
-    ],
     "tags": [
         "studies"
     ],

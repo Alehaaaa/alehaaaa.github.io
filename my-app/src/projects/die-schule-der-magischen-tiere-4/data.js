@@ -14,20 +14,9 @@ export default {
     "imdbLink": "https://www.imdb.com/title/tt35286242/",
     "trailerLink": "https://www.youtube.com/watch?v=2CAMAa-wENE",
     "timeline": {
-        "start": {
-            "month": "Nov.",
-            "year": 2024
-        },
-        "end": {
-            "month": "Jun.",
-            "year": 2025
-        }
+        "start": "2024-11",
+        "end": "2025-06"
     },
-    "colorAccent": [
-        255,
-        77,
-        94
-    ],
     "tags": [
         "feature film"
     ],

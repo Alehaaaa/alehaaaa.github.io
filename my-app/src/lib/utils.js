@@ -7,11 +7,6 @@ export const cn = (...inputs) => twMerge(clsx(inputs))
 // Master toggle to compress projects with future end dates into "Currently" (disabled for now)
 export const COMPRESS_FUTURE_DATES = false
 
-const monthMap = {
-  "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
-  "Jul.": 6, "Aug.": 7, "Sep.": 8, "Oct.": 9, "Nov.": 10, "Dec.": 11
-}
-
 const slugify = (value, fallback) => {
   const base = (value || fallback || '')
     .normalize('NFKD')
@@ -28,26 +23,53 @@ export const toPublicUrl = (p) => {
   return p.replace(/^public\//, '/').replace(/^\/?/, '/')
 }
 
-const isFuture = (monthStr, year) => {
-  const month = monthMap[monthStr] ?? 11
-  return new Date(year, month + 1, 1) > new Date()
+// Returns true if the project should currently be shown as censored/upcoming.
+// upcoming can be:
+//   true           → always censored
+//   "YYYY-MM-DD"   → censored until that date has passed
+//   false/undefined → not upcoming
+export const isUpcoming = (upcoming) => {
+  if (!upcoming) return false
+  if (upcoming === true) return true
+  return new Date() < new Date(upcoming)
 }
 
-const formatPoint = (p) => [p?.month, p?.year].filter(Boolean).join(' ')
+// Parse "YYYY-MM" → { year: number, month: number (1-indexed) }
+const parseYM = (ym) => {
+  if (!ym) return null
+  const [year, month] = ym.split('-').map(Number)
+  return { year, month }
+}
+
+const isFuture = (ym) => {
+  const p = parseYM(ym)
+  if (!p) return false
+  // Past the end of that month
+  return new Date(p.year, p.month, 1) > new Date()
+}
+
+// Short month names for display
+const MONTH_NAMES = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+
+const formatPoint = (ym) => {
+  const p = parseYM(ym)
+  if (!p) return ''
+  return `${MONTH_NAMES[p.month - 1]} ${p.year}`
+}
 
 const getYears = (t) => {
   if (!t?.start) return ''
-  const start = t.start.year
-  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end.month, t.end.year))
-  const end = future ? "Currently" : t.end.year
+  const { year: startYear } = parseYM(t.start)
+  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end))
+  const end = future ? 'Currently' : parseYM(t.end).year
 
-  return start === end ? `${start}` : `${start} - ${end}`
+  return startYear === end ? `${startYear}` : `${startYear} - ${end}`
 }
 
 export const formatTimeline = (t) => {
   if (!t?.start) return ''
   const start = formatPoint(t.start)
-  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end.month, t.end.year))
+  const future = !t.end || (COMPRESS_FUTURE_DATES && isFuture(t.end))
 
   if (future) return `${start} - Currently`
 
@@ -72,10 +94,12 @@ export const projects = sourceProjects
       logo: toPublicUrl(p.companyLogo)
     }
 
+    const upcoming = isUpcoming(p.upcoming)
+
     return {
       ...p,
-      title: p.title,
-      image: toPublicUrl(p.poster),
+      title: upcoming ? 'Upcoming Project' : p.title,
+      image: upcoming ? '/projects/project_upcoming.jpg' : toPublicUrl(p.poster),
       type: p.type,
       role: p.role,
       companyUrl: mainCompany.url,
@@ -83,8 +107,8 @@ export const projects = sourceProjects
       companyDisplayName: mainCompany.displayName || mainCompany.name,
       companies,
       slug,
-      imdb: p.imdbLink,
-      trailer: p.trailerLink,
+      imdb: upcoming ? null : p.imdbLink,
+      trailer: upcoming ? null : p.trailerLink,
       years: getYears(p.timeline),
     }
   })

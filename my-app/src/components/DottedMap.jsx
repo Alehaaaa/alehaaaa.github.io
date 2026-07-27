@@ -37,7 +37,7 @@ const MAP_CONFIG = {
 // --- Data Preparation ---
 const getActiveLocations = () => {
     const locations = projects
-        .filter(p => p.location && !p.disabled)
+        .filter(p => p.location)
         .map(p => ({ name: p.location.name, coords: [p.location.long, p.location.lat] }));
 
     const unique = Array.from(new Map(locations.map(l => [l.name, l])).values());

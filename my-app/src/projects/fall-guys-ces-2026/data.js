@@ -13,20 +13,9 @@ export default {
     "poster": "/projects/project_fall_guys_6.jpg",
     "trailerLink": "https://youtube.com/shorts/7oJvDujD82w",
     "timeline": {
-        "start": {
-            "month": "Nov.",
-            "year": 2025
-        },
-        "end": {
-            "month": "Dec.",
-            "year": 2025
-        }
+        "start": "2025-11",
+        "end": "2025-12"
     },
-    "colorAccent": [
-        255,
-        218,
-        77
-    ],
     "tags": [
         "videogame demo"
     ],

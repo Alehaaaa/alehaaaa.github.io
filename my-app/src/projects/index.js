@@ -1,15 +1,11 @@
 const dataModules = import.meta.glob('./*/data.js', { eager: true });
 const blogModules = import.meta.glob('./*/blog.mdx', { eager: true });
 
-const monthMap = {
-  "Jan.": 0, "Feb.": 1, "Mar.": 2, "Apr.": 3, "May": 4, "Jun.": 5,
-  "Jul.": 6, "Aug.": 7, "Sep.": 8, "Oct.": 9, "Nov.": 10, "Dec.": 11
-};
-
-const getTimelineScore = (timelinePoint) => {
-  if (!timelinePoint) return 0;
-  const monthVal = monthMap[timelinePoint.month] ?? 0;
-  return timelinePoint.year * 12 + monthVal;
+// Parse "YYYY-MM" into a sortable score (year * 12 + month)
+const getTimelineScore = (ym) => {
+  if (!ym) return 0;
+  const [year, month] = ym.split('-').map(Number);
+  return year * 12 + (month - 1);
 };
 
 // Sort function: newest projects first.

@@ -14,20 +14,9 @@ export default {
     "imdbLink": "https://www.imdb.com/title/tt32241578/",
     "trailerLink": "https://www.youtube.com/watch?v=UpXRJ9ZMtRk",
     "timeline": {
-        "start": {
-            "month": "Nov.",
-            "year": 2023
-        },
-        "end": {
-            "month": "Jun.",
-            "year": 2024
-        }
+        "start": "2023-11",
+        "end": "2024-06"
     },
-    "colorAccent": [
-        175,
-        205,
-        100
-    ],
     "tags": [
         "feature film"
     ],

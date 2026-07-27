@@ -20,20 +20,9 @@ export default {
     "trailerLink": "https://www.youtube.com/watch?v=pyZI5oM6hWk",
     "imdbLink": "https://www.imdb.com/title/tt32565993/",
     "timeline": {
-        "start": {
-            "month": "Jun.",
-            "year": 2025
-        },
-        "end": {
-            "month": "Nov.",
-            "year": 2025
-        }
+        "start": "2025-06",
+        "end": "2025-11"
     },
-    "colorAccent": [
-        40,
-        200,
-        185
-    ],
     "tags": [
         "feature film"
     ],

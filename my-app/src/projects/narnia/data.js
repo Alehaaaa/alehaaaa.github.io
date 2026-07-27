@@ -1,5 +1,5 @@
 export default {
-    "disabled": true,
+    "upcoming": "2027-02-12",
     "type": "Feature Film",
     "title": "Narnia",
     "role": "3D Animator",
@@ -21,26 +21,15 @@ export default {
     "trailerLink": null,
     "imdbLink": "https://www.imdb.com/title/tt9077514/",
     "timeline": {
-        "start": {
-            "month": "Feb.",
-            "year": 2026
-        },
-        "end": {
-            "month": "Sep.",
-            "year": 2026
-        }
+        "start": "2026-02",
+        "end": "2026-09"
     },
-    "colorAccent": [
-        40,
-        200,
-        185
-    ],
     "tags": [
         "feature film"
     ],
     "location": {
-        "name": "London",
-        "lat": 51.5074,
-        "long": -0.1278
+        "name": "Barcelona",
+        "lat": 41.3851,
+        "long": 2.1734
     }
 };

@@ -31,7 +31,7 @@ function MediaQuote({ image, alt, quote, cite }) {
         <img
           src={image}
           alt={alt || ''}
-          className="w-full max-w-[240px] h-auto block select-none"
+          className="w-full max-w-[400px] h-auto block select-none"
           loading="lazy"
         />
       </div>

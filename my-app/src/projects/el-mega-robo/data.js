@@ -14,20 +14,9 @@ export default {
     "imdbLink": "https://www.imdb.com/title/tt32380409/",
     "trailerLink": "https://vimeo.com/906418779",
     "timeline": {
-        "start": {
-            "month": "Oct.",
-            "year": 2022
-        },
-        "end": {
-            "month": "Jul.",
-            "year": 2023
-        }
+        "start": "2022-10",
+        "end": "2023-07"
     },
-    "colorAccent": [
-        255,
-        77,
-        243
-    ],
     "tags": [
         "short film"
     ],
