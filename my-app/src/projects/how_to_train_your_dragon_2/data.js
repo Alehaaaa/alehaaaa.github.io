@@ -5,16 +5,16 @@ export default {
     "role": "3D Animator",
     "companies": [
         {
-            "name": "Framestore",
-            "url": "https://framestore.com/",
-            "logo": "/logos/framestore.png",
-            "scale": 1
-        },
-        {
             "name": "Panot Studio",
             "url": "https://studiopanot.com/",
             "logo": "/logos/panot.png",
             "scale": 0.95
+        },
+        {
+            "name": "Framestore",
+            "url": "https://framestore.com/",
+            "logo": "/logos/framestore.png",
+            "scale": 1
         }
     ],
     "poster": "/projects/project_how_to_train_your_dragon_2.jpg",

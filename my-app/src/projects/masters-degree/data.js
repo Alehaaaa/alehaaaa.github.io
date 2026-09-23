@@ -13,8 +13,8 @@ export default {
     "poster": "/studies/en/master_ecib.jpg",
     "trailerLink": "https://vimeo.com/894582147",
     "timeline": {
-        "start": "2021-10",
-        "end": "2022-06"
+        "start": "2022-09",
+        "end": "2023-06"
     },
     "tags": [
         "studies"
