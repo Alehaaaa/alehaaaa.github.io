@@ -188,11 +188,6 @@
     box-shadow: none;
   }
 
-  /* Highlighted variant: inverted colors + bold, for the primary call to action */
-  .neo-button-invert {
-    @apply bg-foreground text-background font-bold;
-  }
-
   .neo-card {
     @apply border-2 border-[color:var(--neo-border)] bg-background text-foreground;
     box-shadow: 4px 4px 0px 0px var(--neo-shadow);
