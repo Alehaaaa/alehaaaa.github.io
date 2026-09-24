@@ -7,6 +7,9 @@ import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import { CompanyLogo } from './CompanyLogo'
 import { MapPin, ExternalLink } from 'lucide-react'
 
+// Explore section is temporarily hidden; set to true to bring it back.
+export const SHOW_EXPLORE = false
+
 export default function Explore() {
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '', trailer: null, imdb: null })
   const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' })

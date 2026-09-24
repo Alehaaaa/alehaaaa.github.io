@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react'
 import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
 import { useScroll } from '@/hooks/useScroll'
 import ThemeToggle from './ThemeToggle'
+import { SHOW_EXPLORE } from './Explore'
 import { PRIVATE_REEL } from '../data/profile'
 
 const NAVBAR_HEIGHT = 80 // approx 16 * 5 or similar, depending on design
@@ -77,8 +78,8 @@ export default function Header() {
   const navLinks = [
     { label: 'Projects', href: 'projects' },
     { label: 'About', href: 'about' },
-    { label: 'Explore', href: 'explore' },
-  ]
+    SHOW_EXPLORE && { label: 'Explore', href: 'explore' },
+  ].filter(Boolean)
 
   return (
     <>
