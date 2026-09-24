@@ -102,7 +102,7 @@ export default function Header() {
               {navLinks.map((link) => (
                 <span key={link.href} className="text-xl font-bold uppercase px-2 py-1">{link.label}</span>
               ))}
-              <span className="neo-button px-6 py-2 uppercase text-lg">Reel</span>
+              <span className="neo-button neo-button-invert px-6 py-2 uppercase text-lg">Reel</span>
             </div>
 
             {/* REAL DESKTOP NAV */}
@@ -121,7 +121,7 @@ export default function Header() {
                 <a
                   href={reelUrl}
                   onClick={openReel}
-                  className="neo-button px-4 py-1.5 lg:px-6 lg:py-2 uppercase text-base lg:text-lg cursor-pointer transition-all"
+                  className="neo-button neo-button-invert px-4 py-1.5 lg:px-6 lg:py-2 uppercase text-base lg:text-lg cursor-pointer transition-all"
                 >
                   Reel
                 </a>
@@ -180,7 +180,7 @@ export default function Header() {
                 <a
                   href={reelUrl}
                   onClick={openReel}
-                  className="text-2xl font-light text-foreground text-left cursor-pointer"
+                  className="neo-button neo-button-invert self-start px-5 py-1.5 text-2xl uppercase cursor-pointer"
                 >
                   Reel
                 </a>
