@@ -56,7 +56,7 @@ export default function Projects() {
   });
 
   return (
-    <section id="projects" className="relative z-20 py-24 md:py-32 bg-transparent overflow-hidden pointer-events-none">
+    <section id="projects" className="relative z-20 pt-24 pb-4 md:py-32 bg-transparent overflow-hidden pointer-events-none">
       <div className="container px-4 md:px-6 mx-auto mb-12 pointer-events-auto">
         <Reveal>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground mb-4 tracking-tight">

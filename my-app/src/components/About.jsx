@@ -60,7 +60,7 @@ export default function About() {
 
   return (
     <>
-      <section id="about" className="py-40 bg-secondary/20">
+      <section id="about" className="pt-16 pb-24 md:py-40 bg-secondary/20">
         <div className="max-w-7xl mx-auto px-4 text-left">
           <div className="lg:flex lg:items-center lg:gap-24">
             <div className="lg:min-w-0 lg:flex-1">

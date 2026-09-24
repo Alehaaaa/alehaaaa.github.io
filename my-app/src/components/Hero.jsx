@@ -35,7 +35,7 @@ export default function Hero() {
       </div>
 
       {/* Balanced World Map spacing - shorter on mobile */}
-      <div className="relative -mt-24 md:-mt-40 -mb-32 md:-mb-56 h-[450px] md:h-[750px] w-full z-10">
+      <div className="relative -mt-16 md:-mt-40 -mb-24 md:-mb-56 h-[580px] md:h-[750px] w-full z-10">
         <DottedMap onHoverCity={setHoveredCity} />
       </div>
     </section>
