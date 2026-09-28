@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react'
-import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
+import { useLightbox, videoSlide } from '@/lib/lightbox'
 import Reveal from './Reveal'
 import { PROFILE, PRIVATE_REEL } from '../data/profile'
 import { FileText, Play } from 'lucide-react'
@@ -45,22 +44,26 @@ const ImdbFilledIcon = ({ className }) => (
 
 export default function About() {
   const SHOW_ICONS = false
-  const [reelOpen, setReelOpen] = useState(false)
   const reelUrl = PRIVATE_REEL.url
-  const reelSrc = useMemo(() => toEmbedSrc(reelUrl) || reelUrl, [reelUrl])
+  const openLightbox = useLightbox()
 
   const openReel = (e) => {
     e.preventDefault()
-    setReelOpen(true)
+    openLightbox(videoSlide(reelUrl, PRIVATE_REEL.title))
   }
 
   const buttonClass = `flex-1 lg:flex-none flex items-center justify-center w-full py-4 border-2 border-[color:var(--neo-border)] bg-background text-xl lg:text-2xl font-medium text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none ${
     SHOW_ICONS ? '' : 'px-8'
   }`
+  // Reel is the primary call to action: inverted colors + bold
+  const reelButtonClass = buttonClass
+    .replace('bg-background', 'bg-foreground')
+    .replace('text-foreground', 'text-background')
+    .replace('font-medium', 'font-bold')
 
   return (
     <>
-      <section id="about" className="py-40 bg-secondary/20">
+      <section id="about" className="pt-16 pb-24 md:py-40 bg-secondary/20">
         <div className="max-w-7xl mx-auto px-4 text-left">
           <div className="lg:flex lg:items-center lg:gap-24">
             <div className="lg:min-w-0 lg:flex-1">
@@ -134,7 +137,7 @@ export default function About() {
                 <a
                   href={reelUrl}
                   onClick={openReel}
-                  className={`${buttonClass} cursor-pointer`}
+                  className={`${reelButtonClass} cursor-pointer`}
                 >
                   {SHOW_ICONS ? (
                     <>
@@ -153,7 +156,6 @@ export default function About() {
           </div>
         </div>
       </section>
-      <LightboxVideo open={reelOpen} onClose={() => setReelOpen(false)} src={reelSrc} title={PRIVATE_REEL.title} />
     </>
   )
 }
