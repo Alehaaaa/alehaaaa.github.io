@@ -1,0 +1,55 @@
+/* Compact project captions on top of GLightbox's clean theme. */
+.glightbox-clean .gdesc-inner {
+  padding: 12px 16px 14px;
+}
+
+.glightbox-clean .gslide-title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+/* The clean theme leaves caption text to inherit the page color,
+   which is near-white in dark mode on its white caption box. */
+.glightbox-clean .gslide-desc {
+  color: #555;
+}
+
+.glb-meta,
+.glb-links {
+  display: block;
+}
+
+.glb-links {
+  margin-top: 6px;
+}
+
+.glb-links a {
+  color: #000;
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 14px;
+}
+
+.glb-links a:hover {
+  text-decoration: underline;
+}
+
+/* Touch layout: caption sits on GLightbox's dark gradient over the image */
+.glightbox-mobile .glightbox-container .gslide-description {
+  padding: 16px 16px 20px;
+}
+
+.glightbox-mobile .glightbox-container .glb-links a {
+  color: #fff;
+}
+
+.glightbox-container .gslide-desc .glb-meta a,
+.glightbox-mobile .glightbox-container .gslide-desc .glb-meta a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.glb-meta a:hover {
+  text-decoration: underline;
+}

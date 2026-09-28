@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import GLightbox from 'glightbox'
 import 'glightbox/dist/css/glightbox.min.css'
+import './lightbox.css'
 import { describeProject } from './utils'
 
 const escapeHtml = (value = '') => String(value)
@@ -16,8 +17,8 @@ const link = (href, label, external = true) =>
 const joinDots = (parts) => parts.filter(Boolean).join(' · ')
 
 /**
- * Poster slide for a project. The caption shows the title, "type · role",
- * companies · location · years, and Trailer / IMDb / project page links.
+ * Poster slide for a project. The caption shows the title, one details line
+ * (type · role · companies · location · years) and a row of Trailer / IMDb / project page links.
  */
 export const projectSlide = (project, { description = describeProject(project), detailLink = true } = {}) => {
   const companies = (project.companies?.length
@@ -31,21 +32,22 @@ export const projectSlide = (project, { description = describeProject(project), 
     project.years && escapeHtml(project.years),
   ])
 
-  const links = joinDots([
+  const meta = joinDots([description && escapeHtml(description), credits])
+  const links = [
     project.trailer && link(project.trailer, 'Trailer'),
     project.imdb && link(project.imdb, 'IMDb'),
     detailLink && project.detail && project.slug && link(`#/projects/${project.slug}`, 'Project page', false),
-  ])
+  ].filter(Boolean).join('')
 
   return {
     href: project.image,
     type: 'image',
     alt: project.title ? `Poster for ${project.title}` : 'Project poster',
     title: escapeHtml(project.title || ''),
-    description: [description && escapeHtml(description), credits, links]
-      .filter(Boolean)
-      .map((line) => `<p>${line}</p>`)
-      .join(''),
+    description: [
+      meta && `<span class="glb-meta">${meta}</span>`,
+      links && `<span class="glb-links">${links}</span>`,
+    ].filter(Boolean).join(''),
   }
 }
 
