@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Reveal from "./Reveal";
 import { projects } from "@/lib/utils";
-import LightboxVideo, { toEmbedSrc } from "./LightboxVideo";
-import LightboxImage from "./LightboxImage";
+import { useLightbox, projectSlide, trailerSlide, openVideoOnClick } from "@/lib/lightbox";
+
+const describeProject = (p) => [p.type, p.role].filter(Boolean).join(' · ');
 
 export default function Projects() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -13,9 +14,6 @@ export default function Projects() {
     containScroll: 'trimSnaps',
     skipSnaps: true
   });
-
-  const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' });
-  const [image, setImage] = useState({ open: false, src: null, alt: '', description: '', trailer: null, imdb: null });
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -25,34 +23,11 @@ export default function Projects() {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  // Disable Embla drag when lightbox is open
-  useEffect(() => {
-    if (!emblaApi) return;
-    if (video.open || image.open) {
-      emblaApi.reInit({ watchDrag: false });
-    } else {
-      emblaApi.reInit({ watchDrag: true });
-    }
-  }, [video.open, image.open, emblaApi]);
-
-  const describeProject = (p) => [p.type, p.role].filter(Boolean).join(' · ');
-
-  const openImage = (p) => {
-    setImage({
-      open: true,
-      src: p.image,
-      alt: p.title,
-      description: describeProject(p),
-      trailer: p.trailer,
-      imdb: p.imdb
-    });
-  };
-
-  const openVideo = (p, embedSrc) => setVideo({
-    open: true,
-    src: embedSrc,
-    title: p.title,
-    description: describeProject(p)
+  // Every poster is a slide of one gallery; browsing it keeps the carousel in sync.
+  const posterSlides = useMemo(() => projects.map((p) => projectSlide(p, describeProject(p))), []);
+  const openLightbox = useLightbox();
+  const openPoster = (index) => openLightbox(posterSlides, index, {
+    onSlideChange: (current) => emblaApi?.scrollTo(current)
   });
 
   return (
@@ -67,7 +42,7 @@ export default function Projects() {
 
       <div className="relative group/container pointer-events-auto">
         {/* Navigation Buttons */}
-        <div className={`absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity ${video.open || image.open ? 'pointer-events-none' : ''}`}>
+        <div className="absolute top-1/2 -translate-y-1/2 left-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
           <button
             onClick={scrollPrev}
             className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
@@ -77,7 +52,7 @@ export default function Projects() {
           </button>
         </div>
 
-        <div className={`absolute top-1/2 -translate-y-1/2 right-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity ${video.open || image.open ? 'pointer-events-none' : ''}`}>
+        <div className="absolute top-1/2 -translate-y-1/2 right-4 z-20 hidden md:block opacity-0 group-hover/container:opacity-100 transition-opacity">
           <button
             onClick={scrollNext}
             className="p-3 bg-background border-2 border-[color:var(--neo-border)] text-foreground shadow-[4px_4px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
@@ -89,7 +64,7 @@ export default function Projects() {
 
         {/* Embla Viewport */}
         <div
-          className={`overflow-hidden px-6 md:px-16 transition-all ${video.open || image.open ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing md:cursor-ew-resize'}`}
+          className="overflow-hidden px-6 md:px-16 transition-all cursor-grab active:cursor-grabbing md:cursor-ew-resize"
           ref={emblaRef}
           style={{ paddingBlock: '1em' }}
         >
@@ -107,7 +82,7 @@ export default function Projects() {
                 <div className="flex flex-col h-full group">
                   <div
                     className="relative aspect-[4/3] overflow-hidden mb-6 bg-background border-2 border-[color:var(--neo-border)] shadow-[6px_6px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_var(--neo-shadow)] transition-all cursor-pointer select-none"
-                    onClick={() => openImage(p)}
+                    onClick={() => openPoster(i)}
                   >
                     <img
                       src={p.image || "/placeholder.svg"}
@@ -157,15 +132,7 @@ export default function Projects() {
                         href={p.trailer}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={(e) => {
-                          const embed = toEmbedSrc(p.trailer);
-                          // For trailer, we want to open lightbox on desktop, link on mobile? 
-                          // The previous logic had a width check.
-                          if (window.innerWidth >= 768 && embed) {
-                            e.preventDefault();
-                            openVideo(p, embed);
-                          }
-                        }}
+                        onClick={openVideoOnClick(openLightbox, trailerSlide(p))}
                         className="px-6 py-2 border-2 border-[color:var(--neo-border)] bg-background text-lg font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer select-none"
                       >
                         Trailer
@@ -188,23 +155,6 @@ export default function Projects() {
           </div>
         </div>
       </div>
-
-      <LightboxVideo
-        open={video.open}
-        onClose={() => setVideo(prev => ({ ...prev, open: false }))}
-        src={video.src}
-        title={`Trailer for ${video.title}`}
-        description={video.description}
-      />
-      <LightboxImage
-        open={image.open}
-        onClose={() => setImage(prev => ({ ...prev, open: false }))}
-        src={image.src}
-        alt={`Poster for ${image.alt}`}
-        description={image.description}
-        trailer={image.trailer}
-        imdb={image.imdb}
-      />
     </section>
   );
 }
