@@ -2,8 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from './Reveal'
 import { projects, describeProject, formatTimeline } from '../lib/utils'
-import LightboxImage from './LightboxImage'
-import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
+import { useLightbox, projectSlide, trailerSlide, openVideoOnClick } from '../lib/lightbox'
 import { CompanyLogo } from './CompanyLogo'
 import { MapPin, ExternalLink } from 'lucide-react'
 
@@ -11,8 +10,7 @@ import { MapPin, ExternalLink } from 'lucide-react'
 export const SHOW_EXPLORE = false
 
 export default function Explore() {
-  const [lightbox, setLightbox] = useState({ open: false, src: null, alt: '', description: '', trailer: null, imdb: null })
-  const [video, setVideo] = useState({ open: false, src: null, title: '', description: '' })
+  const openLightbox = useLightbox()
   const [companiesOpen, setCompaniesOpen] = useState(false)
 
   /* Extract unique tags from projects (excluding companies) */
@@ -99,22 +97,9 @@ export default function Explore() {
     })
   }, [selectedTags, selectedCompanies, allCompanies])
 
+  // The visible (filtered) posters form one gallery
+  const posterSlides = useMemo(() => filteredProjects.map((p) => projectSlide(p)), [filteredProjects])
 
-  const openLightbox = (item) => setLightbox({
-    open: true,
-    src: item.image,
-    alt: item.title || '',
-    description: describeProject(item),
-    trailer: item.trailer,
-    imdb: item.imdb
-  })
-
-  const openVideo = (item, embedSrc) => setVideo({
-    open: true,
-    src: embedSrc,
-    title: item.title || '',
-    description: describeProject(item)
-  })
 
   // Helper to determine if a company is checked
   const isCompanyChecked = (company) => selectedCompanies.includes(company)
@@ -268,13 +253,7 @@ export default function Explore() {
                             href={item.trailer}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={(e) => {
-                              const embed = toEmbedSrc(item.trailer);
-                              if (window.innerWidth >= 768 && embed) {
-                                e.preventDefault();
-                                openVideo(item, embed);
-                              }
-                            }}
+                            onClick={openVideoOnClick(openLightbox, trailerSlide(item))}
                             className="px-4 py-1.5 border-2 border-[color:var(--neo-border)] bg-background text-base font-bold text-foreground shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:shadow-[2px_2px_0px_0px_var(--neo-shadow)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all cursor-pointer"
                           >
                             Trailer
@@ -307,7 +286,7 @@ export default function Explore() {
                           src={item.image}
                           alt={item.title || 'Project artwork'}
                           className="w-full h-full object-cover"
-                          onClick={() => openLightbox(item)}
+                          onClick={() => openLightbox(posterSlides, idx)}
                         />
                       </div>
                     </div>
@@ -318,22 +297,6 @@ export default function Explore() {
           </div>
         </div>
       </div>
-      <LightboxImage
-        open={lightbox.open}
-        onClose={() => setLightbox(prev => ({ ...prev, open: false }))}
-        src={lightbox.src}
-        alt={`Poster for ${lightbox.alt}`}
-        description={lightbox.description}
-        trailer={lightbox.trailer}
-        imdb={lightbox.imdb}
-      />
-      <LightboxVideo
-        open={video.open}
-        onClose={() => setVideo(prev => ({ ...prev, open: false }))}
-        src={video.src}
-        title={`Trailer for ${video.title}`}
-        description={video.description}
-      />
     </section>
   )
 }

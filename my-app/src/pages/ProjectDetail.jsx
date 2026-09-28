@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { getProjectBySlug, toPublicUrl, formatTimeline } from '../lib/utils'
-import LightboxImage from '../components/LightboxImage'
+import { useLightbox, projectSlide } from '../lib/lightbox'
 import { CompanyLogo } from '../components/CompanyLogo'
 import { mdxComponents } from '../components/blog/MdxComponents'
 
@@ -31,7 +31,7 @@ export default function ProjectDetail() {
   const { slug } = useParams()
   const project = getProjectBySlug(slug)
   const navigate = useNavigate()
-  const [lightboxOpen, setLightboxOpen] = React.useState(false)
+  const openLightbox = useLightbox()
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
@@ -63,6 +63,7 @@ export default function ProjectDetail() {
 
   const descriptionParts = [project.type, project.role].filter(Boolean)
   const detailsLine = descriptionParts.join(' / ')
+  const openPoster = () => openLightbox(projectSlide(project, { description: detailsLine, detailLink: false }))
 
   const timelineLabel = formatTimeline(project.timeline)
   const companies = Array.isArray(project.companies) ? project.companies : []
@@ -169,13 +170,13 @@ export default function ProjectDetail() {
           {/* Right Column: Poster at native proportions */}
           <div
             className="overflow-hidden bg-background border-2 border-[color:var(--neo-border)] shadow-[8px_8px_0px_0px_var(--neo-shadow)] hover:shadow-[3px_3px_0px_0px_var(--neo-shadow)] hover:translate-x-[5px] hover:translate-y-[5px] transition-all cursor-pointer select-none"
-            onClick={() => setLightboxOpen(true)}
+            onClick={() => openPoster()}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
                 e.preventDefault()
-                setLightboxOpen(true)
+                openPoster()
               }
             }}
           >
@@ -209,16 +210,6 @@ export default function ProjectDetail() {
           </div>
         </div>
       </div>
-
-      <LightboxImage
-        open={lightboxOpen}
-        onClose={() => setLightboxOpen(false)}
-        src={project.image}
-        alt={project.title ? `Poster for ${project.title}` : 'Project image'}
-        description={detailsLine}
-        trailer={project.trailer}
-        imdb={project.imdb}
-      />
     </section>
   )
 }

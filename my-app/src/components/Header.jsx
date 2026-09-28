@@ -1,8 +1,8 @@
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import LightboxVideo, { toEmbedSrc } from './LightboxVideo'
+import { useLightbox, videoSlide } from '@/lib/lightbox'
 import { useScroll } from '@/hooks/useScroll'
 import ThemeToggle from './ThemeToggle'
 import { SHOW_EXPLORE } from './Explore'
@@ -12,7 +12,6 @@ const NAVBAR_HEIGHT = 80 // approx 16 * 5 or similar, depending on design
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [reelOpen, setReelOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   const containerRef = useRef(null)
@@ -23,7 +22,7 @@ export default function Header() {
   const navigate = useNavigate()
 
   const reelUrl = PRIVATE_REEL.url
-  const reelSrc = useMemo(() => toEmbedSrc(reelUrl) || reelUrl, [reelUrl])
+  const openLightbox = useLightbox()
 
   useEffect(() => {
     const checkOverflow = () => {
@@ -72,7 +71,7 @@ export default function Header() {
   const openReel = (e) => {
     e.preventDefault()
     setIsMenuOpen(false)
-    setReelOpen(true)
+    openLightbox(videoSlide(reelUrl, PRIVATE_REEL.title))
   }
 
   const navLinks = [
@@ -189,13 +188,6 @@ export default function Header() {
           </>
         )}
       </AnimatePresence>
-
-      <LightboxVideo
-        open={reelOpen}
-        onClose={() => setReelOpen(false)}
-        src={reelSrc}
-        title={PRIVATE_REEL.title}
-      />
     </>
   )
 }
