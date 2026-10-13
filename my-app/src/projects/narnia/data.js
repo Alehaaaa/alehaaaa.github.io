@@ -1,7 +1,7 @@
 export default {
     // "upcoming": "2027-02-12",
     "type": "Feature Film",
-    "title": "Narnia",
+    "title": "Narnia: The Magician's Nephew",
     "role": "3D Animator",
     "companies": [
         {
@@ -18,7 +18,7 @@ export default {
         }
     ],
     "poster": "/projects/project_narnia_1.jpg",
-    "trailerLink": null,
+    "trailerLink": "https://www.youtube.com/watch?v=gDJ-ini7fF0",
     "imdbLink": "https://www.imdb.com/title/tt9077514/",
     "timeline": {
         "start": "2026-02",

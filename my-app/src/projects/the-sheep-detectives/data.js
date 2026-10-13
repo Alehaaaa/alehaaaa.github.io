@@ -4,17 +4,17 @@ export default {
     "role": "3D Animator",
     "companies": [
         {
+            "name": "Panot Studio",
+            "url": "https://studiopanot.com/",
+            "logo": "/logos/panot.png",
+            "scale": 0.95
+        },
+        {
             "name": "Framestore",
             "url": "https://framestore.com/",
             "logo": "/logos/framestore.png",
             "scale": 1
         },
-        {
-            "name": "Panot Studio",
-            "url": "https://studiopanot.com/",
-            "logo": "/logos/panot.png",
-            "scale": 0.95
-        }
     ],
     "poster": "/projects/project_the_sheep_detectives.jpg",
     "trailerLink": "https://www.youtube.com/watch?v=pyZI5oM6hWk",
