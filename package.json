@@ -1,15 +1,10 @@
 {
-  "name": "my-app",
+  "name": "aleha-animates",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "dependencies": {
     "@mdx-js/rollup": "^3.1.1",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "clsx": "^2.1.1",
     "d3-geo": "^3.1.1",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.25",
@@ -20,9 +15,7 @@
     "react-router-dom": "^7.18.4",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^6.0.0",
-    "tailwind-merge": "^3.4.0",
-    "topojson-client": "^3.1.0",
-    "web-vitals": "^2.1.4"
+    "topojson-client": "^3.1.0"
   },
   "scripts": {
     "dev": "vite",
@@ -31,31 +24,13 @@
     "start": "vite",
     "test": "node --test tests/*.test.mjs"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17",
-    "tailwindcss-animate": "^1.0.7",
-    "vite": "^7.2.6"
+    "vite": "^7.2.6",
+    "wrangler": "^4.151.3"
   }
 }

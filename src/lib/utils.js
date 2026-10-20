@@ -1,8 +1,4 @@
-import { clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 import { projects as sourceProjects } from '../projects'
-
-export const cn = (...inputs) => twMerge(clsx(inputs))
 
 // Master toggle to compress projects with future end dates into "Currently" (disabled for now)
 export const COMPRESS_FUTURE_DATES = false
