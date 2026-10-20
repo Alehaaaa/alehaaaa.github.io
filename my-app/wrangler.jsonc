@@ -1,0 +1,20 @@
+{
+  // Cloudflare Worker serving the built portfolio as static assets.
+  // IMPORTANT: "name" must match the existing Worker in the Cloudflare
+  // dashboard, otherwise `wrangler deploy` creates a second one.
+  "name": "alehaaaa-github-io",
+  "compatibility_date": "2026-10-20",
+
+  // Vite writes the production build here (vite.config.js -> build.outDir).
+  // Paths are relative to this file, so the Worker's build root must be my-app/.
+  "assets": {
+    "directory": "./dist"
+  }
+
+  // No "main" entry: this is an assets-only Worker, so Cloudflare serves
+  // dist/ directly with no script in front of it.
+  //
+  // No "not_found_handling": the app uses HashRouter, so every route lives
+  // after "#" and the server only ever sees "/". If this ever moves to
+  // BrowserRouter, add "not_found_handling": "single-page-application".
+}
