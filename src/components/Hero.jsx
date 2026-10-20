@@ -4,18 +4,23 @@ import DottedMap from './DottedMap';
 
 export default function Hero() {
   const [hoveredCity, setHoveredCity] = useState(null);
+  const [isReelReady, setIsReelReady] = useState(false);
 
   return (
     <section className="relative bg-background pt-10 md:pt-24 overflow-visible z-0">
       <div className="max-w-7xl mx-auto px-4 relative z-20">
         {/* Video Container with Neo-Brutalist Border/Shadow */}
         <div className="relative aspect-video w-full overflow-hidden border-2 border-[color:var(--neo-border)] shadow-[8px_8px_0px_0px_var(--neo-shadow)] bg-black">
+          <div className="absolute inset-0 flex items-center justify-center text-sm font-bold uppercase tracking-widest text-white/70" aria-hidden="true">
+            Loading reel…
+          </div>
           <iframe
             src={HERO_REEL}
             title="Animation demoreel for website"
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
-            className="absolute inset-0 w-full h-full"
+            onLoad={() => setIsReelReady(true)}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${isReelReady ? 'opacity-100' : 'opacity-0'}`}
           />
         </div>
 
