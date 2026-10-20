@@ -3,7 +3,7 @@
   "name": "alehaaaa-github-io",
   "compatibility_date": "2026-10-19",
   "assets": {
-    "directory": "./my-app/dist",
+    "directory": "./dist",
     "not_found_handling": "single-page-application"
   },
   "observability": {
